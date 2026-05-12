@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .grade import grade_attempt
 from .ingest import ingest_mastersheet
+from .invivo import extract_mouse_data
 from .run import run_task
 from .suite import run_suite, summarize_runs
 from .tasks import list_tasks, make_pilot_tasks
@@ -29,6 +30,10 @@ def main() -> None:
     ingest = sub.add_parser("ingest", help="Ingest an Excel mastersheet into normalized CSVs.")
     ingest.add_argument("xlsx", type=Path)
     ingest.add_argument("--out-dir", type=Path, default=PROCESSED_DIR)
+
+    invivo = sub.add_parser("extract-invivo", help="Extract mouse in vivo measurement sheets.")
+    invivo.add_argument("mouse_dir", type=Path)
+    invivo.add_argument("--out-dir", type=Path, default=PROCESSED_DIR)
 
     make = sub.add_parser("make-tasks", help="Generate pilot tasks from processed data.")
     make.add_argument("--processed-dir", type=Path, default=PROCESSED_DIR)
@@ -71,6 +76,8 @@ def main() -> None:
 
     if args.command == "ingest":
         _print_json(ingest_mastersheet(args.xlsx, args.out_dir))
+    elif args.command == "extract-invivo":
+        _print_json(extract_mouse_data(args.mouse_dir, args.out_dir))
     elif args.command == "make-tasks":
         _print_json(
             make_pilot_tasks(

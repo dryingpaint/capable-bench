@@ -24,10 +24,13 @@ answer, not the path.
 4. `next_experiment`: choose the next experiment that resolves the dominant
    uncertainty.
 
-The current ingestion path supports the in vitro mastersheet. Until linked mouse
-outcomes are added, generated pilot candidate-prioritization tasks use a clearly
-marked heuristic oracle. Those pilot tasks validate the harness and agent
-workflow; they should not be reported as final scientific benchmark results.
+The ingestion path supports the in vitro mastersheet and mouse in vivo
+Excel/JSON exports. Generated pilot candidate-prioritization tasks still use a
+clearly marked heuristic oracle until we link candidate identities to outcome
+labels. Those pilot tasks validate the harness and agent workflow; they should
+not be reported as final scientific benchmark results.
+
+Operational ingestion instructions live in [Data Ingestion](DATA_INGESTION.md).
 
 ## Future Ground Truth
 
@@ -36,4 +39,3 @@ For final benchmark tasks, replace heuristic labels with:
 - linked mouse outcomes for candidate prioritization and hit prediction,
 - curated expert labels for failure diagnosis,
 - expert or counterfactual utility labels for next-experiment selection.
-

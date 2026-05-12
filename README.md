@@ -19,10 +19,13 @@ uv sync
 ```
 
 ```bash
-uv run capablebench ingest "/Users/melissadu/Downloads/Mastersheet omni 20260508.xlsx"
+uv run capablebench ingest "<path-to-invitro-mastersheet.xlsx>"
 uv run capablebench make-tasks --limit 10
 uv run capablebench list-tasks
 ```
+
+For the full private data flow, including in vitro and in vivo extraction, see
+[Data Ingestion](docs/DATA_INGESTION.md).
 
 Run an arbitrary agent command against a task:
 
@@ -71,17 +74,19 @@ uv sync --locked
 
 ## Current Data Flow
 
-1. `ingest` reads the Excel mastersheet and writes normalized CSVs to
+1. `ingest` reads the Excel mastersheet and writes normalized in vitro CSVs to
    `data/processed/`.
-2. `make-tasks` creates pilot task directories in `data/tasks/` and hidden answer
+2. `extract-invivo` reads mouse Excel/JSON exports and writes local in vivo CSVs
+   to `data/processed/`.
+3. `make-tasks` creates pilot task directories in `data/tasks/` and hidden answer
    YAML files in `data/answers/`.
-3. `run` creates an isolated run directory under `runs/`, copies task data, and
+4. `run` creates an isolated run directory under `runs/`, copies task data, and
    executes the supplied command.
-4. `grade` scores an attempt against the hidden answer file.
+5. `grade` scores an attempt against the hidden answer file.
 
 ## Important Status
 
-The current workbook contains in vitro pharmacology and plate QC sheets. Pilot
-candidate-prioritization tasks therefore use a transparent heuristic oracle
-rather than true mouse outcomes. Once in vivo outcome tables are linked, the same
-harness can generate final tasks with objective experimental labels.
+The current pilot candidate-prioritization tasks use a transparent heuristic
+oracle rather than true mouse outcomes. The in vivo extraction now gives us the
+local ground-truth source tables needed to replace those pilot labels with
+experimental outcome labels.

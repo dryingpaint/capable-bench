@@ -66,14 +66,23 @@ grader tries to parse peptide IDs from that text.
 
 ## Final Ground Truth Extension
 
-When mouse outcome data are available, add processed tables such as:
+Mouse outcome data are populated locally with:
 
 ```text
-data/processed/invivo_studies.csv
-data/processed/stability_assays.csv
+uv run capablebench extract-invivo "<path-to-mouse-data-directory>"
 ```
 
-Then replace pilot answer YAML files with labels derived from outcomes:
+That creates processed tables such as:
+
+```text
+data/processed/invivo_measurements_long.csv
+data/processed/invivo_studies_inventory.csv
+data/processed/invivo_olden_raw_measurements_long.csv
+data/processed/invivo_olden_analysis_bars.csv
+data/processed/invivo_olden_analysis_significance.csv
+```
+
+Then replace pilot answer YAML files with labels derived from linked outcomes:
 
 ```yaml
 id: prioritization-oxn-042
@@ -89,4 +98,3 @@ gold_top_3:
   - PEP-...
 outcome_definition: study_normalized_inactivity_effect_size
 ```
-
