@@ -12,16 +12,22 @@ the final answer.
 
 ## Quick Start
 
+Install the locked dependencies with uv:
+
 ```bash
-python -m capablebench.cli ingest "/Users/melissadu/Downloads/Mastersheet omni 20260508.xlsx"
-python -m capablebench.cli make-tasks --limit 10
-python -m capablebench.cli list-tasks
+uv sync
+```
+
+```bash
+uv run capablebench ingest "/Users/melissadu/Downloads/Mastersheet omni 20260508.xlsx"
+uv run capablebench make-tasks --limit 10
+uv run capablebench list-tasks
 ```
 
 Run an arbitrary agent command against a task:
 
 ```bash
-python -m capablebench.cli run TASK_ID \
+uv run capablebench run TASK_ID \
   --agent-command 'codex exec --cd {task_dir} "$(cat {prompt_file})"'
 ```
 
@@ -29,7 +35,7 @@ For Claude Code, use the same placeholder contract with your preferred CLI
 flags:
 
 ```bash
-python -m capablebench.cli run TASK_ID \
+uv run capablebench run TASK_ID \
   --agent-command 'claude -p "$(cat {prompt_file})"'
 ```
 
@@ -46,10 +52,21 @@ saved and used as a fallback.
 Run the same command across a task set:
 
 ```bash
-python -m capablebench.cli run-suite \
+uv run capablebench run-suite \
   --agent-command 'codex exec --cd {task_dir} "$(cat {prompt_file})"' \
   --limit 10
-python -m capablebench.cli summarize
+uv run capablebench summarize
+```
+
+## Dependency Management
+
+Use uv for all dependency changes:
+
+```bash
+uv add PACKAGE
+uv remove PACKAGE
+uv lock
+uv sync --locked
 ```
 
 ## Current Data Flow
