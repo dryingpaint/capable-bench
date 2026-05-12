@@ -1,0 +1,25 @@
+benchmark:
+  name: translational-peptide-reasoning
+  version: 0.1.0
+  description: >
+    Agentic benchmark for scientific decision-making over peptide pharmacology
+    data. Tasks are method-agnostic: agents may inspect files, write code, and
+    run arbitrary analyses, but are graded on final answers.
+
+paths:
+  processed_dir: data/processed
+  tasks_dir: data/tasks
+  answers_dir: data/answers
+  runs_dir: runs
+
+task_defaults:
+  allowed_domains: []
+  require_answer_file: answer.json
+  max_runtime_seconds: 1800
+
+pilot_generation:
+  min_candidates_per_task: 6
+  max_candidates_per_task: 12
+  top_k: 3
+  random_seed: 20260511
+
