@@ -25,16 +25,14 @@ answer, not the path.
    uncertainty.
 
 The ingestion path supports the in vitro mastersheet and mouse in vivo
-Excel/JSON exports. Generated pilot candidate-prioritization tasks still use a
-clearly marked heuristic oracle until we link candidate identities to outcome
-labels. Those pilot tasks validate the harness and agent workflow; they should
-not be reported as final scientific benchmark results.
+Excel/JSON exports. Benchmark tasks should be curated from linked evidence and
+labeled with experimental outcomes or explicit expert rubrics.
 
 Operational ingestion instructions live in [Data Ingestion](DATA_INGESTION.md).
 
-## Future Ground Truth
+## Ground Truth
 
-For final benchmark tasks, replace heuristic labels with:
+For benchmark tasks, use:
 
 - linked mouse outcomes for candidate prioritization and hit prediction,
 - curated expert labels for failure diagnosis,

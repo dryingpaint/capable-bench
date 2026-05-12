@@ -9,7 +9,7 @@ from .ingest import ingest_mastersheet
 from .invivo import extract_mouse_data
 from .run import run_task
 from .suite import run_suite, summarize_runs
-from .tasks import list_tasks, make_pilot_tasks
+from .tasks import list_tasks
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,17 +35,7 @@ def main() -> None:
     invivo.add_argument("mouse_dir", type=Path)
     invivo.add_argument("--out-dir", type=Path, default=PROCESSED_DIR)
 
-    make = sub.add_parser("make-tasks", help="Generate pilot tasks from processed data.")
-    make.add_argument("--processed-dir", type=Path, default=PROCESSED_DIR)
-    make.add_argument("--tasks-dir", type=Path, default=TASKS_DIR)
-    make.add_argument("--answers-dir", type=Path, default=ANSWERS_DIR)
-    make.add_argument("--limit", type=int, default=None)
-    make.add_argument("--min-candidates", type=int, default=6)
-    make.add_argument("--max-candidates", type=int, default=12)
-    make.add_argument("--top-k", type=int, default=3)
-    make.add_argument("--seed", type=int, default=20260511)
-
-    listing = sub.add_parser("list-tasks", help="List generated tasks.")
+    listing = sub.add_parser("list-tasks", help="List available tasks.")
     listing.add_argument("--tasks-dir", type=Path, default=TASKS_DIR)
 
     run = sub.add_parser("run", help="Run one task with an arbitrary agent command.")
@@ -55,6 +45,12 @@ def main() -> None:
     run.add_argument("--answers-dir", type=Path, default=ANSWERS_DIR)
     run.add_argument("--runs-dir", type=Path, default=RUNS_DIR)
     run.add_argument("--timeout-seconds", type=int, default=1800)
+    run.add_argument(
+        "--remote",
+        choices=["local", "modal"],
+        default="local",
+        help="Execution backend. Default: local.",
+    )
 
     suite = sub.add_parser("run-suite", help="Run every listed task with one agent command.")
     suite.add_argument("--agent-command", required=True)
@@ -63,6 +59,12 @@ def main() -> None:
     suite.add_argument("--runs-dir", type=Path, default=RUNS_DIR)
     suite.add_argument("--limit", type=int, default=None)
     suite.add_argument("--timeout-seconds", type=int, default=1800)
+    suite.add_argument(
+        "--remote",
+        choices=["local", "modal"],
+        default="local",
+        help="Execution backend. Default: local.",
+    )
 
     summarize = sub.add_parser("summarize", help="Aggregate grade files under runs/.")
     summarize.add_argument("--runs-dir", type=Path, default=RUNS_DIR)
@@ -78,25 +80,14 @@ def main() -> None:
         _print_json(ingest_mastersheet(args.xlsx, args.out_dir))
     elif args.command == "extract-invivo":
         _print_json(extract_mouse_data(args.mouse_dir, args.out_dir))
-    elif args.command == "make-tasks":
-        _print_json(
-            make_pilot_tasks(
-                args.processed_dir,
-                args.tasks_dir,
-                args.answers_dir,
-                limit=args.limit,
-                min_candidates=args.min_candidates,
-                max_candidates=args.max_candidates,
-                top_k=args.top_k,
-                seed=args.seed,
-            )
-        )
     elif args.command == "list-tasks":
         for task in list_tasks(args.tasks_dir):
             print(f"{task['id']}\t{task['task_type']}\t{task['data_path']}")
     elif args.command == "run":
-        _print_json(
-            run_task(
+        if args.remote == "modal":
+            from .modal_runner import run_task_modal
+
+            result = run_task_modal(
                 args.task_id,
                 args.tasks_dir,
                 args.answers_dir,
@@ -104,10 +95,21 @@ def main() -> None:
                 args.agent_command,
                 timeout_seconds=args.timeout_seconds,
             )
-        )
+        else:
+            result = run_task(
+                args.task_id,
+                args.tasks_dir,
+                args.answers_dir,
+                args.runs_dir,
+                args.agent_command,
+                timeout_seconds=args.timeout_seconds,
+            )
+        _print_json(result)
     elif args.command == "run-suite":
-        _print_json(
-            run_suite(
+        if args.remote == "modal":
+            from .modal_runner import run_suite_modal
+
+            result = run_suite_modal(
                 args.tasks_dir,
                 args.answers_dir,
                 args.runs_dir,
@@ -115,7 +117,16 @@ def main() -> None:
                 limit=args.limit,
                 timeout_seconds=args.timeout_seconds,
             )
-        )
+        else:
+            result = run_suite(
+                args.tasks_dir,
+                args.answers_dir,
+                args.runs_dir,
+                args.agent_command,
+                limit=args.limit,
+                timeout_seconds=args.timeout_seconds,
+            )
+        _print_json(result)
     elif args.command == "summarize":
         _print_json(summarize_runs(args.runs_dir))
     elif args.command == "grade":

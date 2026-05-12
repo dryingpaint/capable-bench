@@ -19,14 +19,14 @@ data/answers/<task_id>.yaml
 ## `task.yaml`
 
 ```yaml
-id: pilot-prioritization-mch-001
+id: prioritization-oxn-001
 task_type: candidate_prioritization
-receptor_family: MCH
+receptor_family: OXN
 data_files:
   - candidates.csv
 answer_file: answer.json
 allowed_domains: []
-label_status: pilot_heuristic_not_final_ground_truth
+label_status: experimental_ground_truth
 ```
 
 ## `problems.csv`
@@ -77,12 +77,12 @@ That creates processed tables such as:
 ```text
 data/processed/invivo_measurements_long.csv
 data/processed/invivo_studies_inventory.csv
-data/processed/invivo_olden_raw_measurements_long.csv
-data/processed/invivo_olden_analysis_bars.csv
-data/processed/invivo_olden_analysis_significance.csv
+data/processed/invivo_json_exports_raw_measurements_long.csv
+data/processed/invivo_json_exports_analysis_bars.csv
+data/processed/invivo_json_exports_analysis_significance.csv
 ```
 
-Then replace pilot answer YAML files with labels derived from linked outcomes:
+Use answer YAML files with labels derived from linked outcomes:
 
 ```yaml
 id: prioritization-oxn-042

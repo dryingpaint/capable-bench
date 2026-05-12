@@ -20,7 +20,7 @@ uv sync
 
 ```bash
 uv run capablebench ingest "<path-to-invitro-mastersheet.xlsx>"
-uv run capablebench make-tasks --limit 10
+uv run capablebench extract-invivo "<path-to-mouse-data-directory>"
 uv run capablebench list-tasks
 ```
 
@@ -61,6 +61,31 @@ uv run capablebench run-suite \
 uv run capablebench summarize
 ```
 
+Run on Modal instead of locally:
+
+```bash
+export OPENAI_API_KEY=...
+modal setup
+uv run capablebench run TASK_ID \
+  --remote modal \
+  --agent-command 'codex exec --cd {task_dir} "$(cat {prompt_file})"'
+```
+
+Run a task set as parallel Modal function calls:
+
+```bash
+uv run capablebench run-suite \
+  --remote modal \
+  --agent-command 'codex exec --cd {task_dir} "$(cat {prompt_file})"' \
+  --limit 10
+```
+
+The Modal runner bundles each task directory, reconstructs it inside a remote
+function, runs the agent command there, grades the result remotely, and writes
+the returned artifacts back under `runs/` locally. The image is defined in
+`capablebench/modal_app.py` and installs Codex and Claude Code CLIs into a
+`modal.Image.debian_slim` container.
+
 ## Dependency Management
 
 Use uv for all dependency changes:
@@ -78,15 +103,13 @@ uv sync --locked
    `data/processed/`.
 2. `extract-invivo` reads mouse Excel/JSON exports and writes local in vivo CSVs
    to `data/processed/`.
-3. `make-tasks` creates pilot task directories in `data/tasks/` and hidden answer
-   YAML files in `data/answers/`.
+3. Curated or outcome-linked task bundles live in `data/tasks/`, with hidden
+   answer/rubric files in `data/answers/`.
 4. `run` creates an isolated run directory under `runs/`, copies task data, and
    executes the supplied command.
 5. `grade` scores an attempt against the hidden answer file.
 
-## Important Status
+## Task Curation
 
-The current pilot candidate-prioritization tasks use a transparent heuristic
-oracle rather than true mouse outcomes. The in vivo extraction now gives us the
-local ground-truth source tables needed to replace those pilot labels with
-experimental outcome labels.
+Tasks should be curated from linked in vitro/in vivo evidence and should use
+experimental outcome labels or explicit expert rubrics.

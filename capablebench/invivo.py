@@ -222,7 +222,7 @@ def extract_mouse_data(mouse_dir: Path, out_dir: Path) -> dict[str, Any]:
                 }
             )
 
-    json_summary = _extract_olden_json(mouse_dir / "olden-autopulled", out_dir)
+    json_summary = _extract_json_exports(mouse_dir / "olden-autopulled", out_dir)
 
     write_csv(out_dir / "invivo_measurements_long.csv", all_rows, INVIVO_FIELDNAMES)
     write_csv(out_dir / "invivo_studies_inventory.csv", study_rows, STUDY_FIELDNAMES)
@@ -234,18 +234,18 @@ def extract_mouse_data(mouse_dir: Path, out_dir: Path) -> dict[str, Any]:
         "outputs": {
             "excel_measurements": str(out_dir / "invivo_measurements_long.csv"),
             "excel_inventory": str(out_dir / "invivo_studies_inventory.csv"),
-            "raw_json_measurements": str(out_dir / "invivo_olden_raw_measurements_long.csv"),
-            "cage_in_rack_json": str(out_dir / "invivo_olden_cage_in_rack.csv"),
-            "analysis_bars": str(out_dir / "invivo_olden_analysis_bars.csv"),
-            "analysis_scatter": str(out_dir / "invivo_olden_analysis_scatter.csv"),
-            "analysis_significance": str(out_dir / "invivo_olden_analysis_significance.csv"),
+            "raw_json_measurements": str(out_dir / "invivo_json_exports_raw_measurements_long.csv"),
+            "cage_in_rack_json": str(out_dir / "invivo_json_exports_cage_in_rack.csv"),
+            "analysis_bars": str(out_dir / "invivo_json_exports_analysis_bars.csv"),
+            "analysis_scatter": str(out_dir / "invivo_json_exports_analysis_scatter.csv"),
+            "analysis_significance": str(out_dir / "invivo_json_exports_analysis_significance.csv"),
         },
     }
     write_json(out_dir / "invivo_extract_summary.json", summary)
     return summary
 
 
-def _extract_olden_json(olden_dir: Path, out_dir: Path) -> dict[str, Any]:
+def _extract_json_exports(json_dir: Path, out_dir: Path) -> dict[str, Any]:
     raw_rows: list[dict[str, Any]] = []
     cage_rows: list[dict[str, Any]] = []
     bar_rows: list[dict[str, Any]] = []
@@ -253,17 +253,17 @@ def _extract_olden_json(olden_dir: Path, out_dir: Path) -> dict[str, Any]:
     sig_rows: list[dict[str, Any]] = []
     json_studies: set[str] = set()
 
-    if not olden_dir.exists():
+    if not json_dir.exists():
         return {
-            "olden_json_studies": 0,
-            "olden_raw_measurement_rows": 0,
-            "olden_cage_in_rack_rows": 0,
-            "olden_analysis_bar_rows": 0,
-            "olden_analysis_scatter_rows": 0,
-            "olden_analysis_significance_rows": 0,
+            "json_export_studies": 0,
+            "json_export_raw_measurement_rows": 0,
+            "json_export_cage_in_rack_rows": 0,
+            "json_export_analysis_bar_rows": 0,
+            "json_export_analysis_scatter_rows": 0,
+            "json_export_analysis_significance_rows": 0,
         }
 
-    for path in sorted(olden_dir.rglob("*.json")):
+    for path in sorted(json_dir.rglob("*.json")):
         study_name = path.parent.name
         json_studies.add(study_name)
         try:
@@ -388,18 +388,22 @@ def _extract_olden_json(olden_dir: Path, out_dir: Path) -> dict[str, Any]:
                         }
                     )
 
-    write_csv(out_dir / "invivo_olden_raw_measurements_long.csv", raw_rows, RAW_JSON_FIELDNAMES)
-    write_csv(out_dir / "invivo_olden_cage_in_rack.csv", cage_rows, CAGE_JSON_FIELDNAMES)
-    write_csv(out_dir / "invivo_olden_analysis_bars.csv", bar_rows, ANALYSIS_BAR_FIELDNAMES)
-    write_csv(out_dir / "invivo_olden_analysis_scatter.csv", scatter_rows, ANALYSIS_SCATTER_FIELDNAMES)
-    write_csv(out_dir / "invivo_olden_analysis_significance.csv", sig_rows, ANALYSIS_SIG_FIELDNAMES)
+    write_csv(out_dir / "invivo_json_exports_raw_measurements_long.csv", raw_rows, RAW_JSON_FIELDNAMES)
+    write_csv(out_dir / "invivo_json_exports_cage_in_rack.csv", cage_rows, CAGE_JSON_FIELDNAMES)
+    write_csv(out_dir / "invivo_json_exports_analysis_bars.csv", bar_rows, ANALYSIS_BAR_FIELDNAMES)
+    write_csv(out_dir / "invivo_json_exports_analysis_scatter.csv", scatter_rows, ANALYSIS_SCATTER_FIELDNAMES)
+    write_csv(
+        out_dir / "invivo_json_exports_analysis_significance.csv",
+        sig_rows,
+        ANALYSIS_SIG_FIELDNAMES,
+    )
     return {
-        "olden_json_studies": len(json_studies),
-        "olden_raw_measurement_rows": len(raw_rows),
-        "olden_cage_in_rack_rows": len(cage_rows),
-        "olden_analysis_bar_rows": len(bar_rows),
-        "olden_analysis_scatter_rows": len(scatter_rows),
-        "olden_analysis_significance_rows": len(sig_rows),
+        "json_export_studies": len(json_studies),
+        "json_export_raw_measurement_rows": len(raw_rows),
+        "json_export_cage_in_rack_rows": len(cage_rows),
+        "json_export_analysis_bar_rows": len(bar_rows),
+        "json_export_analysis_scatter_rows": len(scatter_rows),
+        "json_export_analysis_significance_rows": len(sig_rows),
     }
 
 

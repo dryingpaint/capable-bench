@@ -12,6 +12,26 @@ from .grade import grade_attempt
 from .io import ensure_dir, read_yaml, write_json
 
 
+def render_agent_command(
+    agent_command: str,
+    *,
+    task_dir: Path,
+    prompt_file: Path,
+    answer_file: Path,
+    task_id: str,
+) -> str:
+    replacements = {
+        "{task_dir}": shlex.quote(str(task_dir)),
+        "{prompt_file}": shlex.quote(str(prompt_file)),
+        "{answer_file}": shlex.quote(str(answer_file)),
+        "{task_id}": shlex.quote(task_id),
+    }
+    rendered_command = agent_command
+    for placeholder, value in replacements.items():
+        rendered_command = rendered_command.replace(placeholder, value)
+    return rendered_command
+
+
 def _copy_task(task_dir: Path, run_dir: Path) -> None:
     ensure_dir(run_dir)
     for item in task_dir.iterdir():
@@ -45,15 +65,13 @@ def run_task(
     stdout_file = run_dir / "stdout.txt"
     stderr_file = run_dir / "stderr.txt"
 
-    replacements = {
-        "{task_dir}": shlex.quote(str(run_dir)),
-        "{prompt_file}": shlex.quote(str(prompt_file)),
-        "{answer_file}": shlex.quote(str(answer_file)),
-        "{task_id}": shlex.quote(task_id),
-    }
-    rendered_command = agent_command
-    for placeholder, value in replacements.items():
-        rendered_command = rendered_command.replace(placeholder, value)
+    rendered_command = render_agent_command(
+        agent_command,
+        task_dir=run_dir,
+        prompt_file=prompt_file,
+        answer_file=answer_file,
+        task_id=task_id,
+    )
 
     env = os.environ.copy()
     env.update(
