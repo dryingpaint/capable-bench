@@ -16,34 +16,60 @@ def run_suite(
     agent_command: str,
     *,
     limit: int | None = None,
+    task_ids: list[str] | None = None,
     timeout_seconds: int = 1800,
 ) -> dict[str, Any]:
     tasks = list_tasks(tasks_dir)
+    if task_ids is not None:
+        requested = set(task_ids)
+        tasks = [task for task in tasks if task["id"] in requested]
     if limit is not None:
         tasks = tasks[:limit]
 
     results = []
     for task in tasks:
-        results.append(
-            run_task(
-                task["id"],
-                tasks_dir,
-                answers_dir,
-                runs_dir,
-                agent_command,
-                timeout_seconds=timeout_seconds,
+        try:
+            results.append(
+                run_task(
+                    task["id"],
+                    tasks_dir,
+                    answers_dir,
+                    runs_dir,
+                    agent_command,
+                    timeout_seconds=timeout_seconds,
+                )
             )
-        )
+        except Exception as exc:
+            print(f"[run-suite] task {task['id']} failed: {exc!r}")
+            results.append({"task_id": task["id"], "error": repr(exc)})
 
     grades = [r.get("grade") for r in results if r.get("grade")]
     summary = {
         "tasks_attempted": len(results),
         "tasks_graded": len(grades),
-        "mean_precision_at_k": _mean(g.get("precision_at_k", 0.0) for g in grades),
-        "mean_ndcg_at_k": _mean(g.get("ndcg_at_k", 0.0) for g in grades),
-        "top1_exact_rate": _mean(1.0 if g.get("top1_exact") else 0.0 for g in grades),
+        "mean_score": _mean(
+            g.get("score", g.get("precision_at_k", 0.0)) for g in grades
+        ),
+        "mean_precision_at_k": _mean(
+            g["precision_at_k"] for g in grades if "precision_at_k" in g
+        ),
+        "mean_ndcg_at_k": _mean(
+            g["ndcg_at_k"] for g in grades if "ndcg_at_k" in g
+        ),
+        "top1_exact_rate": _mean(
+            1.0 if g.get("top1_exact") else 0.0
+            for g in grades
+            if "top1_exact" in g
+        ),
         "top1_in_gold_top_k_rate": _mean(
-            1.0 if g.get("top1_in_gold_top_k") else 0.0 for g in grades
+            1.0 if g.get("top1_in_gold_top_k") else 0.0
+            for g in grades
+            if "top1_in_gold_top_k" in g
+        ),
+        "exact_match_rate": _mean(
+            1.0 if g.get("exact_match") else 0.0
+            for g in grades
+            if "exact_match" in g
         ),
         "runs": results,
     }
@@ -60,11 +86,29 @@ def summarize_runs(runs_dir: Path) -> dict[str, Any]:
             grades.append(json.load(f))
     return {
         "grades_found": len(grades),
-        "mean_precision_at_k": _mean(g.get("precision_at_k", 0.0) for g in grades),
-        "mean_ndcg_at_k": _mean(g.get("ndcg_at_k", 0.0) for g in grades),
-        "top1_exact_rate": _mean(1.0 if g.get("top1_exact") else 0.0 for g in grades),
+        "mean_score": _mean(
+            g.get("score", g.get("precision_at_k", 0.0)) for g in grades
+        ),
+        "mean_precision_at_k": _mean(
+            g["precision_at_k"] for g in grades if "precision_at_k" in g
+        ),
+        "mean_ndcg_at_k": _mean(
+            g["ndcg_at_k"] for g in grades if "ndcg_at_k" in g
+        ),
+        "top1_exact_rate": _mean(
+            1.0 if g.get("top1_exact") else 0.0
+            for g in grades
+            if "top1_exact" in g
+        ),
         "top1_in_gold_top_k_rate": _mean(
-            1.0 if g.get("top1_in_gold_top_k") else 0.0 for g in grades
+            1.0 if g.get("top1_in_gold_top_k") else 0.0
+            for g in grades
+            if "top1_in_gold_top_k" in g
+        ),
+        "exact_match_rate": _mean(
+            1.0 if g.get("exact_match") else 0.0
+            for g in grades
+            if "exact_match" in g
         ),
     }
 
@@ -74,4 +118,3 @@ def _mean(values: Any) -> float | None:
     if not values:
         return None
     return round(sum(float(v) for v in values) / len(values), 4)
-

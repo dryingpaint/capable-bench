@@ -1,14 +1,25 @@
 # Capable Bench
 
-Agentic benchmark harness for translational peptide reasoning tasks. The goal is
-to test whether coding agents such as Codex or Claude Code can inspect messy
-scientific data, run their own analyses, and make experimentally useful
-decisions.
+Agentic benchmark harness for BioDiscoveryBench: a biological and biochemical
+reasoning benchmark for coding agents. The goal is to test whether agents such
+as Codex or Claude Code can inspect messy scientific data, run their own
+analyses, generate hypotheses, plan experiments, and make experimentally useful
+drug discovery decisions.
 
-The setup follows the useful parts of BioMysteryBench: each problem has a prompt,
-task-specific data files, optional network-domain metadata, and a hidden answer
-or rubric. Agents are free to solve the task however they want; the grader scores
-the final answer.
+The setup follows the useful parts of BioMysteryBench: each problem has a
+prompt, task-specific data files, optional network-domain metadata, and a hidden
+answer or rubric. Agents are free to solve the task however they want; the
+grader scores the final answer.
+
+The benchmark design is documented in
+[BioDiscoveryBench](docs/BIO_DISCOVERY_BENCHMARK.md). It covers translational
+candidate ranking, hit prediction, failure diagnosis, mechanistic hypothesis
+generation, next-experiment selection, end-to-end discovery program planning,
+and tasks that require agents to use or critique biology foundation-model
+outputs.
+
+Calibration guidance for Codex, Claude, Modal, and the target unsaturated
+`<0.60` mean-score gate lives in [Calibration](docs/CALIBRATION.md).
 
 ## Quick Start
 
@@ -21,6 +32,7 @@ uv sync
 ```bash
 uv run capablebench ingest "<path-to-invitro-mastersheet.xlsx>"
 uv run capablebench extract-invivo "<path-to-mouse-data-directory>"
+uv run capablebench curate-pilot --clean
 uv run capablebench list-tasks
 ```
 
@@ -31,7 +43,7 @@ Run an arbitrary agent command against a task:
 
 ```bash
 uv run capablebench run TASK_ID \
-  --agent-command 'codex exec --cd {task_dir} "$(cat {prompt_file})"'
+  --agent-command 'codex exec --json --cd {task_dir} "$(cat {prompt_file})"'
 ```
 
 For Claude Code, use the same placeholder contract with your preferred CLI
@@ -39,7 +51,7 @@ flags:
 
 ```bash
 uv run capablebench run TASK_ID \
-  --agent-command 'claude -p "$(cat {prompt_file})"'
+  --agent-command 'claude -p --output-format stream-json --verbose "$(cat {prompt_file})"'
 ```
 
 The runner substitutes:
@@ -56,7 +68,7 @@ Run the same command across a task set:
 
 ```bash
 uv run capablebench run-suite \
-  --agent-command 'codex exec --cd {task_dir} "$(cat {prompt_file})"' \
+  --agent-command 'codex exec --json --cd {task_dir} "$(cat {prompt_file})"' \
   --limit 10
 uv run capablebench summarize
 ```
@@ -68,7 +80,7 @@ export OPENAI_API_KEY=...
 modal setup
 uv run capablebench run TASK_ID \
   --remote modal \
-  --agent-command 'codex exec --cd {task_dir} "$(cat {prompt_file})"'
+  --agent-command 'codex exec --json --cd {task_dir} "$(cat {prompt_file})"'
 ```
 
 Run a task set as parallel Modal function calls:
@@ -76,7 +88,7 @@ Run a task set as parallel Modal function calls:
 ```bash
 uv run capablebench run-suite \
   --remote modal \
-  --agent-command 'codex exec --cd {task_dir} "$(cat {prompt_file})"' \
+  --agent-command 'codex exec --json --cd {task_dir} "$(cat {prompt_file})"' \
   --limit 10
 ```
 
@@ -103,13 +115,54 @@ uv sync --locked
    `data/processed/`.
 2. `extract-invivo` reads mouse Excel/JSON exports and writes local in vivo CSVs
    to `data/processed/`.
-3. Curated or outcome-linked task bundles live in `data/tasks/`, with hidden
+3. `curate-pilot` builds benchmark task bundles from processed tables.
+4. Curated or outcome-linked task bundles live in `data/tasks/`, with hidden
    answer/rubric files in `data/answers/`.
-4. `run` creates an isolated run directory under `runs/`, copies task data, and
+5. `validate` checks that task bundles and hidden answers are complete.
+6. `run` creates an isolated run directory under `runs/`, copies task data, and
    executes the supplied command.
-5. `grade` scores an attempt against the hidden answer file.
+7. `grade` scores an attempt against the hidden answer file.
 
 ## Task Curation
 
 Tasks should be curated from linked in vitro/in vivo evidence and should use
-experimental outcome labels or explicit expert rubrics.
+experimental outcome labels or explicit expert rubrics. The schema supports
+ranking, label, option-ranking, and rubric-scored tasks; see
+[Task Schema](docs/TASK_SCHEMA.md).
+
+Build the current private benchmark from processed tables:
+
+```bash
+uv run capablebench curate-pilot --clean
+uv run capablebench validate
+uv run capablebench audit-quality
+```
+
+Run a smoke-test baseline across every task:
+
+```bash
+uv run capablebench run-suite \
+  --agent-command 'uv run capablebench baseline-answer --task-dir {task_dir}'
+```
+
+Run a stratified calibration subset by naming task IDs:
+
+```bash
+uv run capablebench run-suite \
+  --task-id pilot-prioritization-nps-001 \
+  --task-id pilot-hit-prediction-001 \
+  --agent-command 'codex exec --json --skip-git-repo-check --cd {task_dir} --dangerously-bypass-approvals-and-sandbox "$(cat {prompt_file})"'
+```
+
+Build a local task/performance dashboard:
+
+```bash
+uv run capablebench build-viewer
+```
+
+The generated static HTML viewer is written to `runs/viewer.html`. It shows all
+tasks, prompt/data previews, latest per-model scores, and calibration summary
+data, regraded against the current hidden answers. For each run it also shows
+`agent_trace.txt`, `stdout.txt`, `stderr.txt`, the submitted answer artifact,
+and the grade. Use `codex exec --json` or Claude's stream JSON output if you
+want agent turns and tool calls in the trace.
