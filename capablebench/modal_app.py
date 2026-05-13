@@ -26,13 +26,16 @@ image = (
 )
 
 app = modal.App(APP_NAME)
+# Named Modal secrets - create with:
+#   modal secret create codex-auth OPENAI_API_KEY=...
+#   modal secret create claude-auth CLAUDE_CODE_OAUTH_TOKEN=...
+# The CLIs don't read local env vars directly in the container: codex reads
+# OPENAI_API_KEY from env when auth_mode=apikey; Claude Code 2.x reads
+# CLAUDE_CODE_OAUTH_TOKEN (the OAuth access token from a Claude subscription)
+# in headless mode because keychain isn't available in the container.
 secrets = [
-    modal.Secret.from_dict(
-        {
-            "OPENAI_API_KEY": os.environ.get("OPENAI_API_KEY"),
-            "ANTHROPIC_API_KEY": os.environ.get("ANTHROPIC_API_KEY"),
-        }
-    )
+    modal.Secret.from_name("codex-auth"),
+    modal.Secret.from_name("claude-auth"),
 ]
 
 
@@ -56,11 +59,10 @@ def run_benchmark_task_remote(
         ensure_dir(path.parent)
         path.write_bytes(content)
 
-    gold_path = None
-    if task_bundle.get("gold_answer") is not None:
-        gold_path = task_dir / "_gold_answer.yaml"
-        gold_path.write_bytes(task_bundle["gold_answer"])
-
+    # The gold answer is INTENTIONALLY not bundled into the container.
+    # Grading happens in the orchestrator after artifacts return. This
+    # prevents the agent from discovering the gold via filesystem reads,
+    # even with bypassPermissions / dangerously-bypass-approvals-and-sandbox.
     metadata = read_yaml(task_dir / "task.yaml")
     prompt_file = task_dir / "prompt.md"
     answer_file = task_dir / metadata.get("answer_file", "answer.json")
@@ -82,8 +84,24 @@ def run_benchmark_task_remote(
             "CAPABLE_BENCH_TASK_DIR": str(task_dir),
             "CAPABLE_BENCH_PROMPT_FILE": str(prompt_file),
             "CAPABLE_BENCH_ANSWER_FILE": str(answer_file),
+            # Modal containers run as root; tell claude-code this is a sandbox
+            # so it lets us use --permission-mode bypassPermissions there.
+            "IS_SANDBOX": "1",
+            "CLAUDE_CODE_DANGEROUSLY_ALLOW_ROOT": "1",
         }
     )
+
+    # The codex CLI reads ~/.codex/auth.json rather than the OPENAI_API_KEY
+    # env var alone. Materialize the auth file from the secret so codex can
+    # authenticate inside the fresh container.
+    openai_key = env.get("OPENAI_API_KEY", "")
+    if openai_key:
+        import json as _json
+        codex_dir = Path.home() / ".codex"
+        codex_dir.mkdir(parents=True, exist_ok=True)
+        (codex_dir / "auth.json").write_text(
+            _json.dumps({"auth_mode": "apikey", "OPENAI_API_KEY": openai_key})
+        )
 
     started = time.time()
     proc = subprocess.run(
@@ -101,11 +119,7 @@ def run_benchmark_task_remote(
     stderr_file.write_text(proc.stderr, encoding="utf-8")
 
     answer_source = answer_file if answer_file.exists() else stdout_file
-    grade = None
-    grade_path = task_dir / "grade.json"
-    if gold_path is not None:
-        grade = grade_attempt(answer_source, gold_path, grade_path)
-
+    # Grading is deferred to the orchestrator (no gold inside the container).
     summary = {
         "task_id": task_id,
         "run_id": run_id,
@@ -116,7 +130,6 @@ def run_benchmark_task_remote(
         "answer_source": str(answer_source),
         "stdout_file": str(stdout_file),
         "stderr_file": str(stderr_file),
-        "grade": grade,
         "executor": "modal",
     }
     write_json(task_dir / "run_summary.json", summary)
