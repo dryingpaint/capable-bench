@@ -72,7 +72,8 @@ def _collect_runs(runs_dir: Path, answers_dir: Path) -> list[dict[str, Any]]:
             answer_source = run_dir / answer_source
         gold_path = answers_dir / f"{task_id}.yaml"
         grade = summary.get("grade")
-        if answer_source.exists() and gold_path.exists():
+        # Only re-grade if no cached grade exists, or if explicitly requested
+        if not grade and answer_source.exists() and gold_path.exists():
             try:
                 grade = grade_attempt(answer_source, gold_path)
             except Exception as exc:

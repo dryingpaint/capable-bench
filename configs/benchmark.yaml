@@ -1,10 +1,12 @@
 benchmark:
-  name: translational-peptide-reasoning
+  name: biodiscoverybench
   version: 0.1.0
   description: >
-    Agentic benchmark for scientific decision-making over peptide pharmacology
-    data. Tasks are method-agnostic: agents may inspect files, write code, and
-    run arbitrary analyses, but are graded on final answers.
+    Agentic benchmark for biological and biochemical reasoning, hypothesis
+    generation, experiment planning, translational candidate decisions, and
+    end-to-end drug discovery over private scientific datasets. Tasks are
+    method-agnostic: agents may inspect files, write code, and run arbitrary
+    analyses, but are graded on final answers.
 
 paths:
   processed_dir: data/processed
@@ -16,10 +18,71 @@ task_defaults:
   allowed_domains: []
   require_answer_file: answer.json
   max_runtime_seconds: 1800
+  scoring_modes:
+    - ranking
+    - label
+    - option_ranking
+    - rubric
+
+calibration:
+  target_max_mean_score: 0.60
+  compare_agents:
+    - codex
+    - claude
+  report_by_task_family: true
+
+capability_targets:
+  - mechanistic_reasoning
+  - hypothesis_generation
+  - experiment_planning
+  - translational_decision_making
+  - model_augmented_discovery
+
+task_types:
+  ranking:
+    - candidate_prioritization
+  label:
+    - hit_prediction
+  option_ranking:
+    - next_experiment
+  rubric:
+    - failure_diagnosis
+    - rescue_strategy
+    - mechanistic_hypothesis
+    - structure_activity_reasoning
+    - counterfactual_biology
+    - artifact_detection
+    - experiment_plan
+    - assay_triage
+    - data_acquisition_plan
+    - drug_discovery_program
+    - portfolio_tradeoff
+    - lead_optimization_loop
+    - foundation_model_triage
+    - model_disagreement_analysis
+    - generated_candidate_review
+    - functional_prediction
+
+evidence_layers:
+  - identity
+  - in_vitro
+  - developability
+  - in_vivo
+  - omics
+  - structure
+  - model_outputs
+  - decision_history
 
 pilot_generation:
   min_candidates_per_task: 6
   max_candidates_per_task: 12
   top_k: 3
   random_seed: 20260511
-
+  target_task_mix:
+    candidate_prioritization: 10
+    hit_prediction: 5
+    failure_diagnosis: 5
+    next_experiment: 5
+    mechanistic_hypothesis: 5
+    foundation_model_triage: 5
+    drug_discovery_program: 3

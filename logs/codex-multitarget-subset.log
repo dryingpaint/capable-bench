@@ -1,0 +1,402 @@
+{
+  "tasks_attempted": 12,
+  "tasks_graded": 12,
+  "mean_score": 0.875,
+  "mean_precision_at_k": null,
+  "mean_ndcg_at_k": null,
+  "top1_exact_rate": null,
+  "top1_in_gold_top_k_rate": null,
+  "exact_match_rate": 0.75,
+  "runs": [
+    {
+      "task_id": "pilot-peptide-multitarget-sequence-mono-active-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-001/20260513-071436",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-001/20260513-071436 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-001/20260513-071436/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 26.182,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-001/20260513-071436/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-001/20260513-071436/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-001/20260513-071436/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-001/20260513-071436/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-peptide-multitarget-sequence-mono-active-001",
+        "task_type": "multitarget_activity",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-001/20260513-071436/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-multitarget-sequence-mono-active-001.yaml",
+        "fields": {
+          "OXN": {
+            "predicted": "active",
+            "gold": "active",
+            "exact_match": true
+          }
+        },
+        "correct_fields": 1,
+        "total_fields": 1,
+        "exact_match": true,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-multitarget-sequence-mono-active-002",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-002/20260513-071502",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-002/20260513-071502 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-002/20260513-071502/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 33.684,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-002/20260513-071502/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-002/20260513-071502/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-002/20260513-071502/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-002/20260513-071502/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-peptide-multitarget-sequence-mono-active-002",
+        "task_type": "multitarget_activity",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-002/20260513-071502/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-multitarget-sequence-mono-active-002.yaml",
+        "fields": {
+          "MCH": {
+            "predicted": "active",
+            "gold": "active",
+            "exact_match": true
+          }
+        },
+        "correct_fields": 1,
+        "total_fields": 1,
+        "exact_match": true,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-multitarget-sequence-mono-active-003",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-003/20260513-071536",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-003/20260513-071536 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-003/20260513-071536/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 23.272,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-003/20260513-071536/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-003/20260513-071536/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-003/20260513-071536/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-003/20260513-071536/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-peptide-multitarget-sequence-mono-active-003",
+        "task_type": "multitarget_activity",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-active-003/20260513-071536/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-multitarget-sequence-mono-active-003.yaml",
+        "fields": {
+          "NPS": {
+            "predicted": "active",
+            "gold": "active",
+            "exact_match": true
+          }
+        },
+        "correct_fields": 1,
+        "total_fields": 1,
+        "exact_match": true,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-multitarget-sequence-dual-mono-active-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-001/20260513-071559",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-001/20260513-071559 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-001/20260513-071559/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 40.483,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-001/20260513-071559/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-001/20260513-071559/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-001/20260513-071559/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-001/20260513-071559/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-peptide-multitarget-sequence-dual-mono-active-001",
+        "task_type": "multitarget_activity",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-001/20260513-071559/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-multitarget-sequence-dual-mono-active-001.yaml",
+        "fields": {
+          "NPS": {
+            "predicted": "active",
+            "gold": "active",
+            "exact_match": true
+          },
+          "MCH": {
+            "predicted": "active",
+            "gold": "inactive",
+            "exact_match": false
+          }
+        },
+        "correct_fields": 1,
+        "total_fields": 2,
+        "exact_match": false,
+        "score": 0.5,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-multitarget-sequence-dual-mono-active-002",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-002/20260513-071640",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-002/20260513-071640 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-002/20260513-071640/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 32.945,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-002/20260513-071640/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-002/20260513-071640/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-002/20260513-071640/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-002/20260513-071640/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-peptide-multitarget-sequence-dual-mono-active-002",
+        "task_type": "multitarget_activity",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-002/20260513-071640/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-multitarget-sequence-dual-mono-active-002.yaml",
+        "fields": {
+          "MCH": {
+            "predicted": "active",
+            "gold": "inactive",
+            "exact_match": false
+          },
+          "OXN": {
+            "predicted": "active",
+            "gold": "active",
+            "exact_match": true
+          }
+        },
+        "correct_fields": 1,
+        "total_fields": 2,
+        "exact_match": false,
+        "score": 0.5,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-multitarget-sequence-dual-mono-active-003",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-003/20260513-071712",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-003/20260513-071712 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-003/20260513-071712/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 75.637,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-003/20260513-071712/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-003/20260513-071712/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-003/20260513-071712/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-003/20260513-071712/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-peptide-multitarget-sequence-dual-mono-active-003",
+        "task_type": "multitarget_activity",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-mono-active-003/20260513-071712/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-multitarget-sequence-dual-mono-active-003.yaml",
+        "fields": {
+          "MCH": {
+            "predicted": "active",
+            "gold": "inactive",
+            "exact_match": false
+          },
+          "OXN": {
+            "predicted": "active",
+            "gold": "active",
+            "exact_match": true
+          }
+        },
+        "correct_fields": 1,
+        "total_fields": 2,
+        "exact_match": false,
+        "score": 0.5,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-multitarget-sequence-mono-inactive-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-001/20260513-071828",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-001/20260513-071828 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-001/20260513-071828/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 38.835,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-001/20260513-071828/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-001/20260513-071828/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-001/20260513-071828/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-001/20260513-071828/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-peptide-multitarget-sequence-mono-inactive-001",
+        "task_type": "multitarget_activity",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-001/20260513-071828/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-multitarget-sequence-mono-inactive-001.yaml",
+        "fields": {
+          "NPS": {
+            "predicted": "inactive",
+            "gold": "inactive",
+            "exact_match": true
+          }
+        },
+        "correct_fields": 1,
+        "total_fields": 1,
+        "exact_match": true,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-multitarget-sequence-mono-inactive-002",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-002/20260513-071907",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-002/20260513-071907 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-002/20260513-071907/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 25.036,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-002/20260513-071907/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-002/20260513-071907/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-002/20260513-071907/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-002/20260513-071907/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-peptide-multitarget-sequence-mono-inactive-002",
+        "task_type": "multitarget_activity",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-002/20260513-071907/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-multitarget-sequence-mono-inactive-002.yaml",
+        "fields": {
+          "MCH": {
+            "predicted": "inactive",
+            "gold": "inactive",
+            "exact_match": true
+          }
+        },
+        "correct_fields": 1,
+        "total_fields": 1,
+        "exact_match": true,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-multitarget-sequence-mono-inactive-003",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-003/20260513-071932",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-003/20260513-071932 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-003/20260513-071932/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 20.249,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-003/20260513-071932/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-003/20260513-071932/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-003/20260513-071932/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-003/20260513-071932/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-peptide-multitarget-sequence-mono-inactive-003",
+        "task_type": "multitarget_activity",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-mono-inactive-003/20260513-071932/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-multitarget-sequence-mono-inactive-003.yaml",
+        "fields": {
+          "MCH": {
+            "predicted": "inactive",
+            "gold": "inactive",
+            "exact_match": true
+          }
+        },
+        "correct_fields": 1,
+        "total_fields": 1,
+        "exact_match": true,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-multitarget-sequence-dual-active-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-001/20260513-071952",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-001/20260513-071952 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-001/20260513-071952/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 24.905,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-001/20260513-071952/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-001/20260513-071952/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-001/20260513-071952/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-001/20260513-071952/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-peptide-multitarget-sequence-dual-active-001",
+        "task_type": "multitarget_activity",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-001/20260513-071952/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-multitarget-sequence-dual-active-001.yaml",
+        "fields": {
+          "MCH": {
+            "predicted": "active",
+            "gold": "active",
+            "exact_match": true
+          },
+          "OXN": {
+            "predicted": "active",
+            "gold": "active",
+            "exact_match": true
+          }
+        },
+        "correct_fields": 2,
+        "total_fields": 2,
+        "exact_match": true,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-multitarget-sequence-dual-active-002",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-002/20260513-072017",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-002/20260513-072017 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-002/20260513-072017/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 21.493,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-002/20260513-072017/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-002/20260513-072017/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-002/20260513-072017/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-002/20260513-072017/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-peptide-multitarget-sequence-dual-active-002",
+        "task_type": "multitarget_activity",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-002/20260513-072017/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-multitarget-sequence-dual-active-002.yaml",
+        "fields": {
+          "NPS": {
+            "predicted": "active",
+            "gold": "active",
+            "exact_match": true
+          },
+          "OXN": {
+            "predicted": "active",
+            "gold": "active",
+            "exact_match": true
+          }
+        },
+        "correct_fields": 2,
+        "total_fields": 2,
+        "exact_match": true,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-multitarget-sequence-dual-active-003",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-003/20260513-072039",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-003/20260513-072039 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-003/20260513-072039/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 23.001,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-003/20260513-072039/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-003/20260513-072039/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-003/20260513-072039/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-003/20260513-072039/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-peptide-multitarget-sequence-dual-active-003",
+        "task_type": "multitarget_activity",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-peptide-multitarget-sequence-dual-active-003/20260513-072039/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-multitarget-sequence-dual-active-003.yaml",
+        "fields": {
+          "NPS": {
+            "predicted": "active",
+            "gold": "active",
+            "exact_match": true
+          },
+          "OXN": {
+            "predicted": "active",
+            "gold": "active",
+            "exact_match": true
+          }
+        },
+        "correct_fields": 2,
+        "total_fields": 2,
+        "exact_match": true,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    }
+  ]
+}

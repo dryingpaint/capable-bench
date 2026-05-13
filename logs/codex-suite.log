@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/Users/melissadu/Documents/projects/capable-bench/.venv/bin/capablebench", line 10, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/melissadu/Documents/projects/capable-bench/capablebench/cli.py", line 189, in main
+    result = run_suite(
+        args.tasks_dir,
+    ...<5 lines>...
+        timeout_seconds=args.timeout_seconds,
+    )
+  File "/Users/melissadu/Documents/projects/capable-bench/capablebench/suite.py", line 32, in run_suite
+    results.append(
+    ^^^^^^^^^^^^^^^
+    ...<6 lines>...
+            timeout_seconds=timeout_seconds,
+    
+  File "/Users/melissadu/Documents/projects/capable-bench/capablebench/run.py", line 99, in run_task
+    stdout, stderr, raw_trace = _capture_process(proc, timeout_seconds)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/melissadu/Documents/projects/capable-bench/capablebench/run.py", line 155, in _capture_process
+    trace_parts.append(
+subprocess.TimeoutExpired: Command 'codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-121501 --dangerously-bypass-approvals-and-sandbox "$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-121501/prompt.md)"' timed out after 900 seconds

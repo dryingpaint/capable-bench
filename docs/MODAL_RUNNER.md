@@ -33,7 +33,7 @@ written to run artifacts.
 ```bash
 uv run capablebench run TASK_ID \
   --remote modal \
-  --agent-command 'codex exec --cd {task_dir} "$(cat {prompt_file})"'
+  --agent-command 'codex exec --json --cd {task_dir} "$(cat {prompt_file})"'
 ```
 
 ## Suite
@@ -41,7 +41,7 @@ uv run capablebench run TASK_ID \
 ```bash
 uv run capablebench run-suite \
   --remote modal \
-  --agent-command 'codex exec --cd {task_dir} "$(cat {prompt_file})"' \
+  --agent-command 'codex exec --json --cd {task_dir} "$(cat {prompt_file})"' \
   --limit 10
 ```
 

@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "/Users/melissadu/Documents/projects/capable-bench/.venv/bin/capablebench", line 10, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/melissadu/Documents/projects/capable-bench/capablebench/cli.py", line 189, in main
+    result = run_suite(
+        args.tasks_dir,
+    ...<5 lines>...
+        timeout_seconds=args.timeout_seconds,
+    )
+  File "/Users/melissadu/Documents/projects/capable-bench/capablebench/suite.py", line 32, in run_suite
+    run_task(
+    ~~~~~~~~^
+        task["id"],
+        ^^^^^^^^^^^
+    ...<4 lines>...
+        timeout_seconds=timeout_seconds,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/melissadu/Documents/projects/capable-bench/capablebench/run.py", line 99, in run_task
+    stdout, stderr, raw_trace = _capture_process(proc, timeout_seconds)
+                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/melissadu/Documents/projects/capable-bench/capablebench/run.py", line 155, in _capture_process
+    raise subprocess.TimeoutExpired(proc.args, timeout_seconds)
+subprocess.TimeoutExpired: Command 'claude -p --output-format stream-json --verbose --permission-mode bypassPermissions "$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-022/20260512-121455/prompt.md)"' timed out after 900 seconds

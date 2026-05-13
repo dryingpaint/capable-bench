@@ -1,0 +1,327 @@
+{
+  "tasks_attempted": 4,
+  "tasks_graded": 4,
+  "mean_score": 0.3,
+  "mean_precision_at_k": null,
+  "mean_ndcg_at_k": null,
+  "top1_exact_rate": null,
+  "top1_in_gold_top_k_rate": null,
+  "exact_match_rate": null,
+  "runs": [
+    {
+      "task_id": "pilot-model-disagreement-analysis-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-123806",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-123806 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-123806/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 50.788,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-123806/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-123806/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-123806/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-123806/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-model-disagreement-analysis-001",
+        "task_type": "model_disagreement_analysis",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-123806/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-model-disagreement-analysis-001.yaml",
+        "concept_results": [
+          {
+            "id": "disagreement",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "disagreement"
+            ]
+          },
+          {
+            "id": "experimental_priority",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "experimental",
+              "assay"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "nxnv10.15",
+              "nxnv10.15",
+              "nxnv10.16",
+              "nxnv10.16",
+              "nxnv12.10"
+            ]
+          },
+          {
+            "id": "calibration",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "rank",
+              "model"
+            ]
+          },
+          {
+            "id": "uncertainty",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "uncertain",
+              "alternative"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 1.0,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-drug-discovery-program-nps-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-123856",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-123856 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-123856/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 65.214,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-123856/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-123856/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-123856/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-123856/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-drug-discovery-program-nps-001",
+        "task_type": "drug_discovery_program",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-123856/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-drug-discovery-program-nps-001.yaml",
+        "concept_results": [
+          {
+            "id": "lead_nomination",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "lead",
+              "advance",
+              "candidate"
+            ]
+          },
+          {
+            "id": "mechanism",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "receptor",
+              "pathway",
+              "target"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "nps",
+              "npsv26.12",
+              "npsv27.4",
+              "npsv5.2"
+            ]
+          },
+          {
+            "id": "experiment_plan",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "experiment",
+              "assay"
+            ]
+          },
+          {
+            "id": "decision_gate",
+            "weight": 2.0,
+            "matched": false,
+            "matched_terms": []
+          },
+          {
+            "id": "risk",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "risk",
+              "uncertainty",
+              "liability"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 0.8,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-drug-discovery-program-oxn-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-124002",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-124002 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-124002/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 68.189,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-124002/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-124002/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-124002/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-124002/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-drug-discovery-program-oxn-001",
+        "task_type": "drug_discovery_program",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-124002/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-drug-discovery-program-oxn-001.yaml",
+        "concept_results": [
+          {
+            "id": "lead_nomination",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "lead",
+              "nominate",
+              "advance",
+              "candidate"
+            ]
+          },
+          {
+            "id": "mechanism",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "receptor"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "oxa",
+              "oxb"
+            ]
+          },
+          {
+            "id": "experiment_plan",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "experiment",
+              "assay"
+            ]
+          },
+          {
+            "id": "decision_gate",
+            "weight": 2.0,
+            "matched": false,
+            "matched_terms": []
+          },
+          {
+            "id": "risk",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "risk",
+              "liability"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 0.8,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-drug-discovery-program-mch-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-124110",
+      "command": "codex exec --json --skip-git-repo-check --cd /Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-124110 --dangerously-bypass-approvals-and-sandbox \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-124110/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 66.037,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-124110/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-124110/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-124110/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-124110/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-drug-discovery-program-mch-001",
+        "task_type": "drug_discovery_program",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-124110/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-drug-discovery-program-mch-001.yaml",
+        "concept_results": [
+          {
+            "id": "lead_nomination",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "lead",
+              "nominate",
+              "advance",
+              "candidate"
+            ]
+          },
+          {
+            "id": "mechanism",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "mechanism",
+              "receptor"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "hmch",
+              "mch core19",
+              "ac-hmch(6-16)-nh2"
+            ]
+          },
+          {
+            "id": "experiment_plan",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "experiment",
+              "assay"
+            ]
+          },
+          {
+            "id": "decision_gate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "stop"
+            ]
+          },
+          {
+            "id": "risk",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "risk",
+              "uncertainty"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 1.0,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    }
+  ]
+}

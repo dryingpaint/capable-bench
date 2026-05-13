@@ -66,6 +66,7 @@ def curate_pilot_tasks(
         _build_drug_discovery_program,
         _build_peptide_pairwise_sequence,
         _build_peptide_ranking_sequence,
+        _build_peptide_multitarget_sequence,
     ]
     context = {
         "tasks_dir": tasks_dir,
@@ -73,6 +74,7 @@ def curate_pilot_tasks(
         "peptides": peptides,
         "peptide_by_id": peptide_by_id,
         "assay_summary": assay_summary,
+        "assays": assays,
         "invivo_rows": invivo_rows,
         "qc": qc,
     }
@@ -1469,6 +1471,192 @@ be most potent.
                 evidence_layers=["identity"],
                 difficulty=size_label,
                 scoring_mode="ranking",
+            )
+            task_ids.append(task_id)
+    return task_ids
+
+
+_FAMILY_OF_RECEPTOR = {
+    "NPSR1": "NPS", "hNPSR1": "NPS", "hNPSR1 Asn107": "NPS",
+    "hNPSR1 Ile107": "NPS", "mNPSR1": "NPS",
+    "OX1R": "OXN", "OX2R": "OXN",
+    "MCHR1": "MCH", "MCHR2": "MCH",
+}
+
+_MULTITARGET_ACTIVE_NM = 1000.0  # ≤1 µM = active for multi-target panel
+_MULTITARGET_PANEL = ("NPS", "OXN", "MCH")
+_MULTITARGET_INPUT_FIELDS = ["peptide_id", "modification", "panel"]
+
+
+def _peptide_family_potency(
+    assays: list[dict[str, str]],
+) -> dict[str, dict[str, float]]:
+    """Aggregate min(EC50) per (peptide_id, receptor_family) across assay records.
+
+    Only positive numeric EC50s are kept. Returns {peptide_id: {family: best_ec50_nm}};
+    families absent for a peptide are not present in the inner dict.
+    """
+    best: dict[str, dict[str, float]] = defaultdict(dict)
+    for r in assays:
+        fam = _FAMILY_OF_RECEPTOR.get((r.get("receptor") or "").strip())
+        if not fam:
+            continue
+        ec50 = _num(r.get("ec50_nm"))
+        if ec50 is None or ec50 <= 0:
+            continue
+        pid = r.get("peptide_id") or ""
+        if not pid:
+            continue
+        cur = best[pid].get(fam)
+        if cur is None or ec50 < cur:
+            best[pid][fam] = ec50
+    return best
+
+
+def _build_peptide_multitarget_sequence(
+    context: dict[str, Any], problems: list[dict[str, Any]]
+) -> list[str]:
+    """Predict per-target activity (active/inactive) across the {NPS, OXN, MCH}
+    panel from sequence alone. Stratified into buckets that probe selectivity
+    vs polypharm reasoning, not just intra-family ranking which the existing
+    pairwise/ranking tasks already cover.
+
+    Buckets:
+      - dual-active: peptide screened in 2 families, active (≤1 µM) in both.
+        Tests recognition of chimeric / polypharm sequence design.
+      - dual-mono-active: peptide screened in 2 families, active in only one.
+        Tests selectivity reasoning — the most diagnostic case because
+        the visible sequence must explain why only one target engages.
+      - mono-active: peptide screened in 1 family and active there. The
+        question becomes: does the model predict 'inactive' at the untested
+        families based on sequence motifs? Gold for untested families is
+        derived from compound-class convention (kept conservative: only
+        labeled 'active' / 'inactive' for screened families; unscreened
+        families are omitted from the gold so the agent isn't penalized
+        for speculating about data we don't have).
+    """
+    rng = random.Random(20260513)
+    assays = context.get("assays") or []
+    peptide_by_id = context["peptide_by_id"]
+    best_by_pep = _peptide_family_potency(assays)
+
+    def _classify(pid: str) -> tuple[str, dict[str, str]]:
+        fam_to_ec50 = best_by_pep.get(pid, {})
+        screened = set(fam_to_ec50)
+        active = {f for f, v in fam_to_ec50.items() if v <= _MULTITARGET_ACTIVE_NM}
+        if len(screened) >= 2 and len(active) >= 2:
+            bucket = "dual-active"
+        elif len(screened) >= 2 and len(active) == 1:
+            bucket = "dual-mono-active"
+        elif len(screened) == 1 and len(active) == 1:
+            bucket = "mono-active"
+        elif len(screened) == 1 and len(active) == 0:
+            bucket = "mono-inactive"
+        else:
+            bucket = "skip"
+        gold = {f: ("active" if f in active else "inactive") for f in screened}
+        return bucket, gold
+
+    candidates: dict[str, list[tuple[str, dict[str, str]]]] = defaultdict(list)
+    for pid in best_by_pep:
+        meta = peptide_by_id.get(pid)
+        if not meta:
+            continue
+        modification = (meta.get("modification") or "").strip()
+        if not modification or _SEQ_ANNOTATION_TOKENS.search(modification):
+            continue
+        bucket, gold = _classify(pid)
+        if bucket == "skip":
+            continue
+        candidates[bucket].append((pid, gold))
+
+    targets_per_bucket = {
+        "dual-active": 12,
+        "dual-mono-active": 10,  # use all available if fewer than 10
+        "mono-active": 15,
+        "mono-inactive": 6,
+    }
+    task_ids: list[str] = []
+    for bucket, items in candidates.items():
+        rng.shuffle(items)
+        take = items[: targets_per_bucket.get(bucket, 10)]
+        for index, (pid, gold) in enumerate(take, start=1):
+            meta = peptide_by_id[pid]
+            modification = meta.get("modification", "").strip()
+            receptors = meta.get("receptors", "")
+            # The panel shown to the agent is always the full 3-family panel,
+            # but only screened families are graded. The agent is told this so
+            # speculating about unscreened families is harmless.
+            screened = sorted(gold.keys())
+            row = {
+                "peptide_id": pid,
+                "modification": modification,
+                "panel": ";".join(_MULTITARGET_PANEL),
+            }
+            task_id = f"pilot-peptide-multitarget-sequence-{bucket}-{index:03d}"
+            screened_str = ", ".join(screened)
+            _write_task(
+                task_id=task_id,
+                task_type="multitarget_activity",
+                prompt=f"""
+# Multi-Target Activity Prediction from Sequence
+
+`peptide_sequence.csv` contains a single peptide: its anonymized identifier,
+the chemical modification string (sequence plus any non-standard residues,
+lipidation, or backbone modifications), and the receptor-family panel under
+consideration (`NPS`, `OXN`, `MCH`).
+
+Using only the sequence and chemical modifications, predict whether the
+peptide is **active** (best functional EC50 ≤ 1 µM) at each receptor family
+in the panel. For families the lab did not screen this peptide against, the
+grader ignores your prediction — so it is safe to give your best guess for
+all three families.
+
+Return `answer.json` with one top-level field per family in the panel
+(`NPS`, `OXN`, `MCH`), each set to `"active"` or `"inactive"`. Include a
+short `rationale` describing the sequence features that drove the call.
+""",
+                task_yaml={
+                    "capability_targets": [
+                        "structure_activity_reasoning",
+                        "sequence_to_function_prediction",
+                        "cross_target_selectivity",
+                    ],
+                    "evidence_layers": ["identity"],
+                    "label_status": "experimental_ground_truth",
+                    "difficulty_bucket": bucket,
+                    "screened_families": screened,
+                },
+                answer_yaml={
+                    "id": task_id,
+                    "task_type": "multitarget_activity",
+                    "label_status": "experimental_ground_truth",
+                    "gold": gold,
+                    "outcome_definition": (
+                        "active = min(ec50_nm) ≤ 1000 nM across in vitro functional "
+                        f"assays at that receptor family; screened families: {screened_str}"
+                    ),
+                },
+                data_files={
+                    "peptide_sequence.csv": ([row], _MULTITARGET_INPUT_FIELDS),
+                },
+                context=context,
+                problems=problems,
+                question=(
+                    "Predict per-target activity (active/inactive at ≤1 µM) on the "
+                    "NPS/OXN/MCH panel from sequence alone."
+                ),
+                answer_rubric=(
+                    "Per-family exact-match accuracy over screened families only."
+                ),
+                capability_targets=[
+                    "structure_activity_reasoning",
+                    "sequence_to_function_prediction",
+                    "cross_target_selectivity",
+                ],
+                evidence_layers=["identity"],
+                difficulty=bucket,
+                scoring_mode="multi_label",
             )
             task_ids.append(task_id)
     return task_ids

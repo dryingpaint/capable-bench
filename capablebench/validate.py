@@ -108,6 +108,12 @@ def _validate_answer(task_id: str, answer: dict[str, Any], issues: list[dict[str
             issues.append(
                 {"task_id": task_id, "severity": "error", "message": "Missing experiment gold"}
             )
+    elif task_type == "multitarget_activity":
+        gold = answer.get("gold") or {}
+        if not gold or not isinstance(gold, dict):
+            issues.append(
+                {"task_id": task_id, "severity": "error", "message": "Missing multitarget gold dict"}
+            )
     elif "rubric" in answer:
         required = answer.get("rubric", {}).get("required_concepts", [])
         if not required:

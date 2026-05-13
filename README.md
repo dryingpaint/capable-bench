@@ -148,7 +148,31 @@ uv run capablebench run-suite \
   --agent-command 'codex exec --json --skip-git-repo-check --cd {task_dir} --dangerously-bypass-approvals-and-sandbox "$(cat {prompt_file})"'
 ```
 
-Build a local task/performance dashboard:
+## Performance Dashboard
+
+### Next.js Dashboard (Recommended)
+
+Launch the modern, interactive performance dashboard:
+
+```bash
+cd dashboard
+./start.sh
+```
+
+The dashboard will be available at http://localhost:3000 and provides:
+
+- **Real-time metrics** with auto-refresh every 30 seconds
+- **Interactive visualizations** - model leaderboards, score distributions, task breakdowns
+- **Advanced filtering** - search, filter by task type, difficulty, and model
+- **Tagging system** - automatically flags saturation, format errors, execution issues
+- **Detailed task views** - full traces, answers, metadata in organized tabs
+- **Professional UX** - modern design with responsive layout
+
+The dashboard reads directly from your existing data structure (`data/`, `runs/`) and enhances it with automatic tagging and interactive exploration.
+
+### Static HTML Viewer (Legacy)
+
+Build a local static HTML viewer:
 
 ```bash
 uv run capablebench build-viewer

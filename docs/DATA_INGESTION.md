@@ -122,18 +122,43 @@ under `data/answers/<task_id>.yaml`.
 Each task set should also include `data/tasks/problems.csv` so the runner can
 discover tasks with `list-tasks`.
 
+Build the current private benchmark directly from the processed private tables:
+
+```bash
+uv run capablebench curate-pilot --clean
+uv run capablebench validate
+```
+
+The curation command currently creates:
+
+- candidate prioritization tasks from linked in vitro and held-out in vivo
+  outcome summaries,
+- hit-prediction tasks from held-out significance calls,
+- next-experiment tasks with expert utility labels,
+- QC/failure-diagnosis tasks,
+- mechanistic cross-family hypothesis tasks,
+- foundation-model-triage tasks with model-output evidence,
+- end-to-end drug discovery program planning tasks.
+
+BioDiscoveryBench treats every new private dataset as an evidence layer. Current
+in vitro and in vivo layers support candidate ranking, hit prediction, failure
+diagnosis, and next-experiment tasks. Future omics, structure,
+developability, model-output, and decision-history layers should be added as
+task-local files with provenance metadata instead of changing the runner
+contract.
+
 ## Run A Task
 
 ```bash
 uv run capablebench run TASK_ID \
-  --agent-command 'codex exec --cd {task_dir} "$(cat {prompt_file})"'
+  --agent-command 'codex exec --json --cd {task_dir} "$(cat {prompt_file})"'
 ```
 
 For a full local suite:
 
 ```bash
 uv run capablebench run-suite \
-  --agent-command 'codex exec --cd {task_dir} "$(cat {prompt_file})"' \
+  --agent-command 'codex exec --json --cd {task_dir} "$(cat {prompt_file})"' \
   --limit 10
 uv run capablebench summarize
 ```

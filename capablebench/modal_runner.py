@@ -5,6 +5,7 @@ import uuid
 from pathlib import Path
 from typing import Any
 
+from .grade import grade_attempt
 from .io import ensure_dir, write_json
 from .tasks import list_tasks
 
@@ -40,13 +41,34 @@ def run_task_modal(
         )
 
     _write_artifacts(result["artifacts"], local_run_dir)
+    grade = _grade_locally(task_id, answers_dir, local_run_dir)
     summary = {
         **result["summary"],
         "run_dir": str(local_run_dir),
         "remote_task_dir": result["summary"].get("remote_task_dir"),
+        "grade": grade,
     }
     write_json(local_run_dir / "run_summary.json", summary)
     return summary
+
+
+def _grade_locally(task_id: str, answers_dir: Path, run_dir: Path) -> Any | None:
+    """Grade the agent's answer against the local gold file.
+
+    Gold lives only on the orchestrator's local disk; it never touched the
+    remote container. We pick the agent's answer.json if it exists, else
+    fall back to stdout.txt, then run the standard grader.
+    """
+    gold_path = answers_dir / f"{task_id}.yaml"
+    if not gold_path.exists():
+        return None
+    answer_file = run_dir / "answer.json"
+    if not answer_file.exists():
+        answer_file = run_dir / "stdout.txt"
+        if not answer_file.exists():
+            return None
+    grade_path = run_dir / "grade.json"
+    return grade_attempt(answer_file, gold_path, grade_path)
 
 
 def run_suite_modal(
@@ -56,9 +78,13 @@ def run_suite_modal(
     agent_command: str,
     *,
     limit: int | None = None,
+    task_ids: list[str] | None = None,
     timeout_seconds: int = 1800,
 ) -> dict[str, Any]:
     tasks = list_tasks(tasks_dir)
+    if task_ids is not None:
+        requested = set(task_ids)
+        tasks = [task for task in tasks if task["id"] in requested]
     if limit is not None:
         tasks = tasks[:limit]
 
@@ -89,10 +115,12 @@ def run_suite_modal(
         run_id = result["summary"]["run_id"]
         local_run_dir = local_run_dirs[run_id]
         _write_artifacts(result["artifacts"], local_run_dir)
+        grade = _grade_locally(result["summary"]["task_id"], answers_dir, local_run_dir)
         summary = {
             **result["summary"],
             "run_dir": str(local_run_dir),
             "remote_task_dir": result["summary"].get("remote_task_dir"),
+            "grade": grade,
         }
         write_json(local_run_dir / "run_summary.json", summary)
         results.append(summary)
@@ -104,6 +132,15 @@ def run_suite_modal(
 
 
 def _bundle_task(task_id: str, tasks_dir: Path, answers_dir: Path) -> dict[str, Any]:
+    """Bundle ONLY the task files for the remote container.
+
+    The gold answer is intentionally NOT included; grading happens locally
+    in the orchestrator after the container returns its artifacts. This
+    keeps the gold off the remote filesystem so the agent cannot read it
+    even with bypassPermissions / dangerously-bypass-approvals-and-sandbox.
+    The answers_dir is accepted for signature compatibility but unused.
+    """
+    _ = answers_dir
     task_dir = tasks_dir / task_id
     if not task_dir.exists():
         raise FileNotFoundError(task_dir)
@@ -113,12 +150,10 @@ def _bundle_task(task_id: str, tasks_dir: Path, answers_dir: Path) -> dict[str, 
         if path.is_file():
             task_files[str(path.relative_to(task_dir))] = path.read_bytes()
 
-    gold_path = answers_dir / f"{task_id}.yaml"
     return {
         "task_id": task_id,
         "run_id": time.strftime("%Y%m%d-%H%M%S") + f"-{uuid.uuid4().hex[:8]}-modal",
         "task_files": task_files,
-        "gold_answer": gold_path.read_bytes() if gold_path.exists() else None,
     }
 
 
@@ -142,11 +177,29 @@ def _suite_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         "executor": "modal",
         "tasks_attempted": len(results),
         "tasks_graded": len(grades),
-        "mean_precision_at_k": _mean(g.get("precision_at_k", 0.0) for g in grades),
-        "mean_ndcg_at_k": _mean(g.get("ndcg_at_k", 0.0) for g in grades),
-        "top1_exact_rate": _mean(1.0 if g.get("top1_exact") else 0.0 for g in grades),
+        "mean_score": _mean(
+            g.get("score", g.get("precision_at_k", 0.0)) for g in grades
+        ),
+        "mean_precision_at_k": _mean(
+            g["precision_at_k"] for g in grades if "precision_at_k" in g
+        ),
+        "mean_ndcg_at_k": _mean(
+            g["ndcg_at_k"] for g in grades if "ndcg_at_k" in g
+        ),
+        "top1_exact_rate": _mean(
+            1.0 if g.get("top1_exact") else 0.0
+            for g in grades
+            if "top1_exact" in g
+        ),
         "top1_in_gold_top_k_rate": _mean(
-            1.0 if g.get("top1_in_gold_top_k") else 0.0 for g in grades
+            1.0 if g.get("top1_in_gold_top_k") else 0.0
+            for g in grades
+            if "top1_in_gold_top_k" in g
+        ),
+        "exact_match_rate": _mean(
+            1.0 if g.get("exact_match") else 0.0
+            for g in grades
+            if "exact_match" in g
         ),
         "runs": results,
     }

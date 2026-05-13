@@ -1,0 +1,1407 @@
+{
+  "tasks_attempted": 25,
+  "tasks_graded": 25,
+  "mean_score": 0.334,
+  "mean_precision_at_k": null,
+  "mean_ndcg_at_k": null,
+  "top1_exact_rate": null,
+  "top1_in_gold_top_k_rate": null,
+  "exact_match_rate": 0.0,
+  "runs": [
+    {
+      "task_id": "pilot-hit-prediction-022",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-022/20260512-123434",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-022/20260512-123434/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 49.449,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-022/20260512-123434/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-022/20260512-123434/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-022/20260512-123434/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-022/20260512-123434/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-hit-prediction-022",
+        "task_type": "hit_prediction",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-022/20260512-123434/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-hit-prediction-022.yaml",
+        "predicted_label": "active",
+        "accepted_labels": [
+          "inactive"
+        ],
+        "exact_match": false,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-hit-prediction-023",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-023/20260512-123523",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-023/20260512-123523/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 90.042,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-023/20260512-123523/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-023/20260512-123523/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-023/20260512-123523/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-023/20260512-123523/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-hit-prediction-023",
+        "task_type": "hit_prediction",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-023/20260512-123523/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-hit-prediction-023.yaml",
+        "predicted_label": "active",
+        "accepted_labels": [
+          "inactive"
+        ],
+        "exact_match": false,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-hit-prediction-024",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-024/20260512-123653",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-024/20260512-123653/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 51.567,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-024/20260512-123653/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-024/20260512-123653/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-024/20260512-123653/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-024/20260512-123653/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-hit-prediction-024",
+        "task_type": "hit_prediction",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-024/20260512-123653/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-hit-prediction-024.yaml",
+        "predicted_label": "active",
+        "accepted_labels": [
+          "inactive"
+        ],
+        "exact_match": false,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-next-experiment-exposure-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-exposure-001/20260512-123745",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-exposure-001/20260512-123745/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 52.868,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-exposure-001/20260512-123745/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-exposure-001/20260512-123745/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-exposure-001/20260512-123745/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-exposure-001/20260512-123745/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-next-experiment-exposure-001",
+        "task_type": "next_experiment",
+        "label_status": "expert_utility_ranking",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-exposure-001/20260512-123745/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-next-experiment-exposure-001.yaml",
+        "predicted_options": [
+          "exp_002",
+          "exp_001",
+          "exp_004",
+          "exp_003"
+        ],
+        "gold_top": [
+          "exp_002"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-next-experiment-artifact-002",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-artifact-002/20260512-123838",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-artifact-002/20260512-123838/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 46.603,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-artifact-002/20260512-123838/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-artifact-002/20260512-123838/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-artifact-002/20260512-123838/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-artifact-002/20260512-123838/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-next-experiment-artifact-002",
+        "task_type": "next_experiment",
+        "label_status": "expert_utility_ranking",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-artifact-002/20260512-123838/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-next-experiment-artifact-002.yaml",
+        "predicted_options": [
+          "exp_003",
+          "exp_004",
+          "exp_001",
+          "exp_002"
+        ],
+        "gold_top": [
+          "exp_003"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-next-experiment-cross-family-003",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-cross-family-003/20260512-123924",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-cross-family-003/20260512-123924/prompt.md)\"",
+      "returncode": 1,
+      "duration_seconds": 11.044,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-cross-family-003/20260512-123924/stdout.txt",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-cross-family-003/20260512-123924/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-cross-family-003/20260512-123924/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-cross-family-003/20260512-123924/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-next-experiment-cross-family-003",
+        "task_type": "next_experiment",
+        "label_status": "expert_utility_ranking",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-cross-family-003/20260512-123924/stdout.txt",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-next-experiment-cross-family-003.yaml",
+        "predicted_options": [
+          "type_rate_limit_event_rate_limit_info_status_allowed_resetsat_1778628600_ratelimittype_five_hour_overagestatus_allowed_overageresetsat_1780272000_isusingoverage_false_uuid_6a884a9c_910a_48ac_a557_6710dbdb83f2_session_id_27ba1a08_290c_43e4_8a5b_42ca73b313cc"
+        ],
+        "gold_top": [
+          "exp_004"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-next-experiment-model-disagreement-004",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-model-disagreement-004/20260512-123935",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-model-disagreement-004/20260512-123935/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 46.918,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-model-disagreement-004/20260512-123935/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-model-disagreement-004/20260512-123935/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-model-disagreement-004/20260512-123935/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-model-disagreement-004/20260512-123935/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-next-experiment-model-disagreement-004",
+        "task_type": "next_experiment",
+        "label_status": "expert_utility_ranking",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-next-experiment-model-disagreement-004/20260512-123935/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-next-experiment-model-disagreement-004.yaml",
+        "predicted_options": [
+          "exp_002",
+          "exp_004",
+          "exp_001",
+          "exp_003"
+        ],
+        "gold_top": [
+          "exp_002"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-failure-diagnosis-qc-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-001/20260512-124022",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-001/20260512-124022/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 61.829,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-001/20260512-124022/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-001/20260512-124022/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-001/20260512-124022/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-001/20260512-124022/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-failure-diagnosis-qc-001",
+        "task_type": "failure_diagnosis",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-001/20260512-124022/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-failure-diagnosis-qc-001.yaml",
+        "concept_results": [
+          {
+            "id": "failed_source_trace",
+            "weight": 2.0,
+            "matched": false,
+            "matched_terms": []
+          },
+          {
+            "id": "do_not_use",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "exclude",
+              "reject"
+            ]
+          },
+          {
+            "id": "corrective_action",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "recover"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 0.5,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-failure-diagnosis-qc-002",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-002/20260512-124124",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-002/20260512-124124/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 69.736,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-002/20260512-124124/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-002/20260512-124124/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-002/20260512-124124/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-002/20260512-124124/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-failure-diagnosis-qc-002",
+        "task_type": "failure_diagnosis",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-002/20260512-124124/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-failure-diagnosis-qc-002.yaml",
+        "concept_results": [
+          {
+            "id": "failed_source_trace",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "fit"
+            ]
+          },
+          {
+            "id": "do_not_use",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "reject"
+            ]
+          },
+          {
+            "id": "corrective_action",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "reprocess",
+              "recover"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 1.0,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-failure-diagnosis-qc-003",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-003/20260512-124234",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-003/20260512-124234/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 102.52,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-003/20260512-124234/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-003/20260512-124234/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-003/20260512-124234/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-003/20260512-124234/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-failure-diagnosis-qc-003",
+        "task_type": "failure_diagnosis",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-003/20260512-124234/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-failure-diagnosis-qc-003.yaml",
+        "concept_results": [
+          {
+            "id": "failed_source_trace",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "raw",
+              "fit",
+              "file"
+            ]
+          },
+          {
+            "id": "do_not_use",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "do not use",
+              "not use",
+              "reject"
+            ]
+          },
+          {
+            "id": "corrective_action",
+            "weight": 1.0,
+            "matched": false,
+            "matched_terms": []
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 0.75,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-failure-diagnosis-qc-004",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-004/20260512-124416",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-004/20260512-124416/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 109.224,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-004/20260512-124416/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-004/20260512-124416/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-004/20260512-124416/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-004/20260512-124416/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-failure-diagnosis-qc-004",
+        "task_type": "failure_diagnosis",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-004/20260512-124416/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-failure-diagnosis-qc-004.yaml",
+        "concept_results": [
+          {
+            "id": "failed_source_trace",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "raw",
+              "fit"
+            ]
+          },
+          {
+            "id": "do_not_use",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "reject"
+            ]
+          },
+          {
+            "id": "corrective_action",
+            "weight": 1.0,
+            "matched": false,
+            "matched_terms": []
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 0.75,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-failure-diagnosis-qc-005",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-005/20260512-124606",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-005/20260512-124606/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 60.407,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-005/20260512-124606/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-005/20260512-124606/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-005/20260512-124606/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-005/20260512-124606/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-failure-diagnosis-qc-005",
+        "task_type": "failure_diagnosis",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-005/20260512-124606/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-failure-diagnosis-qc-005.yaml",
+        "concept_results": [
+          {
+            "id": "failed_source_trace",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "raw",
+              "fit"
+            ]
+          },
+          {
+            "id": "do_not_use",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "reject"
+            ]
+          },
+          {
+            "id": "corrective_action",
+            "weight": 1.0,
+            "matched": false,
+            "matched_terms": []
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 0.75,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-failure-diagnosis-qc-006",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-006/20260512-124706",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-006/20260512-124706/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 64.174,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-006/20260512-124706/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-006/20260512-124706/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-006/20260512-124706/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-006/20260512-124706/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-failure-diagnosis-qc-006",
+        "task_type": "failure_diagnosis",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-failure-diagnosis-qc-006/20260512-124706/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-failure-diagnosis-qc-006.yaml",
+        "concept_results": [
+          {
+            "id": "failed_source_trace",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "raw"
+            ]
+          },
+          {
+            "id": "do_not_use",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "reject"
+            ]
+          },
+          {
+            "id": "corrective_action",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "repeat",
+              "trace"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 1.0,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-mechanistic-hypothesis-cross-family-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-mechanistic-hypothesis-cross-family-001/20260512-124810",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-mechanistic-hypothesis-cross-family-001/20260512-124810/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 92.463,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-mechanistic-hypothesis-cross-family-001/20260512-124810/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-mechanistic-hypothesis-cross-family-001/20260512-124810/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-mechanistic-hypothesis-cross-family-001/20260512-124810/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-mechanistic-hypothesis-cross-family-001/20260512-124810/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-mechanistic-hypothesis-cross-family-001",
+        "task_type": "mechanistic_hypothesis",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-mechanistic-hypothesis-cross-family-001/20260512-124810/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-mechanistic-hypothesis-cross-family-001.yaml",
+        "concept_results": [
+          {
+            "id": "cross_family",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "cross-family",
+              "ox2r",
+              "npsr"
+            ]
+          },
+          {
+            "id": "assay_context",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "assay",
+              "cell line",
+              "pathway"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "nxnv1",
+              "nxnv6.1",
+              "nxnv8"
+            ]
+          },
+          {
+            "id": "falsifiable",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "falsify",
+              "test",
+              "orthogonal"
+            ]
+          },
+          {
+            "id": "uncertainty",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "uncertain",
+              "artifact",
+              "alternative"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 1.0,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-sar-nps-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-nps-001/20260512-124943",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-nps-001/20260512-124943/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 139.313,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-nps-001/20260512-124943/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-nps-001/20260512-124943/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-nps-001/20260512-124943/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-nps-001/20260512-124943/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-sar-nps-001",
+        "task_type": "structure_activity_reasoning",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-nps-001/20260512-124943/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-sar-nps-001.yaml",
+        "concept_results": [
+          {
+            "id": "sar",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "sar",
+              "modification",
+              "substitution"
+            ]
+          },
+          {
+            "id": "potency_efficacy",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "potency",
+              "ec50",
+              "efficacy",
+              "emax"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "npsv40.9",
+              "npsv35.6",
+              "npsv34.7",
+              "npsv18.38",
+              "npsv18.32"
+            ]
+          },
+          {
+            "id": "design_move",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "design",
+              "analog"
+            ]
+          },
+          {
+            "id": "falsifiable",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "falsify",
+              "test",
+              "synthesize",
+              "assay"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 1.0,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-sar-oxn-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-oxn-001/20260512-125202",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-oxn-001/20260512-125202/prompt.md)\"",
+      "returncode": 1,
+      "duration_seconds": 24.583,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-oxn-001/20260512-125202/stdout.txt",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-oxn-001/20260512-125202/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-oxn-001/20260512-125202/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-oxn-001/20260512-125202/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-sar-oxn-001",
+        "task_type": "structure_activity_reasoning",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-oxn-001/20260512-125202/stdout.txt",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-sar-oxn-001.yaml",
+        "concept_results": [
+          {
+            "id": "sar",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "structure-activity",
+              "sar",
+              "modification"
+            ]
+          },
+          {
+            "id": "potency_efficacy",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "ec50",
+              "emax"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "oxnv3",
+              "oxnv25.7",
+              "orexin v3 (+bsa & tween 20)",
+              "orexinv3 (+bsa & tween 20)",
+              "alks-2680 peak 2"
+            ]
+          },
+          {
+            "id": "design_move",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "next design",
+              "design"
+            ]
+          },
+          {
+            "id": "falsifiable",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "falsify",
+              "assay"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 1.0,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-sar-mch-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-mch-001/20260512-125226",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-mch-001/20260512-125226/prompt.md)\"",
+      "returncode": 1,
+      "duration_seconds": 12.951,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-mch-001/20260512-125226/stdout.txt",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-mch-001/20260512-125226/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-mch-001/20260512-125226/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-mch-001/20260512-125226/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-sar-mch-001",
+        "task_type": "structure_activity_reasoning",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-sar-mch-001/20260512-125226/stdout.txt",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-sar-mch-001.yaml",
+        "concept_results": [
+          {
+            "id": "sar",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "sar"
+            ]
+          },
+          {
+            "id": "potency_efficacy",
+            "weight": 2.0,
+            "matched": false,
+            "matched_terms": []
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": false,
+            "matched_terms": []
+          },
+          {
+            "id": "design_move",
+            "weight": 1.0,
+            "matched": false,
+            "matched_terms": []
+          },
+          {
+            "id": "falsifiable",
+            "weight": 1.0,
+            "matched": false,
+            "matched_terms": []
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 0.25,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.25,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-assay-triage-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-assay-triage-001/20260512-125239",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-assay-triage-001/20260512-125239/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 107.565,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-assay-triage-001/20260512-125239/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-assay-triage-001/20260512-125239/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-assay-triage-001/20260512-125239/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-assay-triage-001/20260512-125239/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-assay-triage-001",
+        "task_type": "assay_triage",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-assay-triage-001/20260512-125239/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-assay-triage-001.yaml",
+        "concept_results": [
+          {
+            "id": "qc_status",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "qc",
+              "pass",
+              "reject",
+              "promoted"
+            ]
+          },
+          {
+            "id": "exclude_repeat",
+            "weight": 2.0,
+            "matched": false,
+            "matched_terms": []
+          },
+          {
+            "id": "controls",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "reference",
+              "plate",
+              "raw"
+            ]
+          },
+          {
+            "id": "curation",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "curation",
+              "data"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 0.6667,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-foundation-model-triage-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-001/20260512-125427",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-001/20260512-125427/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 81.559,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-001/20260512-125427/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-001/20260512-125427/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-001/20260512-125427/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-001/20260512-125427/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-foundation-model-triage-001",
+        "task_type": "foundation_model_triage",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-001/20260512-125427/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-foundation-model-triage-001.yaml",
+        "concept_results": [
+          {
+            "id": "model_not_truth",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "not ground truth",
+              "prediction",
+              "model"
+            ]
+          },
+          {
+            "id": "integrate_experiment",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "in vitro",
+              "in vivo",
+              "assay",
+              "experimental"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "nxnv10.15",
+              "nxnv10.15"
+            ]
+          },
+          {
+            "id": "developability",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "developability",
+              "risk",
+              "stability"
+            ]
+          },
+          {
+            "id": "falsifying_experiment",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "falsify",
+              "test"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 1.0,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-foundation-model-triage-002",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-002/20260512-125549",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-002/20260512-125549/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 71.229,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-002/20260512-125549/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-002/20260512-125549/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-002/20260512-125549/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-002/20260512-125549/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-foundation-model-triage-002",
+        "task_type": "foundation_model_triage",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-002/20260512-125549/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-foundation-model-triage-002.yaml",
+        "concept_results": [
+          {
+            "id": "model_not_truth",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "not ground truth",
+              "prediction",
+              "model"
+            ]
+          },
+          {
+            "id": "integrate_experiment",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "in vitro",
+              "assay",
+              "experimental"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "nxnv10.15",
+              "nxnv10.15"
+            ]
+          },
+          {
+            "id": "developability",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "developability",
+              "risk",
+              "stability"
+            ]
+          },
+          {
+            "id": "falsifying_experiment",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "falsify",
+              "test"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 1.0,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-foundation-model-triage-003",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-003/20260512-125700",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-003/20260512-125700/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 71.059,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-003/20260512-125700/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-003/20260512-125700/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-003/20260512-125700/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-003/20260512-125700/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-foundation-model-triage-003",
+        "task_type": "foundation_model_triage",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-foundation-model-triage-003/20260512-125700/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-foundation-model-triage-003.yaml",
+        "concept_results": [
+          {
+            "id": "model_not_truth",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "not ground truth",
+              "model"
+            ]
+          },
+          {
+            "id": "integrate_experiment",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "in vitro",
+              "assay"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "nxnv10.15",
+              "nxnv10.15"
+            ]
+          },
+          {
+            "id": "developability",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "developability",
+              "risk"
+            ]
+          },
+          {
+            "id": "falsifying_experiment",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "falsify"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 1.0,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-model-disagreement-analysis-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-125811",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-125811/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 86.86,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-125811/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-125811/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-125811/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-125811/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-model-disagreement-analysis-001",
+        "task_type": "model_disagreement_analysis",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-model-disagreement-analysis-001/20260512-125811/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-model-disagreement-analysis-001.yaml",
+        "concept_results": [
+          {
+            "id": "disagreement",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "disagreement"
+            ]
+          },
+          {
+            "id": "experimental_priority",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "experimental",
+              "assay"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "nxnv10.15",
+              "nxnv10.15",
+              "nxnv10.16",
+              "nxnv10.16",
+              "nxnv12.10"
+            ]
+          },
+          {
+            "id": "calibration",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "rank",
+              "model"
+            ]
+          },
+          {
+            "id": "uncertainty",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "uncertain",
+              "artifact",
+              "alternative"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 1.0,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-drug-discovery-program-nps-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-125938",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-125938/prompt.md)\"",
+      "returncode": 1,
+      "duration_seconds": 31.132,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-125938/stdout.txt",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-125938/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-125938/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-125938/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-drug-discovery-program-nps-001",
+        "task_type": "drug_discovery_program",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-nps-001/20260512-125938/stdout.txt",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-drug-discovery-program-nps-001.yaml",
+        "concept_results": [
+          {
+            "id": "lead_nomination",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "lead",
+              "nominate",
+              "candidate"
+            ]
+          },
+          {
+            "id": "mechanism",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "receptor",
+              "target"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "nps",
+              "npsv26.12",
+              "npsv27.4",
+              "npsv1.1",
+              "npsv1.1",
+              "npsv5.2"
+            ]
+          },
+          {
+            "id": "experiment_plan",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "experiment",
+              "assay"
+            ]
+          },
+          {
+            "id": "decision_gate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "decision gate",
+              "stop"
+            ]
+          },
+          {
+            "id": "risk",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "risk"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 1.0,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-drug-discovery-program-oxn-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-130009",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-130009/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 159.523,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-130009/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-130009/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-130009/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-130009/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-drug-discovery-program-oxn-001",
+        "task_type": "drug_discovery_program",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-oxn-001/20260512-130009/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-drug-discovery-program-oxn-001.yaml",
+        "concept_results": [
+          {
+            "id": "lead_nomination",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "lead",
+              "nominate",
+              "advance",
+              "candidate"
+            ]
+          },
+          {
+            "id": "mechanism",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "receptor",
+              "pathway",
+              "target"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "oxa",
+              "oxb"
+            ]
+          },
+          {
+            "id": "experiment_plan",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "experiment",
+              "control",
+              "dose",
+              "assay"
+            ]
+          },
+          {
+            "id": "decision_gate",
+            "weight": 2.0,
+            "matched": false,
+            "matched_terms": []
+          },
+          {
+            "id": "risk",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "risk",
+              "liability",
+              "artifact"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 0.8,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-drug-discovery-program-mch-001",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-130248",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-130248/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 119.149,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-130248/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-130248/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-130248/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-130248/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-drug-discovery-program-mch-001",
+        "task_type": "drug_discovery_program",
+        "label_status": "expert_rubric",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-drug-discovery-program-mch-001/20260512-130248/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-drug-discovery-program-mch-001.yaml",
+        "concept_results": [
+          {
+            "id": "lead_nomination",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "lead",
+              "advance",
+              "candidate"
+            ]
+          },
+          {
+            "id": "mechanism",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "mechanism",
+              "receptor",
+              "target"
+            ]
+          },
+          {
+            "id": "specific_candidate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "hmch",
+              "mch core19",
+              "amchv2",
+              "amchv1",
+              "ac-hmch(6-16)-nh2",
+              "mch-(6-17)"
+            ]
+          },
+          {
+            "id": "experiment_plan",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "experiment",
+              "control",
+              "dose",
+              "assay"
+            ]
+          },
+          {
+            "id": "decision_gate",
+            "weight": 2.0,
+            "matched": true,
+            "matched_terms": [
+              "decision gate",
+              "go/no-go"
+            ]
+          },
+          {
+            "id": "risk",
+            "weight": 1.0,
+            "matched": true,
+            "matched_terms": [
+              "risk",
+              "artifact"
+            ]
+          }
+        ],
+        "forbidden_hits": [],
+        "rubric_score": 1.0,
+        "penalty": 0.0,
+        "auto_score_cap": 0.3,
+        "score": 0.3,
+        "parsed_answer": true
+      }
+    }
+  ]
+}
