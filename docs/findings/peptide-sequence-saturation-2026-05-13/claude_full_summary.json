@@ -1,0 +1,2128 @@
+{
+  "executor": "modal",
+  "tasks_attempted": 69,
+  "tasks_graded": 69,
+  "mean_score": 0.4444,
+  "mean_precision_at_k": 0.5185,
+  "mean_ndcg_at_k": 0.6486,
+  "top1_exact_rate": 0.3333,
+  "top1_in_gold_top_k_rate": 0.5556,
+  "exact_match_rate": null,
+  "runs": [
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-hard-001",
+      "run_id": "20260513-014437-84b54b3a-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-001/20260513-014437-84b54b3a-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-001/20260513-014437-84b54b3a-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 138.851,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-001/20260513-014437-84b54b3a-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-001/20260513-014437-84b54b3a-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-001/20260513-014437-84b54b3a-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-hard-001/20260513-014437-84b54b3a-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-hard-001",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-hard-001/20260513-014437-84b54b3a-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-hard-001.yaml",
+        "predicted_options": [
+          "pep_8d7b15d1b7"
+        ],
+        "gold_top": [
+          "pep_8d7b15d1b7"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-hard-002",
+      "run_id": "20260513-014437-a47ebfd6-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-002/20260513-014437-a47ebfd6-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-002/20260513-014437-a47ebfd6-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 95.604,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-002/20260513-014437-a47ebfd6-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-002/20260513-014437-a47ebfd6-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-002/20260513-014437-a47ebfd6-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-hard-002/20260513-014437-a47ebfd6-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-hard-002",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-hard-002/20260513-014437-a47ebfd6-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-hard-002.yaml",
+        "predicted_options": [
+          "pep_b90875c90a"
+        ],
+        "gold_top": [
+          "pep_982cdfede5"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-hard-003",
+      "run_id": "20260513-014437-0b9e29cb-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-003/20260513-014437-0b9e29cb-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-003/20260513-014437-0b9e29cb-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 134.248,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-003/20260513-014437-0b9e29cb-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-003/20260513-014437-0b9e29cb-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-003/20260513-014437-0b9e29cb-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-hard-003/20260513-014437-0b9e29cb-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-hard-003",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-hard-003/20260513-014437-0b9e29cb-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-hard-003.yaml",
+        "predicted_options": [
+          "pep_17d19c9ad5"
+        ],
+        "gold_top": [
+          "pep_17d19c9ad5"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-hard-004",
+      "run_id": "20260513-014437-ae7c784d-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-004/20260513-014437-ae7c784d-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-004/20260513-014437-ae7c784d-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 93.493,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-004/20260513-014437-ae7c784d-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-004/20260513-014437-ae7c784d-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-004/20260513-014437-ae7c784d-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-hard-004/20260513-014437-ae7c784d-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-hard-004",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-hard-004/20260513-014437-ae7c784d-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-hard-004.yaml",
+        "predicted_options": [
+          "pep_84f0e043ae"
+        ],
+        "gold_top": [
+          "pep_1a119207b4"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-hard-005",
+      "run_id": "20260513-014437-1e22b77e-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-005/20260513-014437-1e22b77e-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-005/20260513-014437-1e22b77e-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 227.297,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-005/20260513-014437-1e22b77e-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-005/20260513-014437-1e22b77e-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-hard-005/20260513-014437-1e22b77e-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-hard-005/20260513-014437-1e22b77e-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-hard-005",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-hard-005/20260513-014437-1e22b77e-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-hard-005.yaml",
+        "predicted_options": [
+          "pep_8968ae5e6a"
+        ],
+        "gold_top": [
+          "pep_8968ae5e6a"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-medium-006",
+      "run_id": "20260513-014437-f4d0e0bc-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-006/20260513-014437-f4d0e0bc-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-006/20260513-014437-f4d0e0bc-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 132.752,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-006/20260513-014437-f4d0e0bc-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-006/20260513-014437-f4d0e0bc-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-006/20260513-014437-f4d0e0bc-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-medium-006/20260513-014437-f4d0e0bc-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-medium-006",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-medium-006/20260513-014437-f4d0e0bc-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-medium-006.yaml",
+        "predicted_options": [
+          "pep_7e449f9b0e"
+        ],
+        "gold_top": [
+          "pep_7e449f9b0e"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-medium-007",
+      "run_id": "20260513-014437-1641fec6-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-007/20260513-014437-1641fec6-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-007/20260513-014437-1641fec6-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 145.357,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-007/20260513-014437-1641fec6-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-007/20260513-014437-1641fec6-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-007/20260513-014437-1641fec6-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-medium-007/20260513-014437-1641fec6-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-medium-007",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-medium-007/20260513-014437-1641fec6-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-medium-007.yaml",
+        "predicted_options": [
+          "pep_f2a951ec30"
+        ],
+        "gold_top": [
+          "pep_bda910b7ef"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-medium-008",
+      "run_id": "20260513-014437-bb346327-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-008/20260513-014437-bb346327-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-008/20260513-014437-bb346327-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 86.454,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-008/20260513-014437-bb346327-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-008/20260513-014437-bb346327-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-008/20260513-014437-bb346327-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-medium-008/20260513-014437-bb346327-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-medium-008",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-medium-008/20260513-014437-bb346327-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-medium-008.yaml",
+        "predicted_options": [
+          "pep_ebfdc038a5"
+        ],
+        "gold_top": [
+          "pep_9cd40b948a"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-medium-009",
+      "run_id": "20260513-014437-d67c7645-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-009/20260513-014437-d67c7645-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-009/20260513-014437-d67c7645-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 106.445,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-009/20260513-014437-d67c7645-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-009/20260513-014437-d67c7645-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-009/20260513-014437-d67c7645-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-medium-009/20260513-014437-d67c7645-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-medium-009",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-medium-009/20260513-014437-d67c7645-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-medium-009.yaml",
+        "predicted_options": [
+          "pep_eaf7c7a25f"
+        ],
+        "gold_top": [
+          "pep_eaf7c7a25f"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-medium-010",
+      "run_id": "20260513-014437-0679cd6a-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-010/20260513-014437-0679cd6a-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-010/20260513-014437-0679cd6a-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 119.539,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-010/20260513-014437-0679cd6a-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-010/20260513-014437-0679cd6a-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-medium-010/20260513-014437-0679cd6a-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-medium-010/20260513-014437-0679cd6a-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-medium-010",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-medium-010/20260513-014437-0679cd6a-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-medium-010.yaml",
+        "predicted_options": [
+          "pep_57aa9a237f"
+        ],
+        "gold_top": [
+          "pep_cc728870b4"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-easy-011",
+      "run_id": "20260513-014437-4039812d-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-011/20260513-014437-4039812d-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-011/20260513-014437-4039812d-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 64.247,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-011/20260513-014437-4039812d-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-011/20260513-014437-4039812d-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-011/20260513-014437-4039812d-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-easy-011/20260513-014437-4039812d-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-easy-011",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-easy-011/20260513-014437-4039812d-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-easy-011.yaml",
+        "predicted_options": [
+          "pep_c9fe4f8ed3"
+        ],
+        "gold_top": [
+          "pep_17d19c9ad5"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-easy-012",
+      "run_id": "20260513-014437-4f881de1-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-012/20260513-014437-4f881de1-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-012/20260513-014437-4f881de1-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 78.501,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-012/20260513-014437-4f881de1-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-012/20260513-014437-4f881de1-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-012/20260513-014437-4f881de1-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-easy-012/20260513-014437-4f881de1-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-easy-012",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-easy-012/20260513-014437-4f881de1-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-easy-012.yaml",
+        "predicted_options": [
+          "pep_bb3103f53a"
+        ],
+        "gold_top": [
+          "pep_8aa263d549"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-easy-013",
+      "run_id": "20260513-014437-6bb23ebd-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-013/20260513-014437-6bb23ebd-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-013/20260513-014437-6bb23ebd-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 166.247,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-013/20260513-014437-6bb23ebd-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-013/20260513-014437-6bb23ebd-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-013/20260513-014437-6bb23ebd-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-easy-013/20260513-014437-6bb23ebd-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-easy-013",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-easy-013/20260513-014437-6bb23ebd-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-easy-013.yaml",
+        "predicted_options": [
+          "pep_f71a4156e7"
+        ],
+        "gold_top": [
+          "pep_4fb658a58a"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-easy-014",
+      "run_id": "20260513-014437-6fd90256-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-014/20260513-014437-6fd90256-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-014/20260513-014437-6fd90256-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 64.024,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-014/20260513-014437-6fd90256-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-014/20260513-014437-6fd90256-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-014/20260513-014437-6fd90256-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-easy-014/20260513-014437-6fd90256-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-easy-014",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-easy-014/20260513-014437-6fd90256-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-easy-014.yaml",
+        "predicted_options": [
+          "pep_d27b7b98ab"
+        ],
+        "gold_top": [
+          "pep_d27b7b98ab"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-easy-015",
+      "run_id": "20260513-014437-10d95a17-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-015/20260513-014437-10d95a17-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-015/20260513-014437-10d95a17-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 93.25,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-015/20260513-014437-10d95a17-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-015/20260513-014437-10d95a17-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-easy-015/20260513-014437-10d95a17-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-easy-015/20260513-014437-10d95a17-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-easy-015",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-easy-015/20260513-014437-10d95a17-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-easy-015.yaml",
+        "predicted_options": [
+          "pep_cd721616f5"
+        ],
+        "gold_top": [
+          "pep_b2b3678727"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-trivial-016",
+      "run_id": "20260513-014437-d5eec149-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-016/20260513-014437-d5eec149-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-016/20260513-014437-d5eec149-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 46.194,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-016/20260513-014437-d5eec149-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-016/20260513-014437-d5eec149-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-016/20260513-014437-d5eec149-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-trivial-016/20260513-014437-d5eec149-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-trivial-016",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-trivial-016/20260513-014437-d5eec149-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-trivial-016.yaml",
+        "predicted_options": [
+          "pep_bed41b837c"
+        ],
+        "gold_top": [
+          "pep_b2b3678727"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-trivial-017",
+      "run_id": "20260513-014437-261e67be-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-017/20260513-014437-261e67be-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-017/20260513-014437-261e67be-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 101.905,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-017/20260513-014437-261e67be-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-017/20260513-014437-261e67be-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-017/20260513-014437-261e67be-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-trivial-017/20260513-014437-261e67be-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-trivial-017",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-trivial-017/20260513-014437-261e67be-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-trivial-017.yaml",
+        "predicted_options": [
+          "pep_f3ee7467da"
+        ],
+        "gold_top": [
+          "pep_be81209be4"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-trivial-018",
+      "run_id": "20260513-014437-9856847e-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-018/20260513-014437-9856847e-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-018/20260513-014437-9856847e-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 42.266,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-018/20260513-014437-9856847e-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-018/20260513-014437-9856847e-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-018/20260513-014437-9856847e-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-trivial-018/20260513-014437-9856847e-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-trivial-018",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-trivial-018/20260513-014437-9856847e-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-trivial-018.yaml",
+        "predicted_options": [
+          "pep_951ca8b3fb"
+        ],
+        "gold_top": [
+          "pep_951ca8b3fb"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-trivial-019",
+      "run_id": "20260513-014437-cfb0faec-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-019/20260513-014437-cfb0faec-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-019/20260513-014437-cfb0faec-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 105.177,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-019/20260513-014437-cfb0faec-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-019/20260513-014437-cfb0faec-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-019/20260513-014437-cfb0faec-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-trivial-019/20260513-014437-cfb0faec-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-trivial-019",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-trivial-019/20260513-014437-cfb0faec-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-trivial-019.yaml",
+        "predicted_options": [
+          "pep_7a4229a332"
+        ],
+        "gold_top": [
+          "pep_2975e3038a"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-nps-trivial-020",
+      "run_id": "20260513-014437-85a35242-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-020/20260513-014437-85a35242-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-020/20260513-014437-85a35242-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 52.972,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-020/20260513-014437-85a35242-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-020/20260513-014437-85a35242-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-nps-trivial-020/20260513-014437-85a35242-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-trivial-020/20260513-014437-85a35242-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-nps-trivial-020",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-nps-trivial-020/20260513-014437-85a35242-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-nps-trivial-020.yaml",
+        "predicted_options": [
+          "pep_e44db0bd6a"
+        ],
+        "gold_top": [
+          "pep_e44db0bd6a"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-hard-001",
+      "run_id": "20260513-014437-2b68f7a5-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-001/20260513-014437-2b68f7a5-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-001/20260513-014437-2b68f7a5-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 120.814,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-001/20260513-014437-2b68f7a5-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-001/20260513-014437-2b68f7a5-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-001/20260513-014437-2b68f7a5-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-hard-001/20260513-014437-2b68f7a5-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-hard-001",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-hard-001/20260513-014437-2b68f7a5-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-hard-001.yaml",
+        "predicted_options": [
+          "pep_786479c072"
+        ],
+        "gold_top": [
+          "pep_786479c072"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-hard-002",
+      "run_id": "20260513-014437-b1f64330-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-002/20260513-014437-b1f64330-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-002/20260513-014437-b1f64330-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 44.165,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-002/20260513-014437-b1f64330-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-002/20260513-014437-b1f64330-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-002/20260513-014437-b1f64330-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-hard-002/20260513-014437-b1f64330-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-hard-002",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-hard-002/20260513-014437-b1f64330-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-hard-002.yaml",
+        "predicted_options": [
+          "pep_b80f5fcb94"
+        ],
+        "gold_top": [
+          "pep_25f3aa9837"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-hard-003",
+      "run_id": "20260513-014437-940906d8-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-003/20260513-014437-940906d8-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-003/20260513-014437-940906d8-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 69.219,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-003/20260513-014437-940906d8-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-003/20260513-014437-940906d8-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-003/20260513-014437-940906d8-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-hard-003/20260513-014437-940906d8-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-hard-003",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-hard-003/20260513-014437-940906d8-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-hard-003.yaml",
+        "predicted_options": [
+          "pep_2e449a7679"
+        ],
+        "gold_top": [
+          "pep_b92b07d835"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-hard-004",
+      "run_id": "20260513-014437-b93ee0b3-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-004/20260513-014437-b93ee0b3-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-004/20260513-014437-b93ee0b3-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 222.661,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-004/20260513-014437-b93ee0b3-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-004/20260513-014437-b93ee0b3-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-004/20260513-014437-b93ee0b3-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-hard-004/20260513-014437-b93ee0b3-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-hard-004",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-hard-004/20260513-014437-b93ee0b3-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-hard-004.yaml",
+        "predicted_options": [
+          "pep_0440af3f98"
+        ],
+        "gold_top": [
+          "pep_0440af3f98"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-hard-005",
+      "run_id": "20260513-014437-4d3a79a6-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-005/20260513-014437-4d3a79a6-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-005/20260513-014437-4d3a79a6-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 49.849,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-005/20260513-014437-4d3a79a6-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-005/20260513-014437-4d3a79a6-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-hard-005/20260513-014437-4d3a79a6-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-hard-005/20260513-014437-4d3a79a6-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-hard-005",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-hard-005/20260513-014437-4d3a79a6-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-hard-005.yaml",
+        "predicted_options": [
+          "pep_b92b07d835"
+        ],
+        "gold_top": [
+          "pep_bd83319ee3"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-medium-006",
+      "run_id": "20260513-014437-f17d763d-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-006/20260513-014437-f17d763d-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-006/20260513-014437-f17d763d-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 186.293,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-006/20260513-014437-f17d763d-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-006/20260513-014437-f17d763d-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-006/20260513-014437-f17d763d-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-medium-006/20260513-014437-f17d763d-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-medium-006",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-medium-006/20260513-014437-f17d763d-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-medium-006.yaml",
+        "predicted_options": [
+          "pep_85dba45e66"
+        ],
+        "gold_top": [
+          "pep_a7480e6349"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-medium-007",
+      "run_id": "20260513-014437-cd8cb733-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-007/20260513-014437-cd8cb733-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-007/20260513-014437-cd8cb733-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 58.849,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-007/20260513-014437-cd8cb733-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-007/20260513-014437-cd8cb733-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-007/20260513-014437-cd8cb733-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-medium-007/20260513-014437-cd8cb733-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-medium-007",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-medium-007/20260513-014437-cd8cb733-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-medium-007.yaml",
+        "predicted_options": [
+          "pep_ae73a93f2d"
+        ],
+        "gold_top": [
+          "pep_ae73a93f2d"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-medium-008",
+      "run_id": "20260513-014437-dd5c122f-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-008/20260513-014437-dd5c122f-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-008/20260513-014437-dd5c122f-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 124.009,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-008/20260513-014437-dd5c122f-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-008/20260513-014437-dd5c122f-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-008/20260513-014437-dd5c122f-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-medium-008/20260513-014437-dd5c122f-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-medium-008",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-medium-008/20260513-014437-dd5c122f-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-medium-008.yaml",
+        "predicted_options": [
+          "pep_1b7058bfa2"
+        ],
+        "gold_top": [
+          "pep_1b7058bfa2"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-medium-009",
+      "run_id": "20260513-014437-a0cfde5e-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-009/20260513-014437-a0cfde5e-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-009/20260513-014437-a0cfde5e-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 773.075,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-009/20260513-014437-a0cfde5e-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-009/20260513-014437-a0cfde5e-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-009/20260513-014437-a0cfde5e-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-medium-009/20260513-014437-a0cfde5e-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-medium-009",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-medium-009/20260513-014437-a0cfde5e-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-medium-009.yaml",
+        "predicted_options": [
+          "pep_1982a98fa1"
+        ],
+        "gold_top": [
+          "pep_ef7d01cd40"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-medium-010",
+      "run_id": "20260513-014437-c7ad433f-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-010/20260513-014437-c7ad433f-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-010/20260513-014437-c7ad433f-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 78.466,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-010/20260513-014437-c7ad433f-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-010/20260513-014437-c7ad433f-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-medium-010/20260513-014437-c7ad433f-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-medium-010/20260513-014437-c7ad433f-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-medium-010",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-medium-010/20260513-014437-c7ad433f-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-medium-010.yaml",
+        "predicted_options": [
+          "pep_e9ec519d3f"
+        ],
+        "gold_top": [
+          "pep_e9ec519d3f"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-easy-011",
+      "run_id": "20260513-014437-49d66962-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-011/20260513-014437-49d66962-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-011/20260513-014437-49d66962-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 101.934,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-011/20260513-014437-49d66962-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-011/20260513-014437-49d66962-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-011/20260513-014437-49d66962-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-easy-011/20260513-014437-49d66962-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-easy-011",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-easy-011/20260513-014437-49d66962-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-easy-011.yaml",
+        "predicted_options": [
+          "pep_3b8ad94138"
+        ],
+        "gold_top": [
+          "pep_3b8ad94138"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-easy-012",
+      "run_id": "20260513-014437-991dc13a-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-012/20260513-014437-991dc13a-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-012/20260513-014437-991dc13a-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 52.457,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-012/20260513-014437-991dc13a-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-012/20260513-014437-991dc13a-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-012/20260513-014437-991dc13a-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-easy-012/20260513-014437-991dc13a-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-easy-012",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-easy-012/20260513-014437-991dc13a-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-easy-012.yaml",
+        "predicted_options": [
+          "pep_816ac46c1c"
+        ],
+        "gold_top": [
+          "pep_816ac46c1c"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-easy-013",
+      "run_id": "20260513-014437-6c1f588e-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-013/20260513-014437-6c1f588e-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-013/20260513-014437-6c1f588e-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 59.044,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-013/20260513-014437-6c1f588e-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-013/20260513-014437-6c1f588e-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-013/20260513-014437-6c1f588e-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-easy-013/20260513-014437-6c1f588e-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-easy-013",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-easy-013/20260513-014437-6c1f588e-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-easy-013.yaml",
+        "predicted_options": [
+          "pep_700a40b882"
+        ],
+        "gold_top": [
+          "pep_700a40b882"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-easy-014",
+      "run_id": "20260513-014437-6519a111-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-014/20260513-014437-6519a111-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-014/20260513-014437-6519a111-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 88.359,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-014/20260513-014437-6519a111-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-014/20260513-014437-6519a111-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-014/20260513-014437-6519a111-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-easy-014/20260513-014437-6519a111-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-easy-014",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-easy-014/20260513-014437-6519a111-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-easy-014.yaml",
+        "predicted_options": [
+          "pep_934a769958"
+        ],
+        "gold_top": [
+          "pep_03f8504efe"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-easy-015",
+      "run_id": "20260513-014437-1c536280-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-015/20260513-014437-1c536280-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-015/20260513-014437-1c536280-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 57.866,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-015/20260513-014437-1c536280-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-015/20260513-014437-1c536280-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-easy-015/20260513-014437-1c536280-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-easy-015/20260513-014437-1c536280-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-easy-015",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-easy-015/20260513-014437-1c536280-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-easy-015.yaml",
+        "predicted_options": [
+          "pep_d9216fb296"
+        ],
+        "gold_top": [
+          "pep_d9216fb296"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-trivial-016",
+      "run_id": "20260513-014437-47470965-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-016/20260513-014437-47470965-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-016/20260513-014437-47470965-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 53.774,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-016/20260513-014437-47470965-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-016/20260513-014437-47470965-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-016/20260513-014437-47470965-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-trivial-016/20260513-014437-47470965-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-trivial-016",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-trivial-016/20260513-014437-47470965-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-trivial-016.yaml",
+        "predicted_options": [
+          "pep_ee8297491d"
+        ],
+        "gold_top": [
+          "pep_ee8297491d"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-trivial-017",
+      "run_id": "20260513-014437-4dc8c14d-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-017/20260513-014437-4dc8c14d-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-017/20260513-014437-4dc8c14d-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 42.153,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-017/20260513-014437-4dc8c14d-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-017/20260513-014437-4dc8c14d-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-017/20260513-014437-4dc8c14d-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-trivial-017/20260513-014437-4dc8c14d-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-trivial-017",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-trivial-017/20260513-014437-4dc8c14d-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-trivial-017.yaml",
+        "predicted_options": [
+          "pep_1484a050c3"
+        ],
+        "gold_top": [
+          "pep_1484a050c3"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-trivial-018",
+      "run_id": "20260513-014437-a1b07935-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-018/20260513-014437-a1b07935-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-018/20260513-014437-a1b07935-modal/prompt.md)\"",
+      "returncode": 1,
+      "duration_seconds": 12.259,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-018/20260513-014437-a1b07935-modal/stdout.txt",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-018/20260513-014437-a1b07935-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-018/20260513-014437-a1b07935-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-trivial-018/20260513-014437-a1b07935-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-trivial-018",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-trivial-018/20260513-014437-a1b07935-modal/stdout.txt",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-trivial-018.yaml",
+        "predicted_options": [
+          "type_system_subtype_init_cwd_tmp_capable_bench_task_pilot_peptide_pairwise_sequence_oxn_trivial_018_20260513_014437_a1b07935_modal_session_id_69b64c0b_17c4_4560_bef3_03eaff377c28_tools_task_askuserquestion_bash_croncreate_crondelete_cronlist_edit_enterplanmode_enterworktree_exitplanmode_exitworktree_glob_grep_monitor_notebookedit_pushnotification_read_remotetrigger_schedulewakeup_skill_taskoutput_taskstop_todowrite_toolsearch_webfetch_websearch_write_mcp_servers_model_claude_sonnet_4_6_permissionmode_bypasspermissions_slash_commands_update_config_debug_simplify_batch_fewer_permission_prompts_loop_schedule_claude_api_clear_compact_context_heapdump_init_review_security_review_usage_insights_goal_team_onboarding_apikeysource_none_claude_code_version_2_1_139_output_style_default_agents_claude_explore_general_purpose_plan_statusline_setup_skills_update_config_debug_simplify_batch_fewer_permission_prompts_loop_schedule_claude_api_plugins_analytics_disabled_false_uuid_731c018b_0f6f_469e_9297_85f36ea98a22_memory_paths_auto_root_claude_projects_tmp_capable_bench_task_pilot_peptide_pairwise_sequence_oxn_trivial_018_20260513_014437_a1b07935_modal_memory_fast_mode_state_off"
+        ],
+        "gold_top": [
+          "pep_423cfad029"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-trivial-019",
+      "run_id": "20260513-014437-1a5b207b-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-019/20260513-014437-1a5b207b-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-019/20260513-014437-1a5b207b-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 87.878,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-019/20260513-014437-1a5b207b-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-019/20260513-014437-1a5b207b-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-019/20260513-014437-1a5b207b-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-trivial-019/20260513-014437-1a5b207b-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-trivial-019",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-trivial-019/20260513-014437-1a5b207b-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-trivial-019.yaml",
+        "predicted_options": [
+          "pep_881d9b069b"
+        ],
+        "gold_top": [
+          "pep_75d36bd697"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-oxn-trivial-020",
+      "run_id": "20260513-014437-7ec71a34-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-020/20260513-014437-7ec71a34-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-020/20260513-014437-7ec71a34-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 95.054,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-020/20260513-014437-7ec71a34-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-020/20260513-014437-7ec71a34-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-oxn-trivial-020/20260513-014437-7ec71a34-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-trivial-020/20260513-014437-7ec71a34-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-oxn-trivial-020",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-oxn-trivial-020/20260513-014437-7ec71a34-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-oxn-trivial-020.yaml",
+        "predicted_options": [
+          "pep_58f2c6e9d6"
+        ],
+        "gold_top": [
+          "pep_58f2c6e9d6"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-hard-001",
+      "run_id": "20260513-014437-2b2e85e5-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-001/20260513-014437-2b2e85e5-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-001/20260513-014437-2b2e85e5-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 78.406,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-001/20260513-014437-2b2e85e5-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-001/20260513-014437-2b2e85e5-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-001/20260513-014437-2b2e85e5-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-hard-001/20260513-014437-2b2e85e5-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-hard-001",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-hard-001/20260513-014437-2b2e85e5-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-hard-001.yaml",
+        "predicted_options": [
+          "pep_722831ac79"
+        ],
+        "gold_top": [
+          "pep_72e481bd02"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-hard-002",
+      "run_id": "20260513-014437-ec755f65-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-002/20260513-014437-ec755f65-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-002/20260513-014437-ec755f65-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 181.922,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-002/20260513-014437-ec755f65-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-002/20260513-014437-ec755f65-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-002/20260513-014437-ec755f65-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-hard-002/20260513-014437-ec755f65-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-hard-002",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-hard-002/20260513-014437-ec755f65-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-hard-002.yaml",
+        "predicted_options": [
+          "pep_0d5499fc99"
+        ],
+        "gold_top": [
+          "pep_66aca7a1af"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-hard-003",
+      "run_id": "20260513-014437-66d55032-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-003/20260513-014437-66d55032-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-003/20260513-014437-66d55032-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 142.031,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-003/20260513-014437-66d55032-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-003/20260513-014437-66d55032-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-003/20260513-014437-66d55032-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-hard-003/20260513-014437-66d55032-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-hard-003",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-hard-003/20260513-014437-66d55032-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-hard-003.yaml",
+        "predicted_options": [
+          "pep_1746cadeb2"
+        ],
+        "gold_top": [
+          "pep_517897f3a5"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-hard-004",
+      "run_id": "20260513-014437-09fe41f3-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-004/20260513-014437-09fe41f3-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-004/20260513-014437-09fe41f3-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 111.956,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-004/20260513-014437-09fe41f3-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-004/20260513-014437-09fe41f3-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-004/20260513-014437-09fe41f3-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-hard-004/20260513-014437-09fe41f3-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-hard-004",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-hard-004/20260513-014437-09fe41f3-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-hard-004.yaml",
+        "predicted_options": [
+          "pep_19987f2e8c"
+        ],
+        "gold_top": [
+          "pep_759341cc19"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-hard-005",
+      "run_id": "20260513-014437-d37240ed-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-005/20260513-014437-d37240ed-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-005/20260513-014437-d37240ed-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 186.202,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-005/20260513-014437-d37240ed-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-005/20260513-014437-d37240ed-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-hard-005/20260513-014437-d37240ed-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-hard-005/20260513-014437-d37240ed-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-hard-005",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-hard-005/20260513-014437-d37240ed-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-hard-005.yaml",
+        "predicted_options": [
+          "pep_7437406d2e"
+        ],
+        "gold_top": [
+          "pep_7437406d2e"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-medium-006",
+      "run_id": "20260513-014437-8c2370d0-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-006/20260513-014437-8c2370d0-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-006/20260513-014437-8c2370d0-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 131.147,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-006/20260513-014437-8c2370d0-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-006/20260513-014437-8c2370d0-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-006/20260513-014437-8c2370d0-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-medium-006/20260513-014437-8c2370d0-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-medium-006",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-medium-006/20260513-014437-8c2370d0-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-medium-006.yaml",
+        "predicted_options": [
+          "pep_b0ce5e7267"
+        ],
+        "gold_top": [
+          "pep_19987f2e8c"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-medium-007",
+      "run_id": "20260513-014437-a26dc5fa-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-007/20260513-014437-a26dc5fa-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-007/20260513-014437-a26dc5fa-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 88.79,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-007/20260513-014437-a26dc5fa-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-007/20260513-014437-a26dc5fa-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-007/20260513-014437-a26dc5fa-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-medium-007/20260513-014437-a26dc5fa-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-medium-007",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-medium-007/20260513-014437-a26dc5fa-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-medium-007.yaml",
+        "predicted_options": [
+          "pep_b0ce5e7267"
+        ],
+        "gold_top": [
+          "pep_b0ce5e7267"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-medium-008",
+      "run_id": "20260513-014437-b23c5ef4-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-008/20260513-014437-b23c5ef4-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-008/20260513-014437-b23c5ef4-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 97.054,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-008/20260513-014437-b23c5ef4-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-008/20260513-014437-b23c5ef4-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-008/20260513-014437-b23c5ef4-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-medium-008/20260513-014437-b23c5ef4-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-medium-008",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-medium-008/20260513-014437-b23c5ef4-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-medium-008.yaml",
+        "predicted_options": [
+          "pep_5d7c340c27"
+        ],
+        "gold_top": [
+          "pep_5d7c340c27"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-medium-009",
+      "run_id": "20260513-014437-5d7f59bd-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-009/20260513-014437-5d7f59bd-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-009/20260513-014437-5d7f59bd-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 125.356,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-009/20260513-014437-5d7f59bd-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-009/20260513-014437-5d7f59bd-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-009/20260513-014437-5d7f59bd-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-medium-009/20260513-014437-5d7f59bd-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-medium-009",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-medium-009/20260513-014437-5d7f59bd-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-medium-009.yaml",
+        "predicted_options": [
+          "pep_940f7913a1"
+        ],
+        "gold_top": [
+          "pep_b06d8cfc0e"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-medium-010",
+      "run_id": "20260513-014437-eafd7e32-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-010/20260513-014437-eafd7e32-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-010/20260513-014437-eafd7e32-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 96.535,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-010/20260513-014437-eafd7e32-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-010/20260513-014437-eafd7e32-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-medium-010/20260513-014437-eafd7e32-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-medium-010/20260513-014437-eafd7e32-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-medium-010",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-medium-010/20260513-014437-eafd7e32-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-medium-010.yaml",
+        "predicted_options": [
+          "pep_78b8e06402"
+        ],
+        "gold_top": [
+          "pep_d252fb29fa"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-easy-011",
+      "run_id": "20260513-014437-ac9393e0-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-011/20260513-014437-ac9393e0-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-011/20260513-014437-ac9393e0-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 52.395,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-011/20260513-014437-ac9393e0-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-011/20260513-014437-ac9393e0-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-011/20260513-014437-ac9393e0-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-easy-011/20260513-014437-ac9393e0-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-easy-011",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-easy-011/20260513-014437-ac9393e0-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-easy-011.yaml",
+        "predicted_options": [
+          "pep_021cf7b0a5"
+        ],
+        "gold_top": [
+          "pep_77a315c29a"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-easy-012",
+      "run_id": "20260513-014437-91e6cd7e-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-012/20260513-014437-91e6cd7e-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-012/20260513-014437-91e6cd7e-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 63.499,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-012/20260513-014437-91e6cd7e-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-012/20260513-014437-91e6cd7e-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-012/20260513-014437-91e6cd7e-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-easy-012/20260513-014437-91e6cd7e-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-easy-012",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-easy-012/20260513-014437-91e6cd7e-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-easy-012.yaml",
+        "predicted_options": [
+          "pep_72e481bd02"
+        ],
+        "gold_top": [
+          "pep_9bc43bfbcf"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-easy-013",
+      "run_id": "20260513-014437-309ed356-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-013/20260513-014437-309ed356-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-013/20260513-014437-309ed356-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 113.266,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-013/20260513-014437-309ed356-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-013/20260513-014437-309ed356-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-013/20260513-014437-309ed356-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-easy-013/20260513-014437-309ed356-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-easy-013",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-easy-013/20260513-014437-309ed356-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-easy-013.yaml",
+        "predicted_options": [
+          "pep_38847dd5a2"
+        ],
+        "gold_top": [
+          "pep_0827c2b5c5"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-easy-014",
+      "run_id": "20260513-014437-b3d1218f-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-014/20260513-014437-b3d1218f-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-014/20260513-014437-b3d1218f-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 104.044,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-014/20260513-014437-b3d1218f-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-014/20260513-014437-b3d1218f-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-014/20260513-014437-b3d1218f-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-easy-014/20260513-014437-b3d1218f-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-easy-014",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-easy-014/20260513-014437-b3d1218f-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-easy-014.yaml",
+        "predicted_options": [
+          "pep_c698df97f5"
+        ],
+        "gold_top": [
+          "pep_c698df97f5"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-easy-015",
+      "run_id": "20260513-014437-855a319c-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-015/20260513-014437-855a319c-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-015/20260513-014437-855a319c-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 48.064,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-015/20260513-014437-855a319c-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-015/20260513-014437-855a319c-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-easy-015/20260513-014437-855a319c-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-easy-015/20260513-014437-855a319c-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-easy-015",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-easy-015/20260513-014437-855a319c-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-easy-015.yaml",
+        "predicted_options": [
+          "pep_492cbb59b1"
+        ],
+        "gold_top": [
+          "pep_77a315c29a"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-trivial-016",
+      "run_id": "20260513-014437-557d6802-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-016/20260513-014437-557d6802-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-016/20260513-014437-557d6802-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 69.186,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-016/20260513-014437-557d6802-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-016/20260513-014437-557d6802-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-016/20260513-014437-557d6802-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-trivial-016/20260513-014437-557d6802-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-trivial-016",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-trivial-016/20260513-014437-557d6802-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-trivial-016.yaml",
+        "predicted_options": [
+          "pep_70e8ba6ad0"
+        ],
+        "gold_top": [
+          "pep_5d7c340c27"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-trivial-017",
+      "run_id": "20260513-014437-d1e8e550-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-017/20260513-014437-d1e8e550-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-017/20260513-014437-d1e8e550-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 100.026,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-017/20260513-014437-d1e8e550-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-017/20260513-014437-d1e8e550-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-017/20260513-014437-d1e8e550-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-trivial-017/20260513-014437-d1e8e550-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-trivial-017",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-trivial-017/20260513-014437-d1e8e550-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-trivial-017.yaml",
+        "predicted_options": [
+          "pep_8bad438ce3"
+        ],
+        "gold_top": [
+          "pep_8bad438ce3"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-trivial-018",
+      "run_id": "20260513-014437-9381e063-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-018/20260513-014437-9381e063-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-018/20260513-014437-9381e063-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 89.175,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-018/20260513-014437-9381e063-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-018/20260513-014437-9381e063-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-018/20260513-014437-9381e063-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-trivial-018/20260513-014437-9381e063-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-trivial-018",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-trivial-018/20260513-014437-9381e063-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-trivial-018.yaml",
+        "predicted_options": [
+          "pep_940f7913a1"
+        ],
+        "gold_top": [
+          "pep_8bad438ce3"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-trivial-019",
+      "run_id": "20260513-014437-75b324b9-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-019/20260513-014437-75b324b9-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-019/20260513-014437-75b324b9-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 123.259,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-019/20260513-014437-75b324b9-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-019/20260513-014437-75b324b9-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-019/20260513-014437-75b324b9-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-trivial-019/20260513-014437-75b324b9-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-trivial-019",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-trivial-019/20260513-014437-75b324b9-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-trivial-019.yaml",
+        "predicted_options": [
+          "pep_630d326b9e"
+        ],
+        "gold_top": [
+          "pep_d252fb29fa"
+        ],
+        "top1_in_gold": false,
+        "mean_reciprocal_rank": 0.0,
+        "score": 0.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-pairwise-sequence-mch-trivial-020",
+      "run_id": "20260513-014437-6dc2ca8d-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-020/20260513-014437-6dc2ca8d-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-020/20260513-014437-6dc2ca8d-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 40.999,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-020/20260513-014437-6dc2ca8d-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-020/20260513-014437-6dc2ca8d-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-pairwise-sequence-mch-trivial-020/20260513-014437-6dc2ca8d-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-trivial-020/20260513-014437-6dc2ca8d-modal",
+      "grade": {
+        "task_id": "pilot-peptide-pairwise-sequence-mch-trivial-020",
+        "task_type": "next_experiment",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-pairwise-sequence-mch-trivial-020/20260513-014437-6dc2ca8d-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-pairwise-sequence-mch-trivial-020.yaml",
+        "predicted_options": [
+          "pep_7abd4987a7"
+        ],
+        "gold_top": [
+          "pep_7abd4987a7"
+        ],
+        "top1_in_gold": true,
+        "mean_reciprocal_rank": 1.0,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-ranking-sequence-nps-small-001",
+      "run_id": "20260513-014437-6101afab-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-small-001/20260513-014437-6101afab-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-small-001/20260513-014437-6101afab-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 223.775,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-small-001/20260513-014437-6101afab-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-small-001/20260513-014437-6101afab-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-small-001/20260513-014437-6101afab-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-nps-small-001/20260513-014437-6101afab-modal",
+      "grade": {
+        "task_id": "pilot-peptide-ranking-sequence-nps-small-001",
+        "task_type": "candidate_prioritization",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-nps-small-001/20260513-014437-6101afab-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-ranking-sequence-nps-small-001.yaml",
+        "predicted_top_k": [
+          "PEP-0E72BE56EA",
+          "PEP-C135C2FD5E",
+          "PEP-FECEDB3551"
+        ],
+        "gold_top_k": [
+          "PEP-99C0FB7113",
+          "PEP-D9A932B275",
+          "PEP-0E72BE56EA"
+        ],
+        "precision_at_k": 0.3333333333333333,
+        "top1_exact": true,
+        "top1_in_gold_top_k": true,
+        "ndcg_at_k": 0.8486,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-ranking-sequence-nps-medium-001",
+      "run_id": "20260513-014437-b1b235f5-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-medium-001/20260513-014437-b1b235f5-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-medium-001/20260513-014437-b1b235f5-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 186.684,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-medium-001/20260513-014437-b1b235f5-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-medium-001/20260513-014437-b1b235f5-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-medium-001/20260513-014437-b1b235f5-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-nps-medium-001/20260513-014437-b1b235f5-modal",
+      "grade": {
+        "task_id": "pilot-peptide-ranking-sequence-nps-medium-001",
+        "task_type": "candidate_prioritization",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-nps-medium-001/20260513-014437-b1b235f5-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-ranking-sequence-nps-medium-001.yaml",
+        "predicted_top_k": [
+          "PEP-BADED8AA17",
+          "PEP-281F998E8A",
+          "PEP-7700082B5D"
+        ],
+        "gold_top_k": [
+          "PEP-0CCAFA2B82",
+          "PEP-E7792FCB3D",
+          "PEP-7700082B5D"
+        ],
+        "precision_at_k": 0.3333333333333333,
+        "top1_exact": false,
+        "top1_in_gold_top_k": false,
+        "ndcg_at_k": 0.503,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-ranking-sequence-nps-large-001",
+      "run_id": "20260513-014437-e6b79ccc-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-large-001/20260513-014437-e6b79ccc-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-large-001/20260513-014437-e6b79ccc-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 248.385,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-large-001/20260513-014437-e6b79ccc-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-large-001/20260513-014437-e6b79ccc-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-nps-large-001/20260513-014437-e6b79ccc-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-nps-large-001/20260513-014437-e6b79ccc-modal",
+      "grade": {
+        "task_id": "pilot-peptide-ranking-sequence-nps-large-001",
+        "task_type": "candidate_prioritization",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-nps-large-001/20260513-014437-e6b79ccc-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-ranking-sequence-nps-large-001.yaml",
+        "predicted_top_k": [
+          "PEP-D384112D65",
+          "PEP-560D099E43",
+          "PEP-22E0F4AD93"
+        ],
+        "gold_top_k": [
+          "PEP-22E0F4AD93",
+          "PEP-B9B97294BF",
+          "PEP-BDA910B7EF"
+        ],
+        "precision_at_k": 0.3333333333333333,
+        "top1_exact": false,
+        "top1_in_gold_top_k": false,
+        "ndcg_at_k": 0.4403,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-ranking-sequence-oxn-small-001",
+      "run_id": "20260513-014437-ad08f0de-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-small-001/20260513-014437-ad08f0de-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-small-001/20260513-014437-ad08f0de-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 146.688,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-small-001/20260513-014437-ad08f0de-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-small-001/20260513-014437-ad08f0de-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-small-001/20260513-014437-ad08f0de-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-oxn-small-001/20260513-014437-ad08f0de-modal",
+      "grade": {
+        "task_id": "pilot-peptide-ranking-sequence-oxn-small-001",
+        "task_type": "candidate_prioritization",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-oxn-small-001/20260513-014437-ad08f0de-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-ranking-sequence-oxn-small-001.yaml",
+        "predicted_top_k": [
+          "PEP-2E449A7679",
+          "PEP-3646F50CFD",
+          "PEP-7756AEAFD1"
+        ],
+        "gold_top_k": [
+          "PEP-3646F50CFD",
+          "PEP-7756AEAFD1",
+          "PEP-2E449A7679"
+        ],
+        "precision_at_k": 1.0,
+        "top1_exact": false,
+        "top1_in_gold_top_k": true,
+        "ndcg_at_k": 0.8193,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-ranking-sequence-oxn-medium-001",
+      "run_id": "20260513-014437-3852b3d6-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-medium-001/20260513-014437-3852b3d6-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-medium-001/20260513-014437-3852b3d6-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 202.041,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-medium-001/20260513-014437-3852b3d6-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-medium-001/20260513-014437-3852b3d6-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-medium-001/20260513-014437-3852b3d6-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-oxn-medium-001/20260513-014437-3852b3d6-modal",
+      "grade": {
+        "task_id": "pilot-peptide-ranking-sequence-oxn-medium-001",
+        "task_type": "candidate_prioritization",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-oxn-medium-001/20260513-014437-3852b3d6-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-ranking-sequence-oxn-medium-001.yaml",
+        "predicted_top_k": [
+          "PEP-5B02BBF3F1",
+          "PEP-F0FB3FEFF8",
+          "PEP-BBEDF09AAD"
+        ],
+        "gold_top_k": [
+          "PEP-C4459F3622",
+          "PEP-50F92F0C74",
+          "PEP-BBEDF09AAD"
+        ],
+        "precision_at_k": 0.3333333333333333,
+        "top1_exact": false,
+        "top1_in_gold_top_k": false,
+        "ndcg_at_k": 0.5787,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-ranking-sequence-oxn-large-001",
+      "run_id": "20260513-014437-ca271565-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-large-001/20260513-014437-ca271565-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-large-001/20260513-014437-ca271565-modal/prompt.md)\"",
+      "returncode": 1,
+      "duration_seconds": 8.658,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-large-001/20260513-014437-ca271565-modal/stdout.txt",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-large-001/20260513-014437-ca271565-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-oxn-large-001/20260513-014437-ca271565-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-oxn-large-001/20260513-014437-ca271565-modal",
+      "grade": {
+        "task_id": "pilot-peptide-ranking-sequence-oxn-large-001",
+        "task_type": "candidate_prioritization",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-oxn-large-001/20260513-014437-ca271565-modal/stdout.txt",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-ranking-sequence-oxn-large-001.yaml",
+        "predicted_top_k": [
+          "PEP-AE73A93F2D",
+          "PEP-1901FD3803",
+          "PEP-D121B2A4AE"
+        ],
+        "gold_top_k": [
+          "PEP-DA45E76EEF",
+          "PEP-4706CD0D86",
+          "PEP-AE73A93F2D"
+        ],
+        "precision_at_k": 0.3333333333333333,
+        "top1_exact": true,
+        "top1_in_gold_top_k": true,
+        "ndcg_at_k": 0.7954,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-ranking-sequence-mch-small-001",
+      "run_id": "20260513-014437-709fc8e5-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-small-001/20260513-014437-709fc8e5-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-small-001/20260513-014437-709fc8e5-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 152.226,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-small-001/20260513-014437-709fc8e5-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-small-001/20260513-014437-709fc8e5-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-small-001/20260513-014437-709fc8e5-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-mch-small-001/20260513-014437-709fc8e5-modal",
+      "grade": {
+        "task_id": "pilot-peptide-ranking-sequence-mch-small-001",
+        "task_type": "candidate_prioritization",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-mch-small-001/20260513-014437-709fc8e5-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-ranking-sequence-mch-small-001.yaml",
+        "predicted_top_k": [
+          "PEP-492CBB59B1",
+          "PEP-2E88C53A07",
+          "PEP-0D5499FC99"
+        ],
+        "gold_top_k": [
+          "PEP-2E88C53A07",
+          "PEP-0D5499FC99",
+          "PEP-D747C442C3"
+        ],
+        "precision_at_k": 0.6666666666666666,
+        "top1_exact": false,
+        "top1_in_gold_top_k": false,
+        "ndcg_at_k": 0.4792,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-ranking-sequence-mch-medium-001",
+      "run_id": "20260513-014437-fff74a13-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-medium-001/20260513-014437-fff74a13-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-medium-001/20260513-014437-fff74a13-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 552.627,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-medium-001/20260513-014437-fff74a13-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-medium-001/20260513-014437-fff74a13-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-medium-001/20260513-014437-fff74a13-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-mch-medium-001/20260513-014437-fff74a13-modal",
+      "grade": {
+        "task_id": "pilot-peptide-ranking-sequence-mch-medium-001",
+        "task_type": "candidate_prioritization",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-mch-medium-001/20260513-014437-fff74a13-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-ranking-sequence-mch-medium-001.yaml",
+        "predicted_top_k": [
+          "PEP-A1FBFDBD21",
+          "PEP-F2CDA6CD6F",
+          "PEP-9813A7559C"
+        ],
+        "gold_top_k": [
+          "PEP-F69343AA29",
+          "PEP-F2CDA6CD6F",
+          "PEP-A1FBFDBD21"
+        ],
+        "precision_at_k": 0.6666666666666666,
+        "top1_exact": true,
+        "top1_in_gold_top_k": true,
+        "ndcg_at_k": 0.8728,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-peptide-ranking-sequence-mch-large-001",
+      "run_id": "20260513-014437-20ff6e27-modal",
+      "remote_task_dir": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-large-001/20260513-014437-20ff6e27-modal",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-large-001/20260513-014437-20ff6e27-modal/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 209.293,
+      "answer_source": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-large-001/20260513-014437-20ff6e27-modal/answer.json",
+      "stdout_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-large-001/20260513-014437-20ff6e27-modal/stdout.txt",
+      "stderr_file": "/tmp/capable-bench-task/pilot-peptide-ranking-sequence-mch-large-001/20260513-014437-20ff6e27-modal/stderr.txt",
+      "executor": "modal",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-mch-large-001/20260513-014437-20ff6e27-modal",
+      "grade": {
+        "task_id": "pilot-peptide-ranking-sequence-mch-large-001",
+        "task_type": "candidate_prioritization",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/sat_full_claude/pilot-peptide-ranking-sequence-mch-large-001/20260513-014437-20ff6e27-modal/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-peptide-ranking-sequence-mch-large-001.yaml",
+        "predicted_top_k": [
+          "PEP-94F65383C0",
+          "PEP-C53F6C3A93",
+          "PEP-9ADF543292"
+        ],
+        "gold_top_k": [
+          "PEP-9ADF543292",
+          "PEP-0FD21B878C",
+          "PEP-94F65383C0"
+        ],
+        "precision_at_k": 0.6666666666666666,
+        "top1_exact": false,
+        "top1_in_gold_top_k": true,
+        "ndcg_at_k": 0.5,
+        "parsed_answer": true
+      }
+    }
+  ]
+}
