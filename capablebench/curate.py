@@ -49,6 +49,7 @@ def curate_pilot_tasks(
     peptide_by_id = {row["peptide_id"]: row for row in peptides}
     assay_summary = _summarize_assays(assays)
     invivo_rows = _summarize_invivo(bars, sig, peptide_by_compound)
+    peptide_resolutions = _load_peptide_resolutions(processed_dir)
 
     problems: list[dict[str, Any]] = []
     generated: list[str] = []
@@ -77,6 +78,7 @@ def curate_pilot_tasks(
         "assays": assays,
         "invivo_rows": invivo_rows,
         "qc": qc,
+        "peptide_resolutions": peptide_resolutions,
     }
     for builder in builders:
         task_ids = builder(context, problems)
@@ -451,27 +453,74 @@ to translate. Do not assume held-out outcome labels are visible. Write
     return task_ids
 
 
+_HIT_PREDICTION_ASSAYS = [
+    ("Ca2+", "ca2"),
+    ("IP-1", "ip1"),
+    ("b-Arrestin", "arrestin"),
+    ("cAMP", "camp"),
+]
+_HIT_PREDICTION_FIELDS = [
+    "peptide_id", "modification", "receptors",
+    "dose", "metric", "window_hours",
+    *(f"ec50_{key}_nm" for _, key in _HIT_PREDICTION_ASSAYS),
+    *(f"emax_{key}_pct" for _, key in _HIT_PREDICTION_ASSAYS),
+]
+
+
+def _peptide_per_assay_stats(
+    assays: list[dict[str, str]],
+) -> dict[str, dict[str, dict[str, float]]]:
+    """Per-(peptide_id, assay) median EC50 and median Emax from raw records."""
+    by_key: dict[tuple[str, str], dict[str, list[float]]] = defaultdict(
+        lambda: {"ec50": [], "emax": []}
+    )
+    for r in assays:
+        pid = (r.get("peptide_id") or "").strip()
+        assay = (r.get("assay") or "").strip()
+        if not pid or not assay:
+            continue
+        ec50 = _num(r.get("ec50_nm"))
+        emax = _num(r.get("emax_pct"))
+        if ec50 is not None and ec50 > 0:
+            by_key[(pid, assay)]["ec50"].append(ec50)
+        if emax is not None:
+            by_key[(pid, assay)]["emax"].append(emax)
+    out: dict[str, dict[str, dict[str, float]]] = defaultdict(dict)
+    for (pid, assay), bins in by_key.items():
+        entry = {"n": max(len(bins["ec50"]), len(bins["emax"]))}
+        if bins["ec50"]:
+            entry["ec50_med_nm"] = round(sorted(bins["ec50"])[len(bins["ec50"]) // 2], 4)
+        if bins["emax"]:
+            entry["emax_med_pct"] = round(sorted(bins["emax"])[len(bins["emax"]) // 2], 2)
+        out[pid][assay] = entry
+    return out
+
+
 def _build_hit_prediction(context: dict[str, Any], problems: list[dict[str, Any]]) -> list[str]:
     rows = [r for r in context["invivo_rows"] if not str(r["peptide_id"]).startswith("UNMAPPED")]
     rows = sorted(rows, key=lambda r: (r["study_name"], r["window_hours"], r["group"]))[:24]
+    per_assay = _peptide_per_assay_stats(context.get("assays") or [])
+    peptide_by_id = context["peptide_by_id"]
     task_ids = []
+    fields = _HIT_PREDICTION_FIELDS
     for index, outcome in enumerate(rows, start=1):
         peptide_id = outcome["peptide_id"]
         summary = context["assay_summary"].get(peptide_id, {"peptide_id": peptide_id})
-        visible = [
-            {
-                "peptide_id": peptide_id,
-                "compound": summary.get("compound", outcome["compound"]),
-                "dose": outcome["dose"],
-                "metric": outcome["metric"],
-                "window_hours": outcome["window_hours"],
-                "median_ec50_nm": summary.get("median_ec50_nm", ""),
-                "best_ec50_nm": summary.get("best_ec50_nm", ""),
-                "assays": summary.get("assays", ""),
-                "receptors": summary.get("receptors", ""),
-                "assay_records": summary.get("assay_records", ""),
-            }
-        ]
+        meta = peptide_by_id.get(peptide_id) or {}
+        stats = per_assay.get(peptide_id, {})
+        row = {
+            "peptide_id": peptide_id,
+            "modification": meta.get("modification", "").strip(),
+            "receptors": summary.get("receptors", ""),
+            "dose": outcome["dose"],
+            "metric": outcome["metric"],
+            "window_hours": outcome["window_hours"],
+        }
+        for assay_label, key in _HIT_PREDICTION_ASSAYS:
+            entry = stats.get(assay_label, {})
+            row[f"ec50_{key}_nm"] = entry.get("ec50_med_nm", "")
+            row[f"emax_{key}_pct"] = entry.get("emax_med_pct", "")
+        visible = [row]
         task_id = f"pilot-hit-prediction-{index:03d}"
         gold_label = "active" if str(outcome["significant"]).lower() == "true" else "inactive"
         _write_task(
@@ -480,11 +529,22 @@ def _build_hit_prediction(context: dict[str, Any], problems: list[dict[str, Any]
             prompt=f"""
 # Hit Prediction
 
-Predict whether the candidate in `candidate_context.csv` will show a significant
-in vivo effect for the specified endpoint and time window.
+`candidate_context.csv` describes one anonymized peptide and one in vivo
+experimental condition (dose, endpoint, time window). The visible columns are:
+
+- `peptide_id`, `modification` (sequence + chemistry), `receptors` (target panel).
+- `dose`, `metric`, `window_hours` (the experimental condition).
+- `ec50_<assay>_nm` and `emax_<assay>_pct` for each functional readout
+  (Ca²⁺, IP-1, β-arrestin, cAMP). Empty cells indicate the assay was not run.
+
+Predict whether the peptide will produce a **significant** in vivo effect at
+the specified endpoint and time window. Integrate the modification chemistry
+(PK liabilities, lipidation, non-natural residues), the per-assay pharmacology
+(potency, efficacy, biased agonism across G-protein vs arrestin pathways), and
+the dose / window. The compound code is intentionally withheld.
 
 Return `answer.json` with `prediction` set to `active` or `inactive`, plus
-confidence, rationale, effect direction, and main risk.
+`confidence`, `rationale`, `effect_direction`, and `main_risk`.
 """,
             task_yaml={
                 "capability_targets": ["translational_decision_making"],
@@ -499,7 +559,7 @@ confidence, rationale, effect direction, and main risk.
                 "accepted_labels": [gold_label],
                 "outcome_definition": "significant=True in held-out in vivo analysis_significance row",
             },
-            data_files={"candidate_context.csv": (visible, list(visible[0]))},
+            data_files={"candidate_context.csv": (visible, fields)},
             context=context,
             problems=problems,
             question="Predict active/inactive in vivo outcome.",
@@ -1219,6 +1279,112 @@ _SEQ_ANNOTATION_TOKENS = re.compile(
     re.IGNORECASE,
 )
 
+
+def _load_peptide_resolutions(processed_dir: Path) -> dict[str, dict[str, str]]:
+    """Load the manual peptide_full_sequences.csv resolution table, if present.
+
+    Maps peptide_id -> {full_sequence_resolved, pharmacology, confidence, parent_compound}.
+    Used by the sequence-only task builders to (a) materialize delta-only
+    modification strings into full sequences and (b) drop peptides whose
+    pharmacology doesn't match the agonist-only task semantics.
+    """
+    path = processed_dir / "peptide_full_sequences.csv"
+    if not path.exists():
+        return {}
+    out: dict[str, dict[str, str]] = {}
+    import csv as _csv
+    with open(path, encoding="utf-8") as f:
+        for r in _csv.DictReader(f):
+            pid = r.get("peptide_id", "")
+            if pid:
+                out[pid] = r
+    return out
+
+
+_AA1 = "ACDEFGHIKLMNPQRSTVWY"
+_SINGLE_RUN_8 = re.compile(rf"[{_AA1}]{{8,}}")
+_SINGLE_RUN_4 = re.compile(rf"[{_AA1}]{{4,}}")
+_AA3 = (r"Ala|Arg|Asn|Asp|Cys|Gln|Glu|Gly|His|Ile|Leu|Lys|Met|Phe|Pro|Ser|"
+        r"Thr|Trp|Tyr|Val|Sar|Nle|Aib|Hyp|Orn|Dab|Dap|hArg|hLys|hVal|hAla|"
+        r"hLeu|hThr|Gua|Gla|Gba|betaAla|betaHoVal|Acpc")
+_THREE_LETTER_CHAIN = re.compile(rf"(?:(?:D-)?(?:{_AA3})-){{4,}}(?:D-)?(?:{_AA3})")
+
+# Markers that flag antagonist scaffolds (S38151 / aMCH / GPS18169) or
+# multi-pharmacophore fusion peptides (MOX, NXN, NPM, etc.) - any of these
+# in the raw modification string means "drop from agonist-only sequence pool"
+# unless the peptide has an explicit agonist resolution.
+_NON_AGONIST_MARKERS = re.compile(
+    r"(^Gba-|^Gua-|"            # S38151 / GPS18169 / aMCH antagonist N-cap
+    r"Ac-\(Gva\)|Ac-\(Gpr\)|"   # Bednarek 2002 ring-variant antagonist N-caps
+    r"-RSGPP|-GLQGR|"           # OXN tail tacked onto MCH or NPS core (MOX, NXN)
+    r"-\(AEEA\)-|-\(Ahx\)-|"    # explicit fusion linkers
+    r"-GSG-|-GSGKGSG-|"         # peptide-stub fusion linkers
+    r"-\(βAla\)-|-\(betaAla\)-|"# beta-alanine fusion linkers
+    r"NPS×OXN|NPS x OXN)",      # explicit fusion labels (from resolved seqs)
+    re.IGNORECASE,
+)
+
+
+def _looks_like_full_sequence(s: str) -> bool:
+    """Heuristic: a string represents a full peptide sequence if it contains
+    either (a) a run of >=8 consecutive single-letter amino acids,
+    (b) a chain of >=5 three-letter amino acid codes joined by hyphens, or
+    (c) >=3 runs of >=4 consecutive single-letter amino acids (spaced).
+    Catches both single-letter (`SFRNGVGTGM...`) and three-letter
+    (`Asp-Phe-Asp-Met-...`) sequence notations.
+    """
+    if not s:
+        return False
+    if _SINGLE_RUN_8.search(s):
+        return True
+    if _THREE_LETTER_CHAIN.search(s):
+        return True
+    return len(_SINGLE_RUN_4.findall(s)) >= 3
+
+
+def _resolved_modification_for_seq(
+    pid: str, raw_modification: str, resolutions: dict[str, dict[str, str]]
+) -> str | None:
+    """Return the modification string to show to the agent for sequence-only
+    agonist tasks, or None if this peptide should be dropped from the pool.
+
+    Drop rules (any of these -> drop):
+      - In resolutions table with pharmacology != 'agonist' (antagonist /
+        fusion / small-molecule)
+      - In resolutions table with confidence == 'EXCLUDE'
+      - Raw modification contains antagonist or fusion markers (Gba- / Gua-
+        prefix, embedded -RSGPP-/-GLQGR-/linker tokens, etc.) AND the
+        peptide isn't explicitly resolved as agonist
+      - Not in resolutions table AND raw modification is empty / contains
+        annotation tokens / doesn't look like a complete sequence
+
+    Otherwise return either the resolved full sequence (if available) or
+    the raw modification (already a clean full sequence).
+    """
+    entry = resolutions.get(pid)
+    raw = (raw_modification or "").strip()
+
+    if entry is not None:
+        pharm = (entry.get("pharmacology") or "").lower()
+        conf = (entry.get("confidence") or "").upper()
+        if conf == "EXCLUDE":
+            return None
+        if pharm and pharm != "agonist":  # antagonist, fusion, small-molecule
+            return None
+        full_seq = entry.get("full_sequence_resolved", "").strip()
+        if full_seq and not full_seq.upper().startswith("REVIEW"):
+            return full_seq
+        # Resolution row exists but has no usable sequence; fall through
+
+    # Not in resolutions table (or row was empty): apply stricter raw filter
+    if not raw or _SEQ_ANNOTATION_TOKENS.search(raw):
+        return None
+    if _NON_AGONIST_MARKERS.search(raw):
+        return None
+    if not _looks_like_full_sequence(raw):
+        return None
+    return raw
+
 # Potency ratio buckets for pairwise difficulty stratification. The "easy"
 # bin (>=30x) is a floor test; "hard" (2-5x) probes log-scale reasoning under
 # assay noise; <2x is excluded because gold labels become noisy.
@@ -1234,8 +1400,15 @@ def _seq_candidate_pool(context: dict[str, Any], family: str) -> list[dict[str, 
     """Return peptides in `family` with a valid sequence and EC50, suitable for
     sequence-only prediction tasks. Filters by minimum evidence so gold labels
     are robust: >=2 assay records and a non-trivial best_ec50_nm.
+
+    Resolution table (data/processed/peptide_full_sequences.csv) is consulted
+    if present:
+      - delta-only modifications are replaced by the resolved full sequence
+      - non-agonist peptides (antagonist / fusion / small-molecule) are dropped
+      - peptides marked EXCLUDE are dropped
     """
     peptide_by_id = context["peptide_by_id"]
+    resolutions = context.get("peptide_resolutions") or {}
     pool = []
     for pid, summary in context["assay_summary"].items():
         if summary.get("receptor_family") != family:
@@ -1245,8 +1418,9 @@ def _seq_candidate_pool(context: dict[str, Any], family: str) -> list[dict[str, 
             continue
         if int(summary.get("assay_records") or 0) < 2:
             continue
-        modification = (peptide_by_id.get(pid) or {}).get("modification", "").strip()
-        if not modification or _SEQ_ANNOTATION_TOKENS.search(modification):
+        raw_modification = (peptide_by_id.get(pid) or {}).get("modification", "")
+        modification = _resolved_modification_for_seq(pid, raw_modification, resolutions)
+        if modification is None:
             continue
         pool.append(
             {
@@ -1557,13 +1731,15 @@ def _build_peptide_multitarget_sequence(
         gold = {f: ("active" if f in active else "inactive") for f in screened}
         return bucket, gold
 
+    resolutions = context.get("peptide_resolutions") or {}
     candidates: dict[str, list[tuple[str, dict[str, str]]]] = defaultdict(list)
     for pid in best_by_pep:
         meta = peptide_by_id.get(pid)
         if not meta:
             continue
-        modification = (meta.get("modification") or "").strip()
-        if not modification or _SEQ_ANNOTATION_TOKENS.search(modification):
+        raw_modification = meta.get("modification") or ""
+        modification = _resolved_modification_for_seq(pid, raw_modification, resolutions)
+        if modification is None:
             continue
         bucket, gold = _classify(pid)
         if bucket == "skip":
@@ -1582,7 +1758,8 @@ def _build_peptide_multitarget_sequence(
         take = items[: targets_per_bucket.get(bucket, 10)]
         for index, (pid, gold) in enumerate(take, start=1):
             meta = peptide_by_id[pid]
-            modification = meta.get("modification", "").strip()
+            raw_modification = meta.get("modification", "")
+            modification = _resolved_modification_for_seq(pid, raw_modification, resolutions) or raw_modification.strip()
             receptors = meta.get("receptors", "")
             # The panel shown to the agent is always the full 3-family panel,
             # but only screened families are graded. The agent is told this so
