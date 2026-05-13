@@ -1,0 +1,13 @@
+family,bucket,n,claude_acc,codex_acc,claude_correct,codex_correct
+NPS,trivial,5,0.4,0.8,2,4
+NPS,easy,5,0.2,0.4,1,2
+NPS,medium,5,0.6,0.6,3,3
+NPS,hard,5,0.6,0.8,3,4
+OXN,trivial,5,0.8,0.6,4,3
+OXN,easy,5,0.6,0.8,3,4
+OXN,medium,5,0.8,0.8,4,4
+OXN,hard,5,0.4,0.2,2,1
+MCH,trivial,5,0.4,0.8,2,4
+MCH,easy,5,0.4,0.6,2,3
+MCH,medium,5,0.6,0.6,3,3
+MCH,hard,5,0.4,0.2,2,1
