@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import math
+import random
 import re
 import shutil
 from collections import defaultdict
@@ -63,6 +64,8 @@ def curate_pilot_tasks(
         _build_foundation_model_triage,
         _build_model_disagreement_analysis,
         _build_drug_discovery_program,
+        _build_peptide_pairwise_sequence,
+        _build_peptide_ranking_sequence,
     ]
     context = {
         "tasks_dir": tasks_dir,
@@ -1188,4 +1191,284 @@ Return `answer.json` with `recommendation`, `mechanistic_model`,
             scoring_mode="rubric",
         )
         task_ids.append(task_id)
+    return task_ids
+
+
+# ---------------------------------------------------------------------------
+# Peptide sequence-only effectiveness tasks
+# ---------------------------------------------------------------------------
+#
+# Both task families share the same input contract: the agent sees ONLY the
+# peptide_id, the chemical modification string (sequence + modifications), and
+# the receptor family. Measured potency / efficacy / record counts are hidden.
+# This probes structure->activity prediction from sequence rather than CSV
+# integration. The named `compound` field is intentionally excluded so the
+# model cannot win by recognizing a published series name.
+
+_SEQ_INPUT_FIELDS = ["peptide_id", "modification", "receptor_family", "receptors"]
+
+# Words that should never appear in a real chemistry/sequence string. If any
+# of these are present, the field is a free-text annotation that leaked into
+# the modification column and would also leak outcome information to the
+# agent. Reject those peptides from sequence-only task pools.
+_SEQ_ANNOTATION_TOKENS = re.compile(
+    r"\b(mice|mouse|slept|sleep|sleeping|active|inactive|potent|weak|"
+    r"verified|excluded|see|note|test(?:ed)?|tbd)\b",
+    re.IGNORECASE,
+)
+
+# Potency ratio buckets for pairwise difficulty stratification. The "easy"
+# bin (>=30x) is a floor test; "hard" (2-5x) probes log-scale reasoning under
+# assay noise; <2x is excluded because gold labels become noisy.
+_PAIRWISE_BUCKETS = [
+    ("hard", 2.0, 5.0),
+    ("medium", 5.0, 30.0),
+    ("easy", 30.0, 100.0),
+    ("trivial", 100.0, float("inf")),
+]
+
+
+def _seq_candidate_pool(context: dict[str, Any], family: str) -> list[dict[str, Any]]:
+    """Return peptides in `family` with a valid sequence and EC50, suitable for
+    sequence-only prediction tasks. Filters by minimum evidence so gold labels
+    are robust: >=2 assay records and a non-trivial best_ec50_nm.
+    """
+    peptide_by_id = context["peptide_by_id"]
+    pool = []
+    for pid, summary in context["assay_summary"].items():
+        if summary.get("receptor_family") != family:
+            continue
+        ec50 = _num(summary.get("best_ec50_nm"))
+        if ec50 is None or ec50 <= 0:
+            continue
+        if int(summary.get("assay_records") or 0) < 2:
+            continue
+        modification = (peptide_by_id.get(pid) or {}).get("modification", "").strip()
+        if not modification or _SEQ_ANNOTATION_TOKENS.search(modification):
+            continue
+        pool.append(
+            {
+                "peptide_id": pid,
+                "best_ec50_nm": ec50,
+                "modification": modification,
+                "receptor_family": family,
+                "receptors": summary.get("receptors", ""),
+            }
+        )
+    pool.sort(key=lambda r: r["best_ec50_nm"])
+    return pool
+
+
+def _build_peptide_pairwise_sequence(
+    context: dict[str, Any], problems: list[dict[str, Any]]
+) -> list[str]:
+    """For each family, sample pairwise comparisons stratified by the log-ratio
+    of best_ec50_nm. Reuses the next_experiment task type so the existing option
+    grader scores top-1 selection.
+    """
+    rng = random.Random(20260512)
+    task_ids: list[str] = []
+    for family in ["NPS", "OXN", "MCH"]:
+        pool = _seq_candidate_pool(context, family)
+        if len(pool) < 4:
+            continue
+        seen_pairs: set[tuple[str, str]] = set()
+        items_per_bucket = 5
+        for bucket_label, lo, hi in _PAIRWISE_BUCKETS:
+            # Find pairs whose potency ratio falls in [lo, hi).
+            candidate_pairs = []
+            for i, a in enumerate(pool):
+                for b in pool[i + 1 :]:
+                    ratio = b["best_ec50_nm"] / a["best_ec50_nm"]
+                    if lo <= ratio < hi:
+                        candidate_pairs.append((a, b, ratio))
+            rng.shuffle(candidate_pairs)
+            taken = 0
+            for a, b, ratio in candidate_pairs:
+                if taken >= items_per_bucket:
+                    break
+                key = tuple(sorted([a["peptide_id"], b["peptide_id"]]))
+                if key in seen_pairs:
+                    continue
+                seen_pairs.add(key)
+                taken += 1
+                # Randomize row order so the more-potent peptide isn't always
+                # first. The agent must reason, not pick row index 0.
+                order = [a, b]
+                rng.shuffle(order)
+                rows = [{k: row.get(k, "") for k in _SEQ_INPUT_FIELDS} for row in order]
+                winner_id = a["peptide_id"]  # a is more potent (lower EC50)
+                task_index = len([t for t in task_ids if family.lower() in t]) + 1
+                task_id = (
+                    f"pilot-peptide-pairwise-sequence-{family.lower()}-"
+                    f"{bucket_label}-{task_index:03d}"
+                )
+                _write_task(
+                    task_id=task_id,
+                    task_type="next_experiment",
+                    prompt=f"""
+# Pairwise Potency Prediction from Sequence
+
+`peptide_sequences.csv` contains two peptides targeting the {family} receptor
+family. Each row gives the anonymized peptide identifier, the chemical
+modification string (sequence plus any non-standard residues, lipidation, or
+backbone modifications), the receptor family, and the receptor variants on
+which the peptide series is tested. **No measured potency, efficacy, or assay
+counts are provided.**
+
+Using only the sequence and chemical modifications, predict which peptide is
+more potent in functional in vitro assays at this receptor (lower EC50). Write
+`answer.json` with `selected_option` set to the `peptide_id` of the more
+potent peptide.
+""",
+                    task_yaml={
+                        "capability_targets": [
+                            "structure_activity_reasoning",
+                            "sequence_to_function_prediction",
+                        ],
+                        "evidence_layers": ["identity"],
+                        "label_status": "experimental_ground_truth",
+                        "difficulty_bucket": bucket_label,
+                        "potency_ratio": round(ratio, 2),
+                    },
+                    answer_yaml={
+                        "id": task_id,
+                        "task_type": "next_experiment",
+                        "label_status": "experimental_ground_truth",
+                        "gold_top": [winner_id],
+                        "gold_ranking": [winner_id, b["peptide_id"]],
+                        "outcome_definition": (
+                            "lower best_ec50_nm in held-out in vitro functional "
+                            f"assays (potency ratio {round(ratio, 2)}x)"
+                        ),
+                    },
+                    data_files={
+                        "peptide_sequences.csv": (rows, _SEQ_INPUT_FIELDS),
+                    },
+                    context=context,
+                    problems=problems,
+                    question=(
+                        "Predict which of two peptides is more potent given only "
+                        "sequence and target."
+                    ),
+                    answer_rubric=(
+                        "Exact match: selected_option equals the peptide_id with "
+                        "lower best_ec50_nm."
+                    ),
+                    capability_targets=[
+                        "structure_activity_reasoning",
+                        "sequence_to_function_prediction",
+                    ],
+                    evidence_layers=["identity"],
+                    difficulty=bucket_label,
+                    scoring_mode="option",
+                )
+                task_ids.append(task_id)
+    return task_ids
+
+
+def _build_peptide_ranking_sequence(
+    context: dict[str, Any], problems: list[dict[str, Any]]
+) -> list[str]:
+    """Rank N peptides by predicted potency given only sequence + target.
+    Uses the candidate_prioritization task type so the existing top-k ranking
+    grader scores precision@3 and NDCG@3.
+    """
+    rng = random.Random(20260513)
+    task_ids: list[str] = []
+    for family in ["NPS", "OXN", "MCH"]:
+        pool = _seq_candidate_pool(context, family)
+        if len(pool) < 12:
+            continue
+        # Sample N peptides spanning the EC50 distribution so the ordering is
+        # not collapsed at one end. Take stratified samples across deciles.
+        for size_label, size in [("small", 5), ("medium", 8), ("large", 12)]:
+            if len(pool) < size:
+                continue
+            # Pick `size` peptides whose EC50 values span at least 10x to keep
+            # the gold ranking robust.
+            attempts = 0
+            chosen: list[dict[str, Any]] = []
+            while attempts < 50:
+                attempts += 1
+                sample = rng.sample(pool, size)
+                lo = min(r["best_ec50_nm"] for r in sample)
+                hi = max(r["best_ec50_nm"] for r in sample)
+                if hi / lo >= 10.0:
+                    chosen = sample
+                    break
+            if not chosen:
+                continue
+            ranked = sorted(chosen, key=lambda r: r["best_ec50_nm"])
+            gold_ranking = [r["peptide_id"] for r in ranked]
+            display = list(chosen)
+            rng.shuffle(display)
+            rows = [
+                {k: row.get(k, "") for k in _SEQ_INPUT_FIELDS} for row in display
+            ]
+            task_id = (
+                f"pilot-peptide-ranking-sequence-{family.lower()}-{size_label}-001"
+            )
+            _write_task(
+                task_id=task_id,
+                task_type="candidate_prioritization",
+                prompt=f"""
+# Potency Ranking from Sequence
+
+`peptide_sequences.csv` lists {size} peptides targeting the {family} receptor
+family. Each row provides the anonymized peptide identifier, the chemical
+modification string (sequence with any non-standard residues, lipidation, or
+backbone modifications), the receptor family, and the receptor variants tested.
+**No measured potency, efficacy, or assay counts are provided.**
+
+Using only the sequence and chemical modifications, rank the peptides from
+most to least potent in functional in vitro assays at this receptor (most
+potent = lowest EC50 first). Write `answer.json` with `ranking` as the full
+ordered list of peptide_ids and `top_3` as the three peptide_ids predicted to
+be most potent.
+""",
+                task_yaml={
+                    "capability_targets": [
+                        "structure_activity_reasoning",
+                        "sequence_to_function_prediction",
+                    ],
+                    "evidence_layers": ["identity"],
+                    "label_status": "experimental_ground_truth",
+                    "top_k": 3,
+                    "n_candidates": size,
+                },
+                answer_yaml={
+                    "id": task_id,
+                    "task_type": "candidate_prioritization",
+                    "label_status": "experimental_ground_truth",
+                    "top_k": 3,
+                    "gold_ranking": gold_ranking,
+                    "gold_top_3": gold_ranking[:3],
+                    "outcome_definition": (
+                        "ranking by ascending best_ec50_nm in held-out in vitro "
+                        f"functional assays; sample spans {round(ranked[-1]['best_ec50_nm'] / ranked[0]['best_ec50_nm'], 1)}x"
+                    ),
+                },
+                data_files={
+                    "peptide_sequences.csv": (rows, _SEQ_INPUT_FIELDS),
+                },
+                context=context,
+                problems=problems,
+                question=(
+                    f"Rank {size} peptides by predicted potency given only sequence "
+                    "and target."
+                ),
+                answer_rubric=(
+                    "Top-k precision and NDCG against ascending best_ec50_nm "
+                    "ranking."
+                ),
+                capability_targets=[
+                    "structure_activity_reasoning",
+                    "sequence_to_function_prediction",
+                ],
+                evidence_layers=["identity"],
+                difficulty=size_label,
+                scoring_mode="ranking",
+            )
+            task_ids.append(task_id)
     return task_ids
