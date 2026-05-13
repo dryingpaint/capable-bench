@@ -1,0 +1,34 @@
+id: cb-nps-polymorphism-001
+task_type: program_lead_selection
+label_status: exact_match
+gold:
+  most_Ile107_preferring: NPSv18.9
+answer_space:
+  most_Ile107_preferring:
+    - hNPS(1-10)
+    - NPS
+    - NPSv10.16
+    - NPSv16.13
+    - NPSv18.16
+    - NPSv18.26
+    - NPSv18.9
+    - NPSv2-proKKv1
+    - NPSv21.9
+    - NPSv31.7
+    - NPSv34.14
+    - NPSv5.4
+    - NPSv8
+    - rNPS(1-10)
+random_guess_baseline: 0.0714   # 1/14
+notes: |
+  Gold computed from data/processed/invitro_assays.csv as the geometric
+  mean hNPSR1-Asn107 EC50 divided by the geometric mean hNPSR1-Ile107
+  EC50, aggregated across replicates. See data/validators/cb-nps-polymorphism-001.py
+  for the derivation. The literature traps in the panel are hNPS(1-10)
+  and rNPS(1-10), the two natural N-terminal truncations that have been
+  published as variant-preferring (Reinscheid lab and successors). They
+  rank #3 and #2 in the panel at 105x and 111x Ile107 preference; the
+  actual winner NPSv18.9 reaches 277x via an unpublished lipidation
+  pattern (C20 diacid + dual AEEA linker). A secondary literature
+  reference is "NPS" itself (native human NPS, ~7x Ile107 preference) —
+  an agent that anchors on native ligand would land far from the answer.

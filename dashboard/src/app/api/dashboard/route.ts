@@ -1,222 +1,592 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import { NextResponse } from 'next/server';
 import path from 'path';
 import fs from 'fs/promises';
 import crypto from 'crypto';
 
-const execAsync = promisify(exec);
+type JsonObject = Record<string, unknown>;
 
-// Cache state
-let cache: {
-  data: any;
+type DashboardRun = {
+  task_id: string;
+  model: string;
+  run_id: string;
+  run_dir: string;
+  command: string;
+  returncode: number | null;
+  duration_seconds: number | null;
+  answer_source: string;
+  stdout_file: string;
+  stderr_file: string;
+  trace_file: string;
+  grade: JsonObject;
+  score: number | null;
+  timestamp: string;
+  answer_text: string;
+  stdout_text: string;
+  stderr_text: string;
+  trace_text: string;
+  tags?: string[];
+};
+
+type CacheState = {
+  data: JsonObject;
   hash: string;
   timestamp: number;
-} | null = null;
+};
 
-// Cache for 30 seconds minimum to avoid thrashing
+let cache: CacheState | null = null;
+
 const CACHE_TTL = 30 * 1000;
+const TEXT_PREVIEW_BYTES = 64 * 1024;
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const capableBenchDir = path.resolve(process.cwd(), '..');
-    const runsDir = path.join(capableBenchDir, 'runs');
-
-    // Check if we can use cached data
-    const currentHash = await getRunsDirectoryHash(runsDir);
     const now = Date.now();
 
-    if (cache &&
-        cache.hash === currentHash &&
-        (now - cache.timestamp) < CACHE_TTL) {
-      console.log('Using cached dashboard data');
+    if (cache && now - cache.timestamp < CACHE_TTL) {
       return NextResponse.json(cache.data);
     }
 
-    console.log('Regenerating dashboard data...');
-
-    // Use optimized viewer with caching hints
-    const { stdout, stderr } = await execAsync(`cd "${capableBenchDir}" && uv run python -c "
-import json
-import sys
-import os
-from pathlib import Path
-
-# Debug info
-print('Working directory:', os.getcwd(), file=sys.stderr)
-print('Python path:', sys.path[:3], file=sys.stderr)
-
-# Add the current directory to Python path so capablebench module is found
-sys.path.insert(0, '.')
-
-try:
-    from capablebench.viewer import _collect_runs, list_tasks, _latest_by_task_model, _model_summary, _read_yaml_optional, _read_text, _data_file_summaries, _read_json_optional
-    from capablebench.io import read_yaml
-
-    # Use the same paths as the existing setup
-    tasks_dir = Path('data/tasks')
-    answers_dir = Path('data/answers')
-    runs_dir = Path('runs')
-
-    # Build the data directly (based on build_viewer but return JSON instead of HTML)
-    tasks = list_tasks(tasks_dir)
-    task_ids = {task['id'] for task in tasks}
-    runs = [run for run in _collect_runs(runs_dir, answers_dir) if run['task_id'] in task_ids and run.get('model') != 'Other']
-    latest_by_task_model = _latest_by_task_model(runs)
-    models = sorted({run['model'] for run in runs if run.get('model') != 'Other'})
-
-    task_rows = []
-    for task in tasks:
-        task_id = task['id']
-        task_dir = tasks_dir / task_id
-        task_rows.append({
-            **task,
-            'prompt': _read_text(task_dir / 'prompt.md'),
-            'task_yaml': _read_yaml_optional(task_dir / 'task.yaml'),
-            'data_files': _data_file_summaries(task_dir),
-            'latest_runs': latest_by_task_model.get(task_id, {}),
-            'gold_answer': _read_yaml_optional(answers_dir / f'{task_id}.yaml'),
-        })
-
-    model_summary = _model_summary(list(latest_by_task_model.values()), models)
-    calibration = _read_json_optional(runs_dir / 'calibration_summary.json')
-
-    # Build the payload
-    data = {
-        'tasks': task_rows,
-        'models': models,
-        'model_summary': model_summary,
-        'latest_runs': latest_by_task_model,  # Add this for frontend compatibility
-        'runs': runs,  # include_all_runs=True
-        'calibration': calibration,
+    const currentHash = await getDashboardHash(capableBenchDir);
+    if (cache && cache.hash === currentHash) {
+      cache.timestamp = now;
+      return NextResponse.json(cache.data);
     }
 
-    # Optimize: limit trace text size to reduce memory usage
-    for run in data.get('runs', []):
-        for key in ['stdout_text', 'stderr_text', 'trace_text']:
-            if key in run and run[key] and len(run[key]) > 10000:
-                run[key] = run[key][:10000] + '... [truncated]'
-
-    print(json.dumps(data, default=str))
-except Exception as e:
-    print('Error:', str(e), file=sys.stderr)
-    raise
-"`, { maxBuffer: 50 * 1024 * 1024 }); // 50MB buffer
-
-    const data = JSON.parse(stdout);
-
-    // Transform the data to add our tagging system
-    const enhancedData = {
-      ...data,
-      runs: data.runs?.map((run: any) => ({
-        ...run,
-        tags: autoTagRun(run)
-      })) || []
-    };
-
-    // Update cache
+    const data = await buildDashboardData(capableBenchDir);
     cache = {
-      data: enhancedData,
+      data,
       hash: currentHash,
-      timestamp: now
+      timestamp: now,
     };
 
-    return NextResponse.json(enhancedData);
-  } catch (error: any) {
+    return NextResponse.json(data);
+  } catch (error: unknown) {
     console.error('Error generating dashboard data:', error);
-    console.error('Stdout:', error.stdout);
-    console.error('Stderr:', error.stderr);
     return NextResponse.json(
       {
         error: 'Failed to generate dashboard data',
-        details: error.message,
-        stderr: error.stderr?.substring(0, 500)
+        details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 }
     );
   }
 }
 
-// Generate a hash of the runs directory to detect changes
-async function getRunsDirectoryHash(runsDir: string): Promise<string> {
-  try {
-    const hash = crypto.createHash('md5');
+async function buildDashboardData(capableBenchDir: string): Promise<JsonObject> {
+  const tasksDir = path.join(capableBenchDir, 'data', 'tasks');
+  const answersDir = path.join(capableBenchDir, 'data', 'answers');
+  const runsDir = path.join(capableBenchDir, 'runs');
 
-    // Hash based on directory structure and key file timestamps
-    const entries = await fs.readdir(runsDir, { withFileTypes: true });
+  const tasks = await listTasks(tasksDir, answersDir);
+  const taskIds = new Set(tasks.map((task) => task.id));
+  const runs = (await collectRuns(runsDir))
+    .filter((run) => taskIds.has(run.task_id) && run.model !== 'Other')
+    .map((run) => ({ ...run, tags: autoTagRun(run) }));
 
-    // Sort for consistent hashing
-    const sortedEntries = entries.sort((a, b) => a.name.localeCompare(b.name));
+  const latestRuns = latestByTaskModel(runs);
+  const models = [...new Set(runs.map((run) => run.model))].sort();
 
-    for (const entry of sortedEntries) {
-      if (entry.isDirectory()) {
-        const dirPath = path.join(runsDir, entry.name);
-        hash.update(entry.name);
+  return {
+    tasks,
+    models,
+    model_summary: modelSummary(Object.values(latestRuns), models),
+    latest_runs: latestRuns,
+    runs,
+    calibration: await readJsonOptional(path.join(runsDir, 'calibration_summary.json')),
+  };
+}
 
-        try {
-          // Check modification time of the directory itself
-          const stats = await fs.stat(dirPath);
-          hash.update(stats.mtime.toISOString());
+async function listTasks(tasksDir: string, answersDir: string): Promise<Array<JsonObject & { id: string }>> {
+  const problemsPath = path.join(tasksDir, 'problems.csv');
+  const problemsCsv = await readTextOptional(problemsPath);
+  if (!problemsCsv) {
+    return [];
+  }
 
-          // Hash key files if they exist
-          const keyFiles = ['run_summary.json', 'grade.json'];
-          for (const file of keyFiles) {
-            try {
-              const filePath = path.join(dirPath, file);
-              const fileStat = await fs.stat(filePath);
-              hash.update(file + fileStat.mtime.toISOString());
-            } catch {
-              // File doesn't exist, skip
-            }
-          }
-        } catch {
-          // Directory access error, skip
-        }
-      } else if (entry.name.endsWith('.json')) {
-        // Top-level JSON files (like latest_suite_summary.json)
-        const filePath = path.join(runsDir, entry.name);
-        try {
-          const stats = await fs.stat(filePath);
-          hash.update(entry.name + stats.mtime.toISOString());
-        } catch {
-          // File access error, skip
-        }
-      }
+  const rows = parseCsv(problemsCsv);
+  return Promise.all(
+    rows.map(async (row) => {
+      const taskDir = path.join(tasksDir, row.id);
+      const prompt = await readTextOptional(path.join(taskDir, 'prompt.md'));
+      const taskYamlText = await readTextOptional(path.join(taskDir, 'task.yaml'));
+      const goldYamlText = await readTextOptional(path.join(answersDir, `${row.id}.yaml`));
+
+      return {
+        ...row,
+        id: row.id,
+        prompt,
+        task_yaml: parseYamlLite(taskYamlText),
+        data_files: await dataFileSummaries(taskDir),
+        gold_answer: parseYamlLite(goldYamlText),
+      };
+    })
+  );
+}
+
+async function collectRuns(runsDir: string): Promise<DashboardRun[]> {
+  const summaryPaths = await findRunSummaries(runsDir);
+  const runs: DashboardRun[] = [];
+
+  for (const summaryPath of summaryPaths) {
+    const summary = await readJsonOptional(summaryPath);
+    if (!summary) {
+      continue;
     }
 
-    return hash.digest('hex');
-  } catch (error) {
-    // If we can't hash, return a timestamp to force refresh
-    return Date.now().toString();
+    const runDir = path.dirname(summaryPath);
+    const taskId = stringValue(summary.task_id) || path.basename(path.dirname(runDir));
+    const grade = objectValue(summary.grade) || (await readJsonOptional(path.join(runDir, 'grade.json'))) || {};
+    const command = stringValue(summary.command);
+    const model = classifyModel(command);
+    const score = scoreFromGrade(grade);
+
+    runs.push({
+      task_id: taskId,
+      model,
+      run_id: stringValue(summary.run_id) || path.basename(runDir),
+      run_dir: runDir,
+      command,
+      returncode: numberValue(summary.returncode),
+      duration_seconds: numberValue(summary.duration_seconds),
+      answer_source: artifactPath(runDir, summary.answer_source, 'answer.json'),
+      stdout_file: artifactPath(runDir, summary.stdout_file, 'stdout.txt'),
+      stderr_file: artifactPath(runDir, summary.stderr_file, 'stderr.txt'),
+      trace_file: artifactPath(runDir, summary.trace_file, 'agent_trace.txt'),
+      grade,
+      score,
+      timestamp: stringValue(summary.run_id) || path.basename(runDir),
+      answer_text: '',
+      stdout_text: '',
+      stderr_text: '',
+      trace_text: '',
+    });
+  }
+
+  return runs;
+}
+
+async function findRunSummaries(runsDir: string): Promise<string[]> {
+  const paths: string[] = [];
+  const taskEntries = await safeReadDir(runsDir);
+
+  for (const taskEntry of taskEntries) {
+    if (!taskEntry.isDirectory()) {
+      continue;
+    }
+
+    const taskDir = path.join(runsDir, taskEntry.name);
+    const runEntries = await safeReadDir(taskDir);
+    for (const runEntry of runEntries) {
+      if (!runEntry.isDirectory()) {
+        continue;
+      }
+
+      const summaryPath = path.join(taskDir, runEntry.name, 'run_summary.json');
+      if (await exists(summaryPath)) {
+        paths.push(summaryPath);
+      }
+    }
+  }
+
+  return paths.sort();
+}
+
+function latestByTaskModel(runs: DashboardRun[]): Record<string, Record<string, DashboardRun>> {
+  const latest: Record<string, Record<string, DashboardRun>> = {};
+  for (const run of runs) {
+    latest[run.task_id] ||= {};
+    const current = latest[run.task_id][run.model];
+    if (!current || String(run.timestamp) > String(current.timestamp)) {
+      latest[run.task_id][run.model] = run;
+    }
+  }
+  return latest;
+}
+
+function modelSummary(
+  taskModelRuns: Record<string, DashboardRun>[],
+  models: string[]
+): Record<string, JsonObject> {
+  const summary: Record<string, JsonObject> = {};
+
+  for (const model of models) {
+    const runs = taskModelRuns
+      .filter((item) => item && item[model])
+      .map((item) => item[model]);
+    const scores = runs
+      .map((run) => run.score)
+      .filter((score): score is number => typeof score === 'number');
+
+    summary[model] = {
+      tasks: runs.length,
+      mean_score: scores.length
+        ? round4(scores.reduce((total, score) => total + score, 0) / scores.length)
+        : null,
+      parsed_rate: meanBool(
+        runs
+          .filter((run) => run.grade)
+      .map((run) => run.grade?.parsed_answer)
+      ),
+      error_rate: meanBool(runs.map((run) => run.returncode !== 0 && run.returncode != null)),
+    };
+  }
+
+  return summary;
+}
+
+async function dataFileSummaries(taskDir: string): Promise<JsonObject[]> {
+  const entries = await safeReadDir(taskDir);
+  const files: JsonObject[] = [];
+
+  for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
+    if (!entry.isFile() || entry.name === 'prompt.md' || entry.name === 'task.yaml') {
+      continue;
+    }
+
+    const filePath = path.join(taskDir, entry.name);
+    const stat = await fs.stat(filePath);
+    files.push({
+      name: entry.name,
+      size_bytes: stat.size,
+      preview: await readPreviewLines(filePath, 8),
+    });
+
+    if (files.length >= 3) {
+      break;
+    }
+  }
+
+  return files;
+}
+
+async function getDashboardHash(capableBenchDir: string): Promise<string> {
+  const hash = crypto.createHash('md5');
+  const paths = [
+    path.join(capableBenchDir, 'data', 'tasks', 'problems.csv'),
+    path.join(capableBenchDir, 'runs', 'calibration_summary.json'),
+  ];
+
+  for (const filePath of paths) {
+    await hashFileStat(hash, capableBenchDir, filePath);
+  }
+
+  for (const filePath of await collectHashFiles(path.join(capableBenchDir, 'data', 'tasks'), [
+    'prompt.md',
+    'task.yaml',
+  ])) {
+    await hashFileStat(hash, capableBenchDir, filePath);
+  }
+
+  for (const filePath of await collectFilesByExtension(path.join(capableBenchDir, 'data', 'answers'), '.yaml')) {
+    await hashFileStat(hash, capableBenchDir, filePath);
+  }
+
+  for (const filePath of await findRunSummaries(path.join(capableBenchDir, 'runs'))) {
+    await hashFileStat(hash, capableBenchDir, filePath);
+    await hashFileStat(hash, capableBenchDir, path.join(path.dirname(filePath), 'grade.json'));
+  }
+
+  return hash.digest('hex');
+}
+
+async function collectHashFiles(rootDir: string, names: string[]): Promise<string[]> {
+  const entries = await safeReadDir(rootDir);
+  const files: string[] = [];
+
+  for (const entry of entries) {
+    if (!entry.isDirectory()) {
+      continue;
+    }
+
+    for (const name of names) {
+      const filePath = path.join(rootDir, entry.name, name);
+      if (await exists(filePath)) {
+        files.push(filePath);
+      }
+    }
+  }
+
+  return files.sort();
+}
+
+async function collectFilesByExtension(rootDir: string, extension: string): Promise<string[]> {
+  const entries = await safeReadDir(rootDir);
+  return entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith(extension))
+    .map((entry) => path.join(rootDir, entry.name))
+    .sort();
+}
+
+async function hashFileStat(hash: crypto.Hash, baseDir: string, filePath: string) {
+  try {
+    const stat = await fs.stat(filePath);
+    hash.update(path.relative(baseDir, filePath));
+    hash.update(String(stat.size));
+    hash.update(String(stat.mtimeMs));
+  } catch {
+    hash.update(path.relative(baseDir, filePath));
+    hash.update('missing');
   }
 }
 
-function autoTagRun(run: any): string[] {
-  const tags: string[] = [];
+function parseCsv(input: string): Array<Record<string, string>> {
+  const rows: string[][] = [];
+  let field = '';
+  let row: string[] = [];
+  let quoted = false;
 
-  // Saturation detection
-  if (run.score >= 0.9 && run.task?.difficulty === 'hard') {
-    tags.push('saturation');
-  }
+  for (let i = 0; i < input.length; i += 1) {
+    const char = input[i];
+    const next = input[i + 1];
 
-  // Format compliance issues
-  if (run.grade && !run.grade.parsed_answer) {
-    tags.push('format_error');
-  }
+    if (quoted) {
+      if (char === '"' && next === '"') {
+        field += '"';
+        i += 1;
+      } else if (char === '"') {
+        quoted = false;
+      } else {
+        field += char;
+      }
+      continue;
+    }
 
-  // Performance issues
-  if (run.returncode && run.returncode !== 0) {
-    tags.push('execution_error');
-  }
-
-  // Score-based classifications
-  if (run.score !== null && run.score !== undefined) {
-    if (run.score < 0.3) {
-      tags.push('low_score');
-    } else if (run.score > 0.9) {
-      tags.push('high_score');
+    if (char === '"') {
+      quoted = true;
+    } else if (char === ',') {
+      row.push(field);
+      field = '';
+    } else if (char === '\n') {
+      row.push(field);
+      rows.push(row);
+      row = [];
+      field = '';
+    } else if (char !== '\r') {
+      field += char;
     }
   }
 
+  if (field || row.length) {
+    row.push(field);
+    rows.push(row);
+  }
+
+  const [headers = [], ...records] = rows.filter((item) => item.some(Boolean));
+  return records.map((record) =>
+    Object.fromEntries(headers.map((header, index) => [header, record[index] || '']))
+  );
+}
+
+function parseYamlLite(input: string): JsonObject {
+  const result: JsonObject = {};
+  if (!input.trim()) {
+    return result;
+  }
+
+  const lines = input.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i += 1) {
+    const line = stripYamlComment(lines[i]);
+    if (!line.trim() || line.startsWith(' ') || line.startsWith('-')) {
+      continue;
+    }
+
+    const match = line.match(/^([^:]+):\s*(.*)$/);
+    if (!match) {
+      continue;
+    }
+
+    const key = match[1].trim();
+    const rest = match[2].trim();
+
+    if (rest === '|') {
+      const block: string[] = [];
+      i += 1;
+      while (i < lines.length && (lines[i].startsWith(' ') || !lines[i].trim())) {
+        block.push(lines[i].replace(/^  /, ''));
+        i += 1;
+      }
+      i -= 1;
+      result[key] = block.join('\n').trimEnd();
+    } else if (rest) {
+      result[key] = parseScalar(rest);
+    } else {
+      const values: unknown[] = [];
+      const objectValue: JsonObject = {};
+      let sawArray = false;
+      let sawObject = false;
+
+      i += 1;
+      while (i < lines.length && (lines[i].startsWith(' ') || !lines[i].trim())) {
+        const child = stripYamlComment(lines[i]);
+        const trimmed = child.trim();
+        if (!trimmed) {
+          i += 1;
+          continue;
+        }
+        if (trimmed.startsWith('- ')) {
+          sawArray = true;
+          values.push(parseScalar(trimmed.slice(2).trim()));
+        } else {
+          const childMatch = trimmed.match(/^([^:]+):\s*(.*)$/);
+          if (childMatch) {
+            sawObject = true;
+            objectValue[childMatch[1].trim()] = parseScalar(childMatch[2].trim());
+          }
+        }
+        i += 1;
+      }
+      i -= 1;
+      result[key] = sawArray && !sawObject ? values : objectValue;
+    }
+  }
+
+  result.__raw = input;
+  return result;
+}
+
+function stripYamlComment(line: string): string {
+  let quoted = false;
+  let quote = '';
+  for (let i = 0; i < line.length; i += 1) {
+    const char = line[i];
+    if ((char === '"' || char === "'") && (!quoted || quote === char)) {
+      quoted = !quoted;
+      quote = quoted ? char : '';
+    }
+    if (!quoted && char === '#' && (i === 0 || /\s/.test(line[i - 1]))) {
+      return line.slice(0, i).trimEnd();
+    }
+  }
+  return line;
+}
+
+function parseScalar(value: string): unknown {
+  if (value === '') return '';
+  if (value === 'null' || value === '~') return null;
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+  if (/^-?\d+(\.\d+)?$/.test(value)) return Number(value);
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    return value.slice(1, -1);
+  }
+  return value;
+}
+
+function artifactPath(runDir: string, value: unknown, defaultName: string): string {
+  const candidate = typeof value === 'string' && value ? value : defaultName;
+  if (path.isAbsolute(candidate) && candidate.startsWith(runDir)) {
+    return candidate;
+  }
+  return path.join(runDir, path.basename(candidate));
+}
+
+function classifyModel(command: string): string {
+  const lower = command.toLowerCase();
+  if (lower.includes('codex')) return 'Codex';
+  if (lower.includes('claude')) return 'Claude';
+  if (lower.includes('modal')) return 'Modal';
+  return 'Other';
+}
+
+function scoreFromGrade(grade: JsonObject | null): number | null {
+  if (!grade || typeof grade !== 'object') {
+    return null;
+  }
+  const rawScore = grade.score ?? grade.precision_at_k;
+  const score = Number(rawScore);
+  return Number.isFinite(score) ? score : null;
+}
+
+function stringValue(value: unknown): string {
+  return typeof value === 'string' ? value : '';
+}
+
+function numberValue(value: unknown): number | null {
+  return typeof value === 'number' && Number.isFinite(value) ? value : null;
+}
+
+function objectValue(value: unknown): JsonObject | null {
+  return value && typeof value === 'object' && !Array.isArray(value)
+    ? (value as JsonObject)
+    : null;
+}
+
+function meanBool(values: unknown[]): number | null {
+  if (!values.length) {
+    return null;
+  }
+  return round4(values.filter(Boolean).length / values.length);
+}
+
+function round4(value: number): number {
+  return Math.round(value * 10000) / 10000;
+}
+
+function autoTagRun(run: DashboardRun): string[] {
+  const tags: string[] = [];
+
+  if (run.grade.parsed_answer === false) {
+    tags.push('format_error');
+  }
+  if (run.returncode && run.returncode !== 0) {
+    tags.push('execution_error');
+  }
+  if (run.score !== null && run.score !== undefined) {
+    if (run.score < 0.3) tags.push('low_score');
+    if (run.score > 0.9) tags.push('high_score');
+  }
+
   return tags;
+}
+
+async function readPreviewLines(filePath: string, limit: number): Promise<string[]> {
+  const text = await readTextOptional(filePath, TEXT_PREVIEW_BYTES);
+  return text.split(/\r?\n/).slice(0, limit);
+}
+
+async function readTextOptional(filePath: string, maxBytes?: number): Promise<string> {
+  try {
+    if (!maxBytes) {
+      return await fs.readFile(filePath, 'utf-8');
+    }
+    const handle = await fs.open(filePath, 'r');
+    try {
+      const buffer = Buffer.alloc(maxBytes);
+      const { bytesRead } = await handle.read(buffer, 0, maxBytes, 0);
+      return buffer.subarray(0, bytesRead).toString('utf-8');
+    } finally {
+      await handle.close();
+    }
+  } catch {
+    return '';
+  }
+}
+
+async function readJsonOptional(filePath: string): Promise<JsonObject | null> {
+  try {
+    return JSON.parse(await fs.readFile(filePath, 'utf-8'));
+  } catch {
+    return null;
+  }
+}
+
+async function safeReadDir(dirPath: string) {
+  try {
+    return await fs.readdir(dirPath, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+}
+
+async function exists(filePath: string): Promise<boolean> {
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
 }

@@ -10,7 +10,7 @@ data/tasks/<task_id>/
   ... other task data files ...
 ```
 
-The hidden answer/rubric lives separately:
+The hidden answer file lives separately:
 
 ```text
 data/answers/<task_id>.yaml
@@ -80,6 +80,23 @@ For `candidate_prioritization` tasks:
 }
 ```
 
+For wet-lab-pending candidate generation tasks, the same answer shape can be
+used before a gold ranking exists. Set `label_status` and `scoring_mode` to
+`wet_lab_validation_pending` in `task.yaml`, and use an answer YAML stub that
+defines `outcome_definition` but intentionally omits `gold_ranking`. The grader
+will parse and retain the proposed recommendations while returning
+`"scored": false` and `"score": null`.
+
+```yaml
+id: cb-next-best-nps-001
+task_type: candidate_prioritization
+label_status: wet_lab_validation_pending
+scoring_mode: wet_lab_validation_pending
+top_k: 3
+outcome_definition: Expert-selected wet-lab validation outcome for the proposed
+  top 3 candidates or modifications.
+```
+
 For `hit_prediction` tasks:
 
 ```json
@@ -103,41 +120,15 @@ For `next_experiment` tasks:
 }
 ```
 
-For `failure_diagnosis`, `mechanistic_hypothesis`, and `foundation_model_triage`
-tasks:
+For `multitarget_activity` and `program_lead_selection` tasks, return a flat
+JSON object whose keys match the `gold` field names in the answer YAML, with
+exact-match string values:
 
 ```json
 {
-  "primary_hypothesis": "The in vivo failure is most consistent with exposure-limited target engagement.",
-  "supporting_evidence": [
-    "Comparable in vitro potency across analogs",
-    "Reduced effect in the late behavioral window"
-  ],
-  "alternative_hypotheses": [
-    "Assay-specific partial agonism",
-    "Species-specific receptor coupling"
-  ],
-  "falsifying_experiment": "Measure free plasma and tissue exposure across the endpoint window with a positive-control arm.",
-  "uncertainty": "No direct receptor occupancy data are visible in this task."
-}
-```
-
-For `experiment_plan` and `drug_discovery_program` tasks:
-
-```json
-{
-  "recommendation": "Advance PEP-... as the lead backup candidate and run a two-arm exposure-response study.",
-  "mechanistic_model": "The candidate likely preserves receptor efficacy while improving developability.",
-  "experiments": [
-    {
-      "id": "EXP-001",
-      "purpose": "Confirm target-window exposure",
-      "controls": ["vehicle", "positive_control"],
-      "decision_gate": "Stop if free exposure is below the biochemical EC80 for most of the window."
-    }
-  ],
-  "risks": ["selectivity", "short half-life", "assay transferability"],
-  "next_design_cycle": "Prioritize substitutions predicted to improve stability without reducing potency."
+  "receptor_1_activity": "agonist",
+  "receptor_2_activity": "inactive",
+  "primary_lead": "PEP-..."
 }
 ```
 
@@ -206,38 +197,20 @@ gold_ranking:
   - exp_004
 ```
 
-For rubric-scored tasks:
+For `multitarget_activity` and `program_lead_selection` tasks:
 
 ```yaml
-id: mechanism-oxn-001
-task_type: mechanistic_hypothesis
-label_status: expert_rubric
-auto_score_cap: 0.3
-rubric:
-  required_concepts:
-    - id: exposure_window
-      weight: 2
-      any_terms:
-        - exposure window
-        - target coverage
-        - free plasma
-    - id: assay_artifact
-      weight: 1
-      any_terms:
-        - assay artifact
-        - batch effect
-        - plate effect
-  forbidden_concepts:
-    - id: unsupported_clinical_claim
-      any_terms:
-        - proven safe in humans
-        - clinically validated
+id: multitarget-mch-nps-001
+task_type: multitarget_activity
+label_status: experimental_ground_truth
+gold:
+  mch_activity: agonist
+  nps_activity: inactive
 ```
 
-The rubric grader is intentionally lightweight. It is useful for automated
-smoke checks. Expert-rubric tasks should set `auto_score_cap` so keyword
-coverage cannot by itself saturate the benchmark; final reporting for creative
-scientific tasks should include expert review against the hidden rubric.
+Keyword-matching, rubric, and other subjective scoring modes are not permitted
+in this benchmark. Every task must have objective ground truth backed by
+measured experimental data.
 
 ## Build And Validate A Pilot
 
@@ -247,4 +220,3 @@ Generate task bundles from processed private tables:
 uv run capablebench curate-pilot --clean
 uv run capablebench validate
 ```
-

@@ -114,7 +114,7 @@ def summarize_runs(runs_dir: Path) -> dict[str, Any]:
 
 
 def _mean(values: Any) -> float | None:
-    values = list(values)
+    values = [value for value in values if value is not None]
     if not values:
         return None
     return round(sum(float(v) for v in values) / len(values), 4)

@@ -85,6 +85,8 @@ def validate_benchmark(
 
 def _validate_answer(task_id: str, answer: dict[str, Any], issues: list[dict[str, str]]) -> None:
     task_type = answer.get("task_type")
+    label_status = answer.get("label_status")
+    scoring_mode = answer.get("scoring_mode")
     if answer.get("id") != task_id:
         issues.append(
             {
@@ -93,6 +95,20 @@ def _validate_answer(task_id: str, answer: dict[str, Any], issues: list[dict[str
                 "message": "answer YAML id does not match problems.csv id",
             }
         )
+    if label_status in {"wet_lab_validation_pending", "wet_lab_pending"} or scoring_mode in {
+        "wet_lab_validation_pending",
+        "pending_wet_lab_validation",
+        "unscored_pending_validation",
+    }:
+        if not answer.get("outcome_definition"):
+            issues.append(
+                {
+                    "task_id": task_id,
+                    "severity": "error",
+                    "message": "Wet-lab-pending task is missing outcome_definition",
+                }
+            )
+        return
     if task_type == "candidate_prioritization":
         if not answer.get("gold_ranking"):
             issues.append(
@@ -108,21 +124,11 @@ def _validate_answer(task_id: str, answer: dict[str, Any], issues: list[dict[str
             issues.append(
                 {"task_id": task_id, "severity": "error", "message": "Missing experiment gold"}
             )
-    elif task_type == "multitarget_activity":
+    elif task_type in {"multitarget_activity", "program_lead_selection"}:
         gold = answer.get("gold") or {}
         if not gold or not isinstance(gold, dict):
             issues.append(
-                {"task_id": task_id, "severity": "error", "message": "Missing multitarget gold dict"}
-            )
-    elif "rubric" in answer:
-        required = answer.get("rubric", {}).get("required_concepts", [])
-        if not required:
-            issues.append(
-                {
-                    "task_id": task_id,
-                    "severity": "error",
-                    "message": "Rubric task has no required concepts",
-                }
+                {"task_id": task_id, "severity": "error", "message": f"Missing gold dict for {task_type}"}
             )
     else:
         issues.append(

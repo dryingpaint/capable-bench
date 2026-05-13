@@ -33,43 +33,16 @@ export default function ChartsGrid({ data }: ChartsGridProps) {
     }))
     .sort((a, b) => b.score - a.score);
 
-  // Prepare score distribution data
-  const scoreDistribution = data.models.map((model, index) => {
-    const scores: number[] = [];
-    data.tasks.forEach(task => {
-      const runs = (data as any).latest_runs?.[task.id];
-      const run = runs?.[model];
-      if (run?.score !== null && run?.score !== undefined) {
-        scores.push(run.score);
-      }
-    });
-
-    const bins = Array(10).fill(0);
-    scores.forEach(score => {
-      const bin = Math.min(9, Math.floor(score * 10));
-      bins[bin]++;
-    });
-
-    return {
-      model,
-      bins: bins.map((count, i) => ({
-        range: `${(i / 10).toFixed(1)}-${((i + 1) / 10).toFixed(1)}`,
-        count,
-      })),
-      color: colorFor(index),
-    };
-  });
-
   // Prepare task type performance data
   const taskTypeData = [...new Set(data.tasks.map(t => t.task_type))].map(taskType => {
-    const result: any = { taskType };
+    const result: Record<string, string | number | null> = { taskType };
 
     data.models.forEach(model => {
       const scores: number[] = [];
       data.tasks
         .filter(t => t.task_type === taskType)
         .forEach(task => {
-          const runs = (data as any).latest_runs?.[task.id];
+          const runs = data.latest_runs?.[task.id];
           const run = runs?.[model];
           if (run?.score !== null && run?.score !== undefined) {
             scores.push(run.score);
@@ -107,7 +80,7 @@ export default function ChartsGrid({ data }: ChartsGridProps) {
         </div>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={leaderboardData} layout="horizontalBar">
+            <BarChart data={leaderboardData} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke="#e7e5e4" />
               <XAxis type="number" domain={[0, 1]} tickFormatter={(value) => value.toFixed(1)} />
               <YAxis
@@ -117,8 +90,8 @@ export default function ChartsGrid({ data }: ChartsGridProps) {
                 tick={{ fontSize: 12, fontWeight: 600 }}
               />
               <Tooltip
-                formatter={(value: any, name, props) => [
-                  `${Number(value).toFixed(3)} · ${props.payload.tasks} tasks`,
+                formatter={(value, _name, props) => [
+                  `${Number(value).toFixed(3)} · ${props.payload?.tasks ?? 0} tasks`,
                   'Mean score'
                 ]}
               />
@@ -151,9 +124,9 @@ export default function ChartsGrid({ data }: ChartsGridProps) {
               />
               <YAxis domain={[0, 1]} tickFormatter={(value) => value.toFixed(1)} />
               <Tooltip
-                formatter={(value: any, name) => [
-                  value === null ? '—' : Number(value).toFixed(3),
-                  name
+                formatter={(value, name) => [
+                  value === null || value === undefined ? '—' : Number(value).toFixed(3),
+                  String(name ?? '')
                 ]}
               />
               {data.models.map((model, index) => (

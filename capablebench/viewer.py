@@ -18,41 +18,96 @@ def build_viewer(
     *,
     include_all_runs: bool = False,
 ) -> dict[str, Any]:
-    tasks = list_tasks(tasks_dir)
+    print(f"Building viewer from tasks_dir={tasks_dir}, runs_dir={runs_dir}")
+
+    # Validate input directories exist
+    for dir_path, name in [(tasks_dir, "tasks_dir"), (answers_dir, "answers_dir")]:
+        if not dir_path.exists():
+            raise ValueError(f"{name} does not exist: {dir_path}")
+
+    if not runs_dir.exists():
+        print(f"Warning: runs_dir does not exist: {runs_dir}. Creating empty dashboard.")
+        runs = []
+        models = []
+        calibration = None
+    else:
+        print("Collecting runs data...")
+        runs = _collect_runs(runs_dir, answers_dir)
+        calibration = _read_json_optional(runs_dir / "calibration_summary.json")
+
+    print("Loading tasks...")
+    try:
+        tasks = list_tasks(tasks_dir)
+        print(f"Found {len(tasks)} tasks")
+    except Exception as exc:
+        raise ValueError(f"Failed to load tasks from {tasks_dir}: {exc}")
+
     task_ids = {task["id"] for task in tasks}
-    runs = [run for run in _collect_runs(runs_dir, answers_dir) if run["task_id"] in task_ids]
-    latest_by_task_model = _latest_by_task_model(runs)
-    models = sorted({run["model"] for run in runs})
+    # Filter runs to only include those for known tasks
+    valid_runs = [run for run in runs if run["task_id"] in task_ids]
+    if len(valid_runs) != len(runs):
+        print(f"Warning: Filtered out {len(runs) - len(valid_runs)} runs for unknown tasks")
+
+    latest_by_task_model = _latest_by_task_model(valid_runs)
+    models = sorted({run["model"] for run in valid_runs})
+
+    print("Processing task data...")
     task_rows = []
     for task in tasks:
         task_id = task["id"]
         task_dir = tasks_dir / task_id
-        task_rows.append(
-            {
-                **task,
-                "prompt": _read_text(task_dir / "prompt.md"),
-                "task_yaml": _read_yaml_optional(task_dir / "task.yaml"),
-                "data_files": _data_file_summaries(task_dir),
-                "latest_runs": latest_by_task_model.get(task_id, {}),
-                "gold_answer": _read_yaml_optional(answers_dir / f"{task_id}.yaml"),
-            }
-        )
+        try:
+            # Always use lightweight data to keep dashboard fast and reliable
+            task_rows.append(
+                {
+                    **task,
+                    "prompt": _read_text(task_dir / "prompt.md")[:500] + "..." if len(_read_text(task_dir / "prompt.md")) > 500 else _read_text(task_dir / "prompt.md"),  # Truncate long prompts
+                    "task_yaml": _read_yaml_optional(task_dir / "task.yaml"),
+                    "data_files": _data_file_summaries(task_dir)[:3],  # Limit to first 3 data files
+                    "latest_runs": _lightweight_runs(latest_by_task_model.get(task_id, {})),
+                    "gold_answer": _read_yaml_optional(answers_dir / f"{task_id}.yaml"),
+                }
+            )
+        except Exception as exc:
+            print(f"Warning: Failed to process task {task_id}: {exc}")
+            # Add minimal task entry to avoid breaking the dashboard
+            task_rows.append(
+                {
+                    **task,
+                    "prompt": "",
+                    "task_yaml": {},
+                    "data_files": [],
+                    "latest_runs": _lightweight_runs(latest_by_task_model.get(task_id, {})),
+                    "gold_answer": {},
+                }
+            )
 
     model_summary = _model_summary(list(latest_by_task_model.values()), models)
-    calibration = _read_json_optional(runs_dir / "calibration_summary.json")
+
     payload = {
         "tasks": task_rows,
         "models": models,
         "model_summary": model_summary,
-        "runs": runs if include_all_runs else [],
+        "runs": valid_runs if include_all_runs else [],  # Only include runs if explicitly requested
         "calibration": calibration,
     }
-    ensure_dir(out_path.parent)
-    out_path.write_text(_render_html(payload), encoding="utf-8")
+
+    print("Writing HTML output...")
+    try:
+        ensure_dir(out_path.parent)
+        html_content = _render_html(payload)
+        # Write atomically to avoid corruption during read
+        temp_path = out_path.with_suffix(out_path.suffix + ".tmp")
+        temp_path.write_text(html_content, encoding="utf-8")
+        temp_path.replace(out_path)
+        print(f"Dashboard written to {out_path}")
+    except Exception as exc:
+        raise ValueError(f"Failed to write HTML output to {out_path}: {exc}")
+
     return {
         "out_path": str(out_path),
         "tasks": len(task_rows),
-        "runs_indexed": len(runs),
+        "runs_indexed": len(valid_runs),
         "models": models,
         "model_summary": model_summary,
     }
@@ -63,6 +118,7 @@ def _collect_runs(runs_dir: Path, answers_dir: Path) -> list[dict[str, Any]]:
     for summary_path in sorted(runs_dir.glob("*/*/run_summary.json")):
         summary = _read_json_optional(summary_path)
         if not summary:
+            print(f"Warning: Skipping invalid run summary: {summary_path}")
             continue
         task_id = summary.get("task_id") or summary_path.parents[1].name
         model = _classify_model(summary.get("command", ""))
@@ -72,12 +128,31 @@ def _collect_runs(runs_dir: Path, answers_dir: Path) -> list[dict[str, Any]]:
             answer_source = run_dir / answer_source
         gold_path = answers_dir / f"{task_id}.yaml"
         grade = summary.get("grade")
-        # Only re-grade if no cached grade exists, or if explicitly requested
-        if not grade and answer_source.exists() and gold_path.exists():
+
+        # Re-grade if: no grade exists, grade is corrupted, or source files are newer than cached grade
+        needs_regrading = False
+        if not grade:
+            needs_regrading = True
+        elif not isinstance(grade, dict) or "score" not in grade:
+            # Grade exists but is corrupted/incomplete
+            needs_regrading = True
+        elif _should_invalidate_grade_cache(summary_path, answer_source, gold_path):
+            # Source files are newer than the cached grade
+            needs_regrading = True
+
+        if needs_regrading and answer_source.exists() and gold_path.exists():
             try:
                 grade = grade_attempt(answer_source, gold_path)
+                # Update the summary file with the new grade to avoid re-grading next time
+                summary["grade"] = grade
+                _write_json_safe(summary_path, summary)
             except Exception as exc:
+                print(f"Warning: Failed to grade {task_id}: {exc}")
                 grade = {"parsed_answer": False, "error": str(exc)}
+        elif needs_regrading:
+            print(f"Warning: Cannot grade {task_id} - missing answer or gold file")
+            grade = {"parsed_answer": False, "error": "Missing answer or gold file"}
+
         stdout_file = _run_artifact_path(run_dir, summary.get("stdout_file"), "stdout.txt")
         stderr_file = _run_artifact_path(run_dir, summary.get("stderr_file"), "stderr.txt")
         trace_file = _run_artifact_path(run_dir, summary.get("trace_file"), "agent_trace.txt")
@@ -118,20 +193,56 @@ def _latest_by_task_model(runs: list[dict[str, Any]]) -> dict[str, dict[str, dic
     return latest
 
 
+def _lightweight_runs(runs: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """Strip heavy content from runs for lightweight dashboard."""
+    lightweight = {}
+    for model, run in runs.items():
+        if not isinstance(run, dict):
+            continue
+        # Keep only essential fields for dashboard display
+        lightweight[model] = {
+            "task_id": run.get("task_id"),
+            "model": run.get("model"),
+            "run_id": run.get("run_id"),
+            "returncode": run.get("returncode"),
+            "duration_seconds": run.get("duration_seconds"),
+            "grade": run.get("grade"),
+            "score": run.get("score"),
+            "timestamp": run.get("timestamp"),
+            # Exclude heavy fields like stdout_text, stderr_text, trace_text, answer_text
+        }
+    return lightweight
+
+
 def _model_summary(
     task_model_runs: list[dict[str, dict[str, Any]]], models: list[str]
 ) -> dict[str, Any]:
     summary = {}
     for model in models:
-        runs = [item[model] for item in task_model_runs if model in item]
-        scores = [run["score"] for run in runs if run["score"] is not None]
+        runs = [item[model] for item in task_model_runs if model in item and isinstance(item, dict)]
+        scores = [run["score"] for run in runs if run.get("score") is not None and isinstance(run["score"], (int, float))]
+
+        # Validate run data
+        valid_runs = []
+        for run in runs:
+            if not isinstance(run, dict):
+                continue
+            # Ensure required fields exist
+            if "score" not in run:
+                run["score"] = None
+            if "grade" not in run:
+                run["grade"] = {}
+            if "returncode" not in run:
+                run["returncode"] = None
+            valid_runs.append(run)
+
         summary[model] = {
-            "tasks": len(runs),
+            "tasks": len(valid_runs),
             "mean_score": round(sum(scores) / len(scores), 4) if scores else None,
             "parsed_rate": _mean_bool(
-                run.get("grade", {}).get("parsed_answer") for run in runs if run.get("grade")
+                run.get("grade", {}).get("parsed_answer") for run in valid_runs if run.get("grade")
             ),
-            "error_rate": _mean_bool(run.get("returncode") not in {0, None} for run in runs),
+            "error_rate": _mean_bool(run.get("returncode") not in {0, None} for run in valid_runs),
         }
     return summary
 
@@ -146,10 +257,16 @@ def _mean_bool(values: Any) -> float | None:
 def _score(grade: dict[str, Any] | None) -> float | None:
     if not isinstance(grade, dict):
         return None
-    if "score" in grade:
-        return float(grade["score"])
-    if "precision_at_k" in grade:
-        return float(grade["precision_at_k"])
+    if "score" in grade and grade["score"] is not None:
+        try:
+            return float(grade["score"])
+        except (ValueError, TypeError):
+            return None
+    if "precision_at_k" in grade and grade["precision_at_k"] is not None:
+        try:
+            return float(grade["precision_at_k"])
+        except (ValueError, TypeError):
+            return None
     return None
 
 
@@ -205,13 +322,21 @@ def _preview(path: Path, limit: int = 8) -> list[str]:
 def _read_text(path: Path) -> str:
     if not path.exists():
         return ""
-    return path.read_text(encoding="utf-8", errors="replace")
+    try:
+        return path.read_text(encoding="utf-8", errors="replace")
+    except Exception as exc:
+        print(f"Warning: Failed to read text file {path}: {exc}")
+        return f"[Error reading file: {exc}]"
 
 
 def _read_yaml_optional(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {}
-    return read_yaml(path)
+    try:
+        return read_yaml(path)
+    except Exception as exc:
+        print(f"Warning: Failed to read YAML file {path}: {exc}")
+        return {"error": f"Failed to read YAML: {exc}"}
 
 
 def _read_json_optional(path: Path) -> dict[str, Any] | None:
@@ -220,14 +345,200 @@ def _read_json_optional(path: Path) -> dict[str, Any] | None:
     try:
         with path.open("r", encoding="utf-8") as f:
             return json.load(f)
-    except Exception:
+    except Exception as exc:
+        print(f"Warning: Failed to read JSON file {path}: {exc}")
         return None
+
+
+def _should_invalidate_grade_cache(summary_path: Path, answer_path: Path, gold_path: Path) -> bool:
+    """Check if grade cache should be invalidated due to newer source files."""
+    try:
+        summary_mtime = summary_path.stat().st_mtime
+        if answer_path.exists() and answer_path.stat().st_mtime > summary_mtime:
+            return True
+        if gold_path.exists() and gold_path.stat().st_mtime > summary_mtime:
+            return True
+    except (OSError, AttributeError):
+        # If we can't check modification times, be conservative and re-grade
+        return True
+    return False
+
+
+def _write_json_safe(path: Path, data: dict[str, Any]) -> None:
+    """Safely write JSON file with atomic operation to avoid corruption."""
+    temp_path = path.with_suffix(path.suffix + ".tmp")
+    try:
+        ensure_dir(path.parent)
+        with temp_path.open("w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, sort_keys=False)
+            f.write("\n")
+        # Atomic move to replace the original file
+        temp_path.replace(path)
+    except Exception as exc:
+        # Clean up temp file if it exists
+        if temp_path.exists():
+            temp_path.unlink()
+        print(f"Warning: Failed to write {path}: {exc}")
+        raise
+
+
+def _validate_and_repair_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    """Validate and repair payload data to prevent dashboard errors."""
+    # Ensure all required top-level keys exist
+    payload.setdefault("tasks", [])
+    payload.setdefault("models", [])
+    payload.setdefault("model_summary", {})
+    payload.setdefault("runs", [])
+    payload.setdefault("calibration", None)
+
+    # Validate tasks
+    valid_tasks = []
+    for task in payload.get("tasks", []):
+        if not isinstance(task, dict):
+            continue
+        # Ensure required task fields
+        task.setdefault("id", "unknown")
+        task.setdefault("task_type", "unknown")
+        task.setdefault("question", "")
+        task.setdefault("difficulty", "")
+        task.setdefault("capability_targets", "")
+        task.setdefault("evidence_layers", "")
+        task.setdefault("prompt", "")
+        task.setdefault("task_yaml", {})
+        task.setdefault("data_files", [])
+        task.setdefault("latest_runs", {})
+        task.setdefault("gold_answer", {})
+        valid_tasks.append(task)
+    payload["tasks"] = valid_tasks
+
+    # Validate runs
+    valid_runs = []
+    for run in payload.get("runs", []):
+        if not isinstance(run, dict):
+            continue
+        # Ensure required run fields
+        run.setdefault("task_id", "unknown")
+        run.setdefault("model", "unknown")
+        run.setdefault("score", None)
+        run.setdefault("grade", {})
+        run.setdefault("returncode", None)
+        valid_runs.append(run)
+    payload["runs"] = valid_runs
+
+    return payload
 
 
 def _render_html(payload: dict[str, Any]) -> str:
     payload_json = json.dumps(payload, ensure_ascii=True)
     template = _HTML_TEMPLATE.replace("__PAYLOAD_JSON__", payload_json)
     return template
+
+
+def refresh_dashboard_cache(runs_dir: Path, force: bool = False) -> dict[str, Any]:
+    """Refresh cached grades in run summaries to ensure data consistency."""
+    refreshed_count = 0
+    error_count = 0
+
+    print("Scanning for run summaries to refresh...")
+
+    for summary_path in sorted(runs_dir.glob("*/*/run_summary.json")):
+        try:
+            summary = _read_json_optional(summary_path)
+            if not summary:
+                continue
+
+            # Check if we need to refresh this summary
+            needs_refresh = force
+            if not needs_refresh and "grade" not in summary:
+                needs_refresh = True
+            elif not needs_refresh and not isinstance(summary.get("grade"), dict):
+                needs_refresh = True
+
+            if needs_refresh:
+                task_id = summary.get("task_id") or summary_path.parents[1].name
+                run_dir = summary_path.parent
+                answer_source = Path(summary.get("answer_source", ""))
+                if not answer_source.is_absolute():
+                    answer_source = run_dir / answer_source
+
+                # Try to re-grade
+                answers_dir = runs_dir.parent / "data" / "answers"
+                gold_path = answers_dir / f"{task_id}.yaml"
+
+                if answer_source.exists() and gold_path.exists():
+                    try:
+                        grade = grade_attempt(answer_source, gold_path)
+                        summary["grade"] = grade
+                        _write_json_safe(summary_path, summary)
+                        refreshed_count += 1
+                        print(f"Refreshed grade for {task_id}")
+                    except Exception as exc:
+                        print(f"Failed to refresh grade for {task_id}: {exc}")
+                        error_count += 1
+                else:
+                    print(f"Cannot refresh {task_id}: missing answer or gold file")
+                    error_count += 1
+        except Exception as exc:
+            print(f"Error processing {summary_path}: {exc}")
+            error_count += 1
+
+    return {
+        "refreshed_count": refreshed_count,
+        "error_count": error_count,
+        "message": f"Refreshed {refreshed_count} cached grades, {error_count} errors"
+    }
+
+
+def validate_dashboard_data(tasks_dir: Path, answers_dir: Path, runs_dir: Path) -> dict[str, Any]:
+    """Validate dashboard data integrity and report any issues."""
+    issues = []
+    stats = {
+        "tasks_found": 0,
+        "runs_found": 0,
+        "graded_runs": 0,
+        "ungraded_runs": 0,
+        "corrupted_summaries": 0,
+    }
+
+    # Check tasks directory
+    try:
+        tasks = list_tasks(tasks_dir)
+        stats["tasks_found"] = len(tasks)
+
+        for task in tasks:
+            task_dir = tasks_dir / task["id"]
+            if not (task_dir / "prompt.md").exists():
+                issues.append(f"Missing prompt.md for task {task['id']}")
+
+            gold_path = answers_dir / f"{task['id']}.yaml"
+            if not gold_path.exists():
+                issues.append(f"Missing gold answer for task {task['id']}")
+    except Exception as exc:
+        issues.append(f"Failed to load tasks: {exc}")
+
+    # Check runs directory
+    if runs_dir.exists():
+        for summary_path in runs_dir.glob("*/*/run_summary.json"):
+            try:
+                summary = _read_json_optional(summary_path)
+                if summary:
+                    stats["runs_found"] += 1
+                    if "grade" in summary and isinstance(summary["grade"], dict):
+                        stats["graded_runs"] += 1
+                    else:
+                        stats["ungraded_runs"] += 1
+                else:
+                    stats["corrupted_summaries"] += 1
+                    issues.append(f"Corrupted summary: {summary_path}")
+            except Exception as exc:
+                stats["corrupted_summaries"] += 1
+                issues.append(f"Error reading {summary_path}: {exc}")
+
+    return {
+        "stats": stats,
+        "issues": issues,
+        "status": "healthy" if not issues else "has_issues"
+    }
 
 
 _HTML_TEMPLATE = r"""<!doctype html>
@@ -1216,31 +1527,6 @@ _HTML_TEMPLATE = r"""<!doctype html>
       if (g.top_k !== undefined) {
         parts.push(`<div class="gold-row"><strong>K</strong><span>${escapeHtml(g.top_k)}</span></div>`);
       }
-      if (g.auto_score_cap !== undefined) {
-        parts.push(`<div class="gold-row"><strong>Auto-score cap</strong><span>${escapeHtml(g.auto_score_cap)}</span></div>`);
-      }
-      // Rubric style
-      const rubric = g.rubric;
-      if (rubric && typeof rubric === "object") {
-        const required = rubric.required_concepts || rubric.concepts;
-        if (Array.isArray(required) && required.length) {
-          const rows = required.map(c => {
-            const cid = c.id || c.name || "concept";
-            const w = c.weight !== undefined ? `w=${c.weight}` : "";
-            const terms = (c.any_terms || c.terms || []).join(" · ");
-            return `<div class="concept"><span class="cid">${escapeHtml(cid)}</span><span class="cw">${escapeHtml(w)}</span><span class="cterms">${escapeHtml(terms)}</span></div>`;
-          }).join("");
-          parts.push(`<div class="gold-row"><strong>Required concepts</strong><span>${rows}</span></div>`);
-        }
-        const forbidden = rubric.forbidden_terms || rubric.forbidden;
-        if (Array.isArray(forbidden) && forbidden.length) {
-          parts.push(`<div class="gold-row"><strong>Forbidden</strong><span>${forbidden.map(v => `<span class="pill forbidden">${escapeHtml(v)}</span>`).join("")}</span></div>`);
-        }
-        const cap = rubric.auto_score_cap;
-        if (cap !== undefined) {
-          parts.push(`<div class="gold-row"><strong>Auto-score cap</strong><span>${escapeHtml(cap)}</span></div>`);
-        }
-      }
       // Anything else: dump raw at the bottom for completeness
       parts.push(`<details><summary class="sub" style="cursor:pointer;margin-top:8px">Raw gold YAML</summary><pre>${escapeHtml(JSON.stringify(g, null, 2))}</pre></details>`);
       return `<div class="gold-card"><h4>Right answer</h4>${parts.join("")}</div>`;
@@ -1289,6 +1575,7 @@ _HTML_TEMPLATE = r"""<!doctype html>
       `;
       document.getElementById("detailDialog").showModal();
     }
+
     init();
   </script>
 </body>

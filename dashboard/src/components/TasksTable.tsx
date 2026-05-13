@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { DashboardData } from '@/types/performance';
+import { DashboardData, TaskMetadata } from '@/types/performance';
 import { Search, Tag } from 'lucide-react';
 import TaskDetailModal from './TaskDetailModal';
 
@@ -66,15 +66,6 @@ export default function TasksTable({ data }: TasksTableProps) {
     return 'text-green-600';
   }
 
-  function getDifficultyClass(difficulty: string | undefined): string {
-    switch (difficulty?.toLowerCase()) {
-      case 'easy': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-amber-100 text-amber-800';
-      case 'hard': return 'bg-red-100 text-red-800';
-      default: return 'bg-stone-100 text-stone-600';
-    }
-  }
-
   function renderPills(value: string | undefined): React.ReactNode {
     if (!value) return null;
     return value.split(';').map(item => item.trim()).filter(Boolean).map((item, index) => (
@@ -85,12 +76,12 @@ export default function TasksTable({ data }: TasksTableProps) {
   }
 
   function getRunTags(taskId: string, model: string): string[] {
-    const runs = (data as any).runs || [];
-    const run = runs.find((r: any) => r.task_id === taskId && r.model === model);
+    const runs = data.runs || [];
+    const run = runs.find((item) => item.task_id === taskId && item.model === model);
     return run?.tags || [];
   }
 
-  function getTaskTags(task: any): string[] {
+  function getTaskTags(task: TaskMetadata): string[] {
     const tags: string[] = [];
 
     // Add task type tag
@@ -105,15 +96,15 @@ export default function TasksTable({ data }: TasksTableProps) {
 
     // Check if this is an interesting finding by examining all runs for this task
     // Look for tasks with unusual patterns like saturation, format errors, or extreme scores
-    const taskRuns = (data as any).runs?.filter((run: any) => run.task_id === task.id) || [];
+    const taskRuns = data.runs?.filter((run) => run.task_id === task.id) || [];
 
-    const hasInterestingPattern = taskRuns.some((run: any) => {
+    const hasInterestingPattern = taskRuns.some((run) => {
       const runTags = run.tags || [];
       return runTags.some((tag: string) =>
         tag.includes('saturation') ||
         tag.includes('format_error') ||
         tag.includes('execution_error') ||
-        (run.score !== null && (run.score < 0.2 || run.score > 0.95)) // Very low or very high scores
+        (run.score !== null && run.score !== undefined && (run.score < 0.2 || run.score > 0.95)) // Very low or very high scores
       );
     });
 
@@ -223,7 +214,7 @@ export default function TasksTable({ data }: TasksTableProps) {
                 </tr>
               ) : (
                 filteredTasks.map(task => {
-                  const latestRuns = (data as any).latest_runs?.[task.id] || {};
+                  const latestRuns = data.latest_runs?.[task.id] || {};
                   const taskTags = getTaskTags(task);
 
                   return (

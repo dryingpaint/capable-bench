@@ -69,10 +69,9 @@ If the suite is too easy, add harder cases with conflicting evidence, missing
 modalities, noisy assay panels, negative controls, and foundation-model outputs
 that are useful but imperfect.
 
-Expert-rubric tasks use an `auto_score_cap` in their hidden answer YAML. This
-keeps automated keyword coverage useful for smoke testing without treating it as
-equivalent to expert scientific review. Final benchmark reports should separate
-automated scores from expert-adjudicated rubric scores.
+All tasks must use deterministic, objective grading (ranking metrics, exact
+label match, option MRR, or multi-field exact match). Keyword-matching,
+rubric, and other subjective scoring modes are not permitted.
 
 ## Current Local Calibration
 
@@ -94,7 +93,7 @@ should include:
 
 - number of tasks and task families attempted,
 - Codex and Claude mean task-normalized scores,
-- per-family ranking, label, option-ranking, and rubric scores,
-- expert-review notes for creative scientific tasks,
+- per-family ranking, label, option-ranking, and multi-field exact-match
+  scores,
 - examples of common failure modes,
 - whether the suite passed the `<0.60` saturation target.

@@ -1,0 +1,3 @@
+peptide_id,modification,receptor_family,receptors
+PEP-77A315C29A,DFDMLRCMLGRVYRPCAQV (hMCH 19-mer with Cys7-Cys16 disulfide),MCH,MCHR1;MCHR2
+PEP-021CF7B0A5,Ac-Arg-D-Cys-Met-Leu-Gly-Arg-Val-Tyr-Arg-Pro-Cys-Trp-NH2 (Bednarek 2001 compound 19 scaffold: Ac-MCH(6-17)-NH2 cyclic via Cys7-Cys16 disulfide),MCH,MCHR1;MCHR2

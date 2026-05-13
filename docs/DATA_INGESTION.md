@@ -10,7 +10,7 @@ Keep these local unless there is an explicit release review:
 - raw source files under `<path-to-private-data-directory>`
 - extracted tables under `data/processed/`
 - generated task bundles under `data/tasks/`
-- hidden answer/rubric files under `data/answers/`
+- hidden answer files under `data/answers/`
 - model run outputs under `runs/`
 
 The `.gitignore` is configured for that boundary. Treat `data/processed/` as the
@@ -116,7 +116,7 @@ PY
 ## Populate Benchmark Tasks
 
 Task bundles should be curated from linked processed tables. Put task
-directories under `data/tasks/<task_id>/` and hidden answer/rubric YAML files
+directories under `data/tasks/<task_id>/` and hidden answer YAML files
 under `data/answers/<task_id>.yaml`.
 
 Each task set should also include `data/tasks/problems.csv` so the runner can

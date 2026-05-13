@@ -20,7 +20,7 @@ REPO = Path(__file__).resolve().parents[2]
 TDIR = REPO / "data" / "tasks" / "cb-orexin-selectivity-001"
 GOLD = yaml.safe_load(open(REPO / "data" / "answers" / "cb-orexin-selectivity-001.yaml"))
 
-CANDIDATES = sorted(GOLD["answer_space"]["most_OX2R_selective"])
+CANDIDATES = sorted(GOLD["answer_space"]["most_R2_preferring"])
 ASSAY_CSV = REPO / "data" / "processed" / "invitro_assays.csv"
 
 
@@ -70,7 +70,7 @@ for cmp, ox1, ox2, sel, n1, n2 in rows:
     print(f"{cmp:>12}  {ox1:>10.3f}  {ox2:>10.4f}  {sel:>10.1f}  {n1:>7}  {n2:>7}")
 
 derived_winner = rows[0][0]
-declared_winner = GOLD["gold"]["most_OX2R_selective"]
+declared_winner = GOLD["gold"]["most_R2_preferring"]
 runner_up = rows[1][0]
 print()
 print(f"Derived winner:  {derived_winner}  (selectivity {rows[0][3]:.1f})")

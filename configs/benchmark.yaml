@@ -22,7 +22,7 @@ task_defaults:
     - ranking
     - label
     - option_ranking
-    - rubric
+    - multi_field_exact_match
 
 calibration:
   target_max_mean_score: 0.60
@@ -45,23 +45,9 @@ task_types:
     - hit_prediction
   option_ranking:
     - next_experiment
-  rubric:
-    - failure_diagnosis
-    - rescue_strategy
-    - mechanistic_hypothesis
-    - structure_activity_reasoning
-    - counterfactual_biology
-    - artifact_detection
-    - experiment_plan
-    - assay_triage
-    - data_acquisition_plan
-    - drug_discovery_program
-    - portfolio_tradeoff
-    - lead_optimization_loop
-    - foundation_model_triage
-    - model_disagreement_analysis
-    - generated_candidate_review
-    - functional_prediction
+  multi_field_exact_match:
+    - multitarget_activity
+    - program_lead_selection
 
 evidence_layers:
   - identity
@@ -81,8 +67,6 @@ pilot_generation:
   target_task_mix:
     candidate_prioritization: 10
     hit_prediction: 5
-    failure_diagnosis: 5
     next_experiment: 5
-    mechanistic_hypothesis: 5
-    foundation_model_triage: 5
-    drug_discovery_program: 3
+    multitarget_activity: 5
+    program_lead_selection: 2

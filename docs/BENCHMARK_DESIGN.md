@@ -19,30 +19,23 @@ track specification lives in [BioDiscoveryBench](BIO_DISCOVERY_BENCHMARK.md).
 - Hidden or private answer material lives under `data/answers/<task_id>.yaml`.
 - Task data are copied into an isolated run directory before each attempt.
 - Agents are instructed to write `answer.json`; stdout is captured as a fallback.
-- Graders are deterministic where possible and can be extended with expert
-  rubrics for free-text scientific judgment.
+- Graders are deterministic. Tasks must have objective ground truth — no
+  keyword-matching, rubric, or subjective evaluation is permitted.
 
 ## Task Families
 
 1. `candidate_prioritization`: rank peptides or candidates for advancement.
 2. `hit_prediction`: predict whether an in vivo or functional effect will be
    observed.
-3. `failure_diagnosis`: identify likely reasons for translational failure.
-4. `next_experiment`: choose the next experiment that resolves the dominant
+3. `next_experiment`: choose the next experiment that resolves the dominant
    uncertainty.
-5. `mechanistic_hypothesis`: explain a phenotype or assay pattern using
-   receptor, pathway, biochemical, or PK/PD reasoning.
-6. `experiment_plan`: design a falsifiable experimental campaign with controls
-   and decision gates.
-7. `drug_discovery_program`: make an end-to-end target, candidate, experiment,
-   and development recommendation.
-8. `foundation_model_triage`: judge how to use protein, molecule, expression,
-   perturbation, structure, or functional-prediction model outputs in a
-   discovery decision.
+4. `multitarget_activity`: predict per-receptor activity outcomes for a peptide.
+5. `program_lead_selection`: pick the lead candidate / variant that best meets
+   the program's stated selectivity or polypharmacology objective.
 
 The ingestion path supports the in vitro mastersheet and mouse in vivo
-Excel/JSON exports. Benchmark tasks should be curated from linked evidence and
-labeled with experimental outcomes or explicit expert rubrics.
+Excel/JSON exports. Benchmark tasks must be curated from linked evidence and
+labeled with experimental outcomes.
 
 Operational ingestion instructions live in [Data Ingestion](DATA_INGESTION.md).
 
@@ -51,24 +44,17 @@ Operational ingestion instructions live in [Data Ingestion](DATA_INGESTION.md).
 For benchmark tasks, use:
 
 - linked mouse outcomes for candidate prioritization and hit prediction,
-- curated expert labels for failure diagnosis and mechanistic hypothesis tasks,
-- expert or counterfactual utility labels for next-experiment selection,
-- hidden expert rubrics and historical decision outcomes for end-to-end program
-  tasks,
-- held-out experimental data, expert review, and provenance-aware checks for
-  foundation-model-augmented tasks.
+- counterfactual utility labels derived from measured assay data for
+  next-experiment selection,
+- measured per-receptor potency / activity for multitarget activity and
+  program lead selection.
 
 ## Scoring Modes
 
-The grader supports four practical scoring modes:
+The grader supports four deterministic scoring modes:
 
-- ranking metrics for `candidate_prioritization`,
+- ranking metrics (precision@k, top-1, nDCG@k) for `candidate_prioritization`,
 - exact label matching for `hit_prediction`,
-- option ranking for `next_experiment`,
-- lightweight rubric concept checks for `failure_diagnosis`,
-  `mechanistic_hypothesis`, `experiment_plan`, `drug_discovery_program`, and
-  `foundation_model_triage`.
-
-Rubric concept checks are useful for regression tests and large sweeps, but
-scientific creativity and experiment quality should still receive expert review
-before any benchmark report claims superiority.
+- option ranking (MRR) for `next_experiment`,
+- multi-field exact match for `multitarget_activity` and
+  `program_lead_selection`.

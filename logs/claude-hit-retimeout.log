@@ -1,0 +1,87 @@
+{
+  "tasks_attempted": 3,
+  "tasks_graded": 3,
+  "mean_score": 1.0,
+  "mean_precision_at_k": null,
+  "mean_ndcg_at_k": null,
+  "top1_exact_rate": null,
+  "top1_in_gold_top_k_rate": null,
+  "exact_match_rate": 1.0,
+  "runs": [
+    {
+      "task_id": "pilot-hit-prediction-004",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-004/20260513-084840",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-004/20260513-084840/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 82.474,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-004/20260513-084840/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-004/20260513-084840/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-004/20260513-084840/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-004/20260513-084840/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-hit-prediction-004",
+        "task_type": "hit_prediction",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-004/20260513-084840/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-hit-prediction-004.yaml",
+        "predicted_label": "active",
+        "accepted_labels": [
+          "active"
+        ],
+        "exact_match": true,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-hit-prediction-005",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-005/20260513-085003",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-005/20260513-085003/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 70.952,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-005/20260513-085003/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-005/20260513-085003/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-005/20260513-085003/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-005/20260513-085003/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-hit-prediction-005",
+        "task_type": "hit_prediction",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-005/20260513-085003/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-hit-prediction-005.yaml",
+        "predicted_label": "active",
+        "accepted_labels": [
+          "active"
+        ],
+        "exact_match": true,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    },
+    {
+      "task_id": "pilot-hit-prediction-006",
+      "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-006/20260513-085114",
+      "command": "claude -p --output-format stream-json --verbose --permission-mode bypassPermissions \"$(cat /Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-006/20260513-085114/prompt.md)\"",
+      "returncode": 0,
+      "duration_seconds": 44.872,
+      "answer_source": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-006/20260513-085114/answer.json",
+      "stdout_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-006/20260513-085114/stdout.txt",
+      "stderr_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-006/20260513-085114/stderr.txt",
+      "trace_file": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-006/20260513-085114/agent_trace.txt",
+      "grade": {
+        "task_id": "pilot-hit-prediction-006",
+        "task_type": "hit_prediction",
+        "label_status": "experimental_ground_truth",
+        "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/pilot-hit-prediction-006/20260513-085114/answer.json",
+        "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/pilot-hit-prediction-006.yaml",
+        "predicted_label": "active",
+        "accepted_labels": [
+          "active"
+        ],
+        "exact_match": true,
+        "score": 1.0,
+        "parsed_answer": true
+      }
+    }
+  ]
+}

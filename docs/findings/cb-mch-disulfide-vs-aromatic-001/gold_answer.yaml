@@ -1,0 +1,12 @@
+id: cb-mch-disulfide-vs-aromatic-001
+task_type: next_experiment
+label_status: experimental_ground_truth
+gold_top:
+- PEP-77A315C29A
+gold_ranking:
+- PEP-77A315C29A
+- PEP-021CF7B0A5
+outcome_definition: lower best_ec50_nm in held-out in vitro functional assays (potency
+  ratio 30.67x; PEP-77A315C29A best EC50 = 0.15 nM at MCHR1 binding, PEP-021CF7B0A5
+  best EC50 = 4.6 nM at MCHR1 binding; source = Bednarek 2001 Table 1 alanine scan
+  on full hMCH and Table 5 D-amino-acid scan on compound 19)

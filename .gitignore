@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 .venv/
+node_modules/
 runs/
 data/raw/*
 !data/raw/README.md

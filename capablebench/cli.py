@@ -14,7 +14,7 @@ from .run import run_task
 from .suite import run_suite, summarize_runs
 from .tasks import list_tasks
 from .validate import validate_benchmark
-from .viewer import build_viewer
+from .viewer import build_viewer, refresh_dashboard_cache, validate_dashboard_data
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -121,6 +121,15 @@ def main() -> None:
     viewer.add_argument("--out", type=Path, default=RUNS_DIR / "viewer.html")
     viewer.add_argument("--include-all-runs", action="store_true")
 
+    refresh_cache = sub.add_parser("refresh-dashboard-cache", help="Refresh cached grades in dashboard data.")
+    refresh_cache.add_argument("--runs-dir", type=Path, default=RUNS_DIR)
+    refresh_cache.add_argument("--force", action="store_true", help="Force refresh all grades, even if already cached")
+
+    validate_data = sub.add_parser("validate-dashboard-data", help="Validate dashboard data integrity.")
+    validate_data.add_argument("--tasks-dir", type=Path, default=TASKS_DIR)
+    validate_data.add_argument("--answers-dir", type=Path, default=ANSWERS_DIR)
+    validate_data.add_argument("--runs-dir", type=Path, default=RUNS_DIR)
+
     grade = sub.add_parser("grade", help="Grade an answer file against a hidden answer YAML.")
     grade.add_argument("answer", type=Path)
     grade.add_argument("gold", type=Path)
@@ -219,6 +228,10 @@ def main() -> None:
                 include_all_runs=args.include_all_runs,
             )
         )
+    elif args.command == "refresh-dashboard-cache":
+        _print_json(refresh_dashboard_cache(args.runs_dir, force=args.force))
+    elif args.command == "validate-dashboard-data":
+        _print_json(validate_dashboard_data(args.tasks_dir, args.answers_dir, args.runs_dir))
     elif args.command == "grade":
         _print_json(grade_attempt(args.answer, args.gold, args.out))
 

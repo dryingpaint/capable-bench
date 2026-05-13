@@ -123,6 +123,35 @@ def _extract_ranking(answer: Any) -> list[str]:
     return []
 
 
+def _extract_candidate_recommendations(answer: Any) -> list[str]:
+    if isinstance(answer, dict):
+        for key in ("top_3", "top_candidates", "recommended_candidates", "ranking"):
+            value = answer.get(key)
+            if isinstance(value, list):
+                ids = []
+                for item in value:
+                    if isinstance(item, dict):
+                        candidate = (
+                            item.get("candidate_id")
+                            or item.get("peptide_id")
+                            or item.get("compound")
+                            or item.get("proposed_modification")
+                            or item.get("name")
+                        )
+                        if candidate:
+                            ids.append(str(candidate))
+                    elif item is not None:
+                        ids.append(str(item))
+                if ids:
+                    return ids
+        raw = answer.get("raw_text", "")
+        if isinstance(raw, str):
+            return _extract_ids_from_text(raw)
+    if isinstance(answer, list):
+        return [str(x) for x in answer]
+    return []
+
+
 def _answer_text(answer: Any) -> str:
     if isinstance(answer, dict):
         raw = answer.get("raw_text")
@@ -298,69 +327,29 @@ def _grade_option_task(
     }
 
 
-def _grade_rubric_task(
+
+def _grade_pending_validation_task(
     *,
     answer: Any,
     gold: dict[str, Any],
     answer_path: Path,
     gold_path: Path,
 ) -> dict[str, Any]:
-    text = _answer_text(answer).lower()
-    rubric = gold.get("rubric", {})
-    required = rubric.get("required_concepts", [])
-    forbidden = rubric.get("forbidden_concepts", [])
-
-    concept_results = []
-    earned = 0.0
-    possible = 0.0
-    for concept in required:
-        if not isinstance(concept, dict):
-            continue
-        weight = float(concept.get("weight", 1.0))
-        possible += weight
-        terms = [str(term).lower() for term in concept.get("any_terms", [])]
-        matched_terms = [term for term in terms if term and term in text]
-        matched = bool(matched_terms)
-        if matched:
-            earned += weight
-        concept_results.append(
-            {
-                "id": concept.get("id"),
-                "weight": weight,
-                "matched": matched,
-                "matched_terms": matched_terms,
-            }
-        )
-
-    forbidden_hits = []
-    for concept in forbidden:
-        if isinstance(concept, dict):
-            terms = [str(term).lower() for term in concept.get("any_terms", [])]
-            matched_terms = [term for term in terms if term and term in text]
-            if matched_terms:
-                forbidden_hits.append(
-                    {"id": concept.get("id"), "matched_terms": matched_terms}
-                )
-
-    base_score = earned / possible if possible else 0.0
-    penalty = min(1.0, 0.2 * len(forbidden_hits))
-    score = max(0.0, base_score - penalty)
-    auto_score_cap = gold.get("auto_score_cap")
-    if auto_score_cap is not None:
-        score = min(score, float(auto_score_cap))
+    recommendations = _extract_candidate_recommendations(answer)
     return {
         "task_id": gold.get("id"),
         "task_type": gold.get("task_type"),
         "label_status": gold.get("label_status"),
+        "scoring_mode": gold.get("scoring_mode"),
         "answer_path": str(answer_path),
         "gold_path": str(gold_path),
-        "concept_results": concept_results,
-        "forbidden_hits": forbidden_hits,
-        "rubric_score": round(base_score, 4),
-        "penalty": round(penalty, 4),
-        "auto_score_cap": auto_score_cap,
-        "score": round(score, 4),
-        "parsed_answer": bool(text.strip()),
+        "predicted_recommendations": recommendations,
+        "top_k_requested": gold.get("top_k"),
+        "parsed_answer": bool(recommendations or _answer_text(answer).strip()),
+        "scored": False,
+        "score": None,
+        "validation_status": gold.get("validation_status", "pending_wet_lab_validation"),
+        "outcome_definition": gold.get("outcome_definition"),
     }
 
 
@@ -387,6 +376,20 @@ def grade_attempt(
     gold = read_yaml(gold_path)
     answer = _load_answer(answer_path)
     task_type = gold.get("task_type")
+    label_status = gold.get("label_status")
+    scoring_mode = gold.get("scoring_mode")
+
+    if label_status in {"wet_lab_validation_pending", "wet_lab_pending"} or scoring_mode in {
+        "wet_lab_validation_pending",
+        "pending_wet_lab_validation",
+        "unscored_pending_validation",
+    }:
+        result = _grade_pending_validation_task(
+            answer=answer, gold=gold, answer_path=answer_path, gold_path=gold_path
+        )
+        if out_path is not None:
+            write_json(out_path, result)
+        return result
 
     if task_type != "candidate_prioritization":
         if task_type == "hit_prediction":
@@ -399,27 +402,6 @@ def grade_attempt(
             )
         elif task_type in {"program_lead_selection", "multitarget_activity"}:
             result = _grade_multi_field_exact_match(
-                answer=answer, gold=gold, answer_path=answer_path, gold_path=gold_path
-            )
-        elif task_type in {
-            "failure_diagnosis",
-            "rescue_strategy",
-            "mechanistic_hypothesis",
-            "structure_activity_reasoning",
-            "counterfactual_biology",
-            "artifact_detection",
-            "experiment_plan",
-            "assay_triage",
-            "data_acquisition_plan",
-            "drug_discovery_program",
-            "portfolio_tradeoff",
-            "lead_optimization_loop",
-            "foundation_model_triage",
-            "model_disagreement_analysis",
-            "generated_candidate_review",
-            "functional_prediction",
-        }:
-            result = _grade_rubric_task(
                 answer=answer, gold=gold, answer_path=answer_path, gold_path=gold_path
             )
         else:

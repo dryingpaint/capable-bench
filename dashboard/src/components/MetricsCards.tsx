@@ -4,6 +4,13 @@ interface MetricsCardsProps {
   data: DashboardData;
 }
 
+type MetricCard = {
+  label: string;
+  value: string | number;
+  delta: string;
+  accent?: boolean;
+};
+
 export default function MetricsCards({ data }: MetricsCardsProps) {
   const taskTypes = [...new Set(data.tasks.map(t => t.task_type))].length;
   const hardTasks = data.tasks.filter(t => t.difficulty?.toLowerCase() === 'hard').length;
@@ -17,7 +24,7 @@ export default function MetricsCards({ data }: MetricsCardsProps) {
     .filter(({ score }) => score !== null && score !== undefined)
     .sort((a, b) => (b.score || 0) - (a.score || 0));
 
-  const cards = [
+  const cards: MetricCard[] = [
     {
       label: 'Tasks',
       value: data.tasks.length.toString(),
@@ -57,12 +64,12 @@ export default function MetricsCards({ data }: MetricsCardsProps) {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-      {cards.map((card, index) => (
+      {cards.map((card) => (
         <div
           key={card.label}
           className={`
             bg-white border border-stone-200 rounded-xl p-4 shadow-sm
-            ${(card as any).accent ? 'bg-gradient-to-br from-stone-50 to-white' : ''}
+            ${card.accent ? 'bg-gradient-to-br from-stone-50 to-white' : ''}
           `}
         >
           <div className="text-xs uppercase tracking-wider text-stone-500 font-semibold mb-2">

@@ -2,121 +2,47 @@
 
 BioDiscoveryBench is the target benchmark shape for this repository: an
 agentic, data-grounded evaluation of whether coding agents can do useful
-biological and biochemical reasoning, generate falsifiable hypotheses, plan
-experiments, and make end-to-end drug discovery decisions from proprietary
-translational datasets.
+biological and biochemical reasoning, predict experimental outcomes, and make
+translational candidate decisions from proprietary translational datasets.
 
 The benchmark should not reward memorized biomedical facts. Each task should
-force the agent to inspect task-local data, choose an analysis strategy, explain
-the mechanistic basis of its decision, and return a structured answer that can
-be graded against held-out outcomes or expert rubrics.
+force the agent to inspect task-local data, choose an analysis strategy, and
+return a structured answer that can be graded deterministically against
+held-out experimental outcomes. Tasks must have objective ground truth — no
+keyword-matching, rubric, or subjective evaluation is permitted.
 
 ## Capability Targets
 
-The suite is organized around five capabilities.
+The suite is organized around four capabilities.
 
 1. `mechanistic_reasoning`: explain an observed or predicted phenotype using
    receptor biology, pathway logic, concentration-response behavior, PK/PD
    constraints, and assay limitations.
-2. `hypothesis_generation`: produce novel, testable hypotheses that connect
-   sequence or molecule features to assay and in vivo outcomes.
-3. `experiment_planning`: choose the next experiment that most efficiently
+2. `sequence_to_function_prediction`: relate peptide sequence and chemical
+   modifications to potency, efficacy, and selectivity.
+3. `translational_decision_making`: rank candidates and predict in vivo
+   outcomes from upstream evidence.
+4. `experiment_planning`: choose the next experiment that most efficiently
    resolves the dominant uncertainty.
-4. `translational_decision_making`: rank candidates, predict in vivo outcomes,
-   and diagnose why in vitro effects did or did not translate.
-5. `model_augmented_discovery`: use or critique biology foundation-model
-   outputs, including protein, sequence, perturbation, expression, structure,
-   and functional-prediction signals.
 
-## Task Tracks
+## Task Families
 
-### Track A: Translational Candidate Decisions
+All families have deterministic graders backed by measured experimental data.
 
-These tasks use the current peptide pharmacology and mouse outcome data.
-
-- `candidate_prioritization`: rank peptides for advancement from a mixed packet
-  of potency, efficacy, selectivity, stability, formulation, and in vivo context.
+- `candidate_prioritization`: rank peptides for advancement from a packet of
+  potency, efficacy, selectivity, stability, formulation, and in vivo context.
+  Graded by precision@k, top-1 exact, and nDCG@k against the held-out outcome
+  ranking.
 - `hit_prediction`: predict whether a candidate produces the target in vivo
-  effect under a specified dose, route, time window, and endpoint.
-- `failure_diagnosis`: explain the most likely reason a candidate failed to
-  translate despite promising upstream data.
-- `rescue_strategy`: propose a formulation, dosing, analog design, or assay
-  follow-up that would rescue or falsify a candidate.
-
-Primary labels should come from held-out mouse studies when available. Expert
-rubrics should be used for failure and rescue tasks where there is no single
-scalar truth.
-
-### Track B: Mechanism And Biochemistry
-
-These tasks isolate causal reasoning rather than ranking.
-
-- `mechanistic_hypothesis`: infer a plausible mechanism from discordant assay
-  panels, receptor-family context, sequence motifs, and phenotype data.
-- `structure_activity_reasoning`: identify which sequence or chemical changes
-  likely drove potency, efficacy, selectivity, stability, or exposure shifts.
-- `counterfactual_biology`: predict how a pathway perturbation, receptor
-  subtype change, species difference, or assay condition would alter the result.
-- `artifact_detection`: distinguish real biology from plate effects, batch
-  artifacts, assay interference, animal activity-window artifacts, or leakage.
-
-Good tasks should contain enough evidence for a domain expert to reason from
-first principles, but not enough for a lookup-style answer.
-
-### Track C: Experiment Planning
-
-These tasks test whether the agent can behave like a working scientist.
-
-- `next_experiment`: select one experiment from realistic options and justify
-  why it has the highest expected information value.
-- `experiment_plan`: design a small campaign with controls, endpoints, sample
-  size logic, decision gates, and failure contingencies.
-- `assay_triage`: decide which assays to trust, repeat, drop, or redesign.
-- `data_acquisition_plan`: specify which additional dataset would most improve
-  confidence in a target, molecule, or mechanism.
-
-Labels can be generated by expert utility rankings, counterfactual historical
-outcomes, or blinded review by medicinal chemistry, biology, and in vivo leads.
-
-### Track D: End-To-End Drug Discovery
-
-These are longer tasks that combine the above capabilities into a program-level
-decision.
-
-- `drug_discovery_program`: start from a disease or pathway brief, identify a
-  target or modality, nominate candidates, design experiments, define stage
-  gates, and produce a development recommendation.
-- `portfolio_tradeoff`: allocate limited experimental budget across competing
-  targets or candidates.
-- `lead_optimization_loop`: analyze one round of data and propose the next
-  design cycle with explicit hypotheses about which properties to improve.
-
-Program tasks should be scored by a mix of deterministic checks, hidden outcome
-labels, and expert review. They are the clearest way to demonstrate the utility
-of private longitudinal data because they require integration across assays,
-animal studies, annotations, and decision history.
-
-### Track E: Foundation-Model-Augmented Discovery
-
-This track anticipates the growing use of biology foundation models in drug
-design and functional prediction.
-
-- `foundation_model_triage`: given model-derived embeddings, variant-effect
-  predictions, structure-confidence summaries, perturbation signatures, or
-  generated candidates, decide which signals are actionable and which are likely
-  artifacts.
-- `model_disagreement_analysis`: reconcile contradictions between experimental
-  data and outputs from protein, molecule, expression, or perturbation models.
-- `generated_candidate_review`: critique de novo molecules, peptides, proteins,
-  or edits for novelty, developability, mechanism, safety, and testability.
-- `functional_prediction`: predict function or phenotype from sequence,
-  structure, expression, and perturbation context.
-
-Task files should store foundation-model outputs as ordinary data artifacts
-under each task directory, for example `embeddings.parquet`,
-`variant_effects.csv`, `structure_summary.json`, `perturbation_scores.csv`, or
-`generated_candidates.sdf`. The benchmark should score the agent on scientific
-use of these signals, not on whether the agent can call a particular model API.
+  effect under a specified dose, route, time window, and endpoint. Graded by
+  exact label match against accepted outcome labels.
+- `next_experiment`: select one experiment from realistic options. Graded by
+  mean reciprocal rank against an expert-utility-ranked option set.
+- `multitarget_activity`: predict per-receptor activity outcomes for a peptide
+  against multiple targets. Graded by multi-field exact match.
+- `program_lead_selection`: pick the lead candidate or variant that best meets
+  the program's stated selectivity or polypharmacology objective. Graded by
+  multi-field exact match.
 
 ## Dataset Expansion Contract
 
@@ -131,7 +57,6 @@ benchmark format.
 | `in_vivo` | dose, route, exposure, endpoint windows, behavior, efficacy | supports outcome-labeled decisions |
 | `omics` | expression, perturb-seq, bulk or single-cell response | supports target and pathway reasoning |
 | `structure` | predicted structures, docking, binding-site annotations | supports mechanism and design critique |
-| `model_outputs` | embeddings, variant effects, generated candidates | supports foundation-model tasks |
 | `decision_history` | stage gates, selected candidates, failed hypotheses | supports historical counterfactual grading |
 
 Task curation should record which layers are visible to the agent and which are
@@ -152,55 +77,15 @@ Hidden labels live in `data/answers/<task_id>.yaml`.
 
 ## Scoring Strategy
 
-Use three scoring modes.
-
-1. Outcome scoring: deterministic metrics against held-out experimental labels,
-   such as precision@k, NDCG, exact label match, or reciprocal rank.
-2. Rubric scoring: deterministic concept coverage for smoke testing plus expert
-   review for final benchmark reporting.
-3. Process artifacts: optional review of code, plots, notebooks, and experiment
-   plans for scientific rigor, reproducibility, and appropriate uncertainty.
-
-Rubric scoring should reward:
-
-- correct mechanism and biochemical constraints,
-- explicit uncertainty and alternative hypotheses,
-- testable predictions,
-- controls and decision gates,
-- recognition of assay artifacts and translational limitations,
-- useful integration of foundation-model outputs.
-
-Rubric scoring should penalize:
-
-- ungrounded claims not supported by task data,
-- treating model predictions as ground truth,
-- missing obvious safety, selectivity, exposure, or assay-validity risks,
-- experiments that cannot falsify the hypothesis,
-- leakage from hidden labels or external private data.
-
-## Pilot Suite Shape
-
-A useful first public or internal pilot should contain 30 to 50 tasks:
-
-- 10 candidate prioritization tasks,
-- 5 hit prediction tasks,
-- 5 failure diagnosis tasks,
-- 5 next experiment tasks,
-- 5 mechanistic hypothesis tasks,
-- 3 to 5 foundation-model triage tasks,
-- 2 to 5 end-to-end drug discovery program tasks.
-
-The pilot should be balanced across easy, medium, and hard cases. Hard cases
-should include noisy or conflicting evidence where a strong answer must identify
-the uncertainty instead of overfitting one assay.
+All grading is deterministic and outcome-based: precision@k, NDCG, exact label
+match, multi-field exact match, or reciprocal rank against measured
+experimental data.
 
 ## Benchmark Release Checklist
 
 - Private source data remain outside the repository.
 - Task packets contain only reviewed, anonymized, and releasable data.
-- Each task has a hidden answer file or explicit expert-review rubric.
+- Each task has a hidden answer file with objective ground truth.
 - The visible data do not contain held-out outcome labels by accident.
 - Expert spot checks confirm that strong answers require biological reasoning,
   not only CSV sorting.
-- Foundation-model output files include provenance, model/version metadata, and
-  a warning that predictions are evidence rather than truth.

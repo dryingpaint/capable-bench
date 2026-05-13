@@ -1,8 +1,8 @@
 'use client';
 
-import { TaskMetadata, DashboardData } from '@/types/performance';
+import { TaskMetadata, DashboardData, RunDetails } from '@/types/performance';
 import { X, Tag } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface TaskDetailModalProps {
   task: TaskMetadata;
@@ -13,7 +13,7 @@ interface TaskDetailModalProps {
 export default function TaskDetailModal({ task, data, onClose }: TaskDetailModalProps) {
   const [activeTab, setActiveTab] = useState<'prompt' | 'metadata' | 'gold' | 'runs'>('prompt');
 
-  const latestRuns = (data as any).latest_runs?.[task.id] || {};
+  const latestRuns = data.latest_runs?.[task.id] || {};
 
   function getScoreClass(score: number | null | undefined): string {
     if (score === null || score === undefined) return 'text-stone-400';
@@ -28,8 +28,8 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
   }
 
   function getRunTags(model: string): string[] {
-    const runs = (data as any).runs || [];
-    const run = runs.find((r: any) => r.task_id === task.id && r.model === model);
+    const runs = data.runs || [];
+    const run = runs.find((item) => item.task_id === task.id && item.model === model);
     return run?.tags || [];
   }
 
@@ -37,6 +37,13 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
     if (!task.gold_answer || Object.keys(task.gold_answer).length === 0) {
       return <div className="text-stone-500">No gold answer available.</div>;
     }
+    const goldAnswer = task.gold_answer;
+    const labelStatus = typeof goldAnswer.label_status === 'string' ? goldAnswer.label_status : null;
+    const goldLabel = printableValue(goldAnswer.gold_label);
+    const acceptedLabels = Array.isArray(goldAnswer.accepted_labels)
+      ? goldAnswer.accepted_labels
+      : null;
+    const rubric = goldAnswer.rubric;
 
     return (
       <div className="bg-green-50 border border-green-200 rounded-lg p-4">
@@ -45,39 +52,39 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
         </h4>
 
         <div className="space-y-3 text-sm">
-          {task.gold_answer.label_status && (
+          {labelStatus && (
             <div className="text-stone-600">
-              <strong>Label status:</strong> {task.gold_answer.label_status}
+              <strong>Label status:</strong> {labelStatus}
             </div>
           )}
 
-          {task.gold_answer.gold_label !== undefined && (
+          {goldLabel !== null && (
             <div>
               <strong className="text-stone-700">Gold label:</strong>{' '}
               <span className="bg-green-200 text-green-800 px-2 py-1 rounded font-medium">
-                {task.gold_answer.gold_label}
+                {goldLabel}
               </span>
             </div>
           )}
 
-          {task.gold_answer.accepted_labels && Array.isArray(task.gold_answer.accepted_labels) && (
+          {acceptedLabels && (
             <div>
               <strong className="text-stone-700">Accepted labels:</strong>
               <div className="flex flex-wrap gap-1 mt-1">
-                {task.gold_answer.accepted_labels.map((label: any, index: number) => (
+                {acceptedLabels.map((label: unknown, index: number) => (
                   <span key={index} className="bg-stone-200 text-stone-700 px-2 py-1 rounded text-xs">
-                    {label}
+                    {printableValue(label)}
                   </span>
                 ))}
               </div>
             </div>
           )}
 
-          {task.gold_answer.rubric && (
+          {rubric !== undefined && rubric !== null && (
             <div>
               <strong className="text-stone-700">Rubric:</strong>
               <pre className="bg-white border rounded p-2 mt-1 text-xs overflow-auto">
-                {JSON.stringify(task.gold_answer.rubric, null, 2)}
+                {JSON.stringify(rubric, null, 2)}
               </pre>
             </div>
           )}
@@ -124,7 +131,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
           ].map(tab => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'prompt' | 'metadata' | 'gold' | 'runs')}
               className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                 activeTab === tab.id
                   ? 'border-stone-900 text-stone-900'
@@ -187,7 +194,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Agent Traces & Artifacts</h3>
               <p className="text-sm text-stone-600">
-                Captured command, answer artifact, combined agent trace, stdout, stderr, and grade for the latest run per model.
+                Latest run metadata loads with the dashboard. Large answer, trace, stdout, and stderr artifacts load when this panel opens.
               </p>
 
               {data.models.map(model => {
@@ -245,54 +252,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
                         </div>
                       </div>
 
-                      <div className="space-y-4">
-                        <div>
-                          <h5 className="text-xs uppercase tracking-wider font-semibold text-stone-600 mb-2">
-                            Command
-                          </h5>
-                          <pre className="bg-stone-50 border rounded p-2 text-xs overflow-auto">
-                            {run.command}
-                          </pre>
-                        </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                          <div>
-                            <h5 className="text-xs uppercase tracking-wider font-semibold text-stone-600 mb-2">
-                              Grade
-                            </h5>
-                            <pre className="bg-stone-50 border rounded p-2 text-xs overflow-auto max-h-60">
-                              {JSON.stringify(run.grade, null, 2)}
-                            </pre>
-                          </div>
-
-                          <div>
-                            <h5 className="text-xs uppercase tracking-wider font-semibold text-stone-600 mb-2">
-                              Answer Artifact
-                            </h5>
-                            <pre className="bg-stone-50 border rounded p-2 text-xs overflow-auto max-h-60">
-                              {run.answer_text || 'No answer text'}
-                            </pre>
-                          </div>
-
-                          <div>
-                            <h5 className="text-xs uppercase tracking-wider font-semibold text-stone-600 mb-2">
-                              Agent Trace
-                            </h5>
-                            <pre className="bg-stone-50 border rounded p-2 text-xs overflow-auto max-h-60">
-                              {run.trace_text || 'No trace'}
-                            </pre>
-                          </div>
-
-                          <div>
-                            <h5 className="text-xs uppercase tracking-wider font-semibold text-stone-600 mb-2">
-                              Stdout
-                            </h5>
-                            <pre className="bg-stone-50 border rounded p-2 text-xs overflow-auto max-h-60">
-                              {run.stdout_text || 'No stdout'}
-                            </pre>
-                          </div>
-                        </div>
-                      </div>
+                      <RunArtifactDetails taskId={task.id} run={run} />
                     </div>
                   </details>
                 );
@@ -303,4 +263,143 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
       </div>
     </div>
   );
+}
+
+interface RunArtifactDetailsProps {
+  taskId: string;
+  run: RunDetails;
+}
+
+interface RunArtifacts {
+  answer_text: string;
+  stdout_text: string;
+  stderr_text: string;
+  trace_text: string;
+  truncated?: Record<string, boolean>;
+}
+
+function RunArtifactDetails({ taskId, run }: RunArtifactDetailsProps) {
+  const [artifacts, setArtifacts] = useState<RunArtifacts | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadArtifacts() {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams({ taskId, runId: run.run_id });
+        const response = await fetch(`/api/run-artifacts?${params.toString()}`);
+        if (!response.ok) {
+          throw new Error('Failed to load run artifacts');
+        }
+        const data = await response.json();
+        if (!cancelled) {
+          setArtifacts(data);
+          setError(null);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'Unknown error');
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadArtifacts();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [taskId, run.run_id]);
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <h5 className="text-xs uppercase tracking-wider font-semibold text-stone-600 mb-2">
+          Command
+        </h5>
+        <pre className="bg-stone-50 border rounded p-2 text-xs overflow-auto">
+          {run.command}
+        </pre>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <ArtifactBlock title="Grade" text={JSON.stringify(run.grade, null, 2)} />
+
+        {loading && (
+          <div className="lg:col-span-2 text-sm text-stone-500 border border-stone-200 rounded p-4">
+            Loading artifacts...
+          </div>
+        )}
+
+        {error && (
+          <div className="lg:col-span-2 text-sm text-red-600 border border-red-200 bg-red-50 rounded p-4">
+            {error}
+          </div>
+        )}
+
+        {artifacts && (
+          <>
+            <ArtifactBlock
+              title="Answer Artifact"
+              text={artifacts.answer_text || 'No answer text'}
+              truncated={artifacts.truncated?.answer_text}
+            />
+            <ArtifactBlock
+              title="Agent Trace"
+              text={artifacts.trace_text || 'No trace'}
+              truncated={artifacts.truncated?.trace_text}
+            />
+            <ArtifactBlock
+              title="Stdout"
+              text={artifacts.stdout_text || 'No stdout'}
+              truncated={artifacts.truncated?.stdout_text}
+            />
+            <ArtifactBlock
+              title="Stderr"
+              text={artifacts.stderr_text || 'No stderr'}
+              truncated={artifacts.truncated?.stderr_text}
+            />
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ArtifactBlock({
+  title,
+  text,
+  truncated,
+}: {
+  title: string;
+  text: string;
+  truncated?: boolean;
+}) {
+  return (
+    <div>
+      <h5 className="text-xs uppercase tracking-wider font-semibold text-stone-600 mb-2">
+        {title}
+        {truncated && <span className="normal-case tracking-normal text-stone-400"> · truncated</span>}
+      </h5>
+      <pre className="bg-stone-50 border rounded p-2 text-xs overflow-auto max-h-60">
+        {text}
+      </pre>
+    </div>
+  );
+}
+
+function printableValue(value: unknown): string | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+    return String(value);
+  }
+  return JSON.stringify(value);
 }

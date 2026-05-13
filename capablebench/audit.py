@@ -13,23 +13,18 @@ REQUIRED_TASK_TYPES = {
     "candidate_prioritization",
     "hit_prediction",
     "next_experiment",
-    "failure_diagnosis",
-    "mechanistic_hypothesis",
-    "structure_activity_reasoning",
-    "foundation_model_triage",
-    "model_disagreement_analysis",
-    "drug_discovery_program",
+    "multitarget_activity",
+    "program_lead_selection",
 }
 
 REQUIRED_CAPABILITIES = {
     "mechanistic_reasoning",
-    "hypothesis_generation",
     "experiment_planning",
     "translational_decision_making",
-    "model_augmented_discovery",
+    "sequence_to_function_prediction",
 }
 
-REQUIRED_EVIDENCE_LAYERS = {"identity", "in_vitro", "in_vivo", "model_outputs"}
+REQUIRED_EVIDENCE_LAYERS = {"identity", "in_vitro", "in_vivo"}
 
 
 def audit_benchmark_quality(

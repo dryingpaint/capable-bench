@@ -6,13 +6,13 @@ export interface TaskMetadata {
   evidence_layers: string;
   question?: string;
   prompt?: string;
-  task_yaml: Record<string, any>;
+  task_yaml: Record<string, unknown>;
   data_files: Array<{
     name: string;
     size_bytes: number;
     preview: string[];
   }>;
-  gold_answer?: Record<string, any>;
+  gold_answer?: Record<string, unknown>;
 }
 
 export interface RunDetails {
@@ -24,13 +24,14 @@ export interface RunDetails {
   returncode?: number;
   duration_seconds?: number;
   answer_source: string;
-  answer_text: string;
-  stdout_text: string;
-  stderr_text: string;
-  trace_text: string;
-  grade?: Record<string, any>;
+  answer_text?: string;
+  stdout_text?: string;
+  stderr_text?: string;
+  trace_text?: string;
+  grade?: Record<string, unknown>;
   score?: number;
   timestamp: string;
+  tags?: string[];
 }
 
 export interface PerformanceRun {
@@ -74,6 +75,7 @@ export interface DashboardData {
   models: string[];
   model_summary: Record<string, ModelSummary>;
   latest_runs: Record<string, Record<string, RunDetails>>;
+  runs?: RunDetails[];
   calibration?: {
     quality_gate_passed?: boolean;
     hard_fraction?: number;
