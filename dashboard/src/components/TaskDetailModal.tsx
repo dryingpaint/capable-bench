@@ -44,7 +44,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
     const rubric = goldAnswer.rubric;
 
     return (
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+      <div className="bg-green-50 border border-green-200 p-4">
         <h4 className="text-green-800 font-bold text-sm mb-3 uppercase tracking-wide">
           Right Answer
         </h4>
@@ -59,7 +59,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
           {goldLabel !== null && (
             <div>
               <strong className="text-stone-700">Gold label:</strong>{' '}
-              <span className="bg-green-200 text-green-800 px-2 py-1 rounded font-medium">
+              <span className="bg-green-200 text-green-800 px-2 py-1 font-medium">
                 {goldLabel}
               </span>
             </div>
@@ -70,7 +70,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
               <strong className="text-stone-700">Accepted labels:</strong>
               <div className="flex flex-wrap gap-1 mt-1">
                 {acceptedLabels.map((label: unknown, index: number) => (
-                  <span key={index} className="bg-stone-200 text-stone-700 px-2 py-1 rounded text-xs">
+                  <span key={index} className="bg-stone-200 text-stone-700 px-2 py-1 text-xs">
                     {printableValue(label)}
                   </span>
                 ))}
@@ -81,7 +81,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
           {rubric !== undefined && rubric !== null && (
             <div>
               <strong className="text-stone-700">Rubric:</strong>
-              <pre className="bg-white border rounded p-2 mt-1 text-xs overflow-auto">
+              <pre className="bg-white border p-2 mt-1 text-xs overflow-auto">
                 {JSON.stringify(rubric, null, 2)}
               </pre>
             </div>
@@ -91,7 +91,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
             <summary className="cursor-pointer text-stone-600 text-xs font-medium">
               Raw gold YAML
             </summary>
-            <pre className="bg-white border rounded p-2 mt-2 text-xs overflow-auto">
+            <pre className="bg-white border p-2 mt-2 text-xs overflow-auto">
               {JSON.stringify(task.gold_answer, null, 2)}
             </pre>
           </details>
@@ -102,7 +102,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl max-w-6xl w-full max-h-[90vh] flex flex-col">
+      <div className="bg-white max-w-6xl w-full max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex justify-between items-start p-6 border-b border-stone-200">
           <div>
@@ -113,7 +113,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-stone-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-stone-100 transition-colors"
           >
             <X className="h-5 w-5 text-stone-600" />
           </button>
@@ -147,7 +147,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-semibold mb-3">Prompt</h3>
-                <pre className="bg-stone-50 border border-stone-200 rounded-lg p-4 text-sm whitespace-pre-wrap overflow-auto">
+                <pre className="bg-stone-50 border border-stone-200 p-4 text-sm whitespace-pre-wrap overflow-auto">
                   {task.prompt || 'No prompt available.'}
                 </pre>
               </div>
@@ -157,11 +157,11 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
                   <h3 className="text-lg font-semibold mb-3">Data Files</h3>
                   <div className="space-y-4">
                     {task.data_files.map((file, index) => (
-                      <div key={index} className="border border-stone-200 rounded-lg p-4">
+                      <div key={index} className="border border-stone-200 p-4">
                         <h4 className="font-medium text-stone-900 mb-2">
                           {file.name} · {file.size_bytes} bytes
                         </h4>
-                        <pre className="bg-stone-50 border rounded p-2 text-xs overflow-auto max-h-32">
+                        <pre className="bg-stone-50 border p-2 text-xs overflow-auto max-h-32">
                           {file.preview.join('\n')}
                         </pre>
                       </div>
@@ -175,7 +175,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
           {activeTab === 'metadata' && (
             <div>
               <h3 className="text-lg font-semibold mb-3">Task Metadata</h3>
-              <pre className="bg-stone-50 border border-stone-200 rounded-lg p-4 text-sm overflow-auto">
+              <pre className="bg-stone-50 border border-stone-200 p-4 text-sm overflow-auto">
                 {JSON.stringify(task.task_yaml, null, 2)}
               </pre>
             </div>
@@ -201,7 +201,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
 
                 if (!run) {
                   return (
-                    <div key={model} className="border border-stone-200 rounded-lg p-4">
+                    <div key={model} className="border border-stone-200 p-4">
                       <h4 className="font-semibold text-stone-900 mb-2">
                         {model} · no run found
                       </h4>
@@ -210,7 +210,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
                 }
 
                 return (
-                  <details key={model} className="border border-stone-200 rounded-lg" open>
+                  <details key={model} className="border border-stone-200" open>
                     <summary className="p-4 cursor-pointer font-semibold text-stone-900 flex items-center gap-3">
                       <span>{model}</span>
                       <span className={`font-bold ${getScoreClass(run.score)}`}>
@@ -221,7 +221,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
                           {tags.map(tag => (
                             <span
                               key={tag}
-                              className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded bg-blue-100 text-blue-700"
+                              className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-blue-100 text-blue-700"
                             >
                               <Tag className="h-3 w-3" />
                               {tag}
@@ -287,8 +287,8 @@ function RunArtifactDetails({ taskId, run }: RunArtifactDetailsProps) {
     async function loadArtifacts() {
       try {
         setLoading(true);
-        const params = new URLSearchParams({ taskId, runId: run.run_id });
-        const response = await fetch(`/api/run-artifacts?${params.toString()}`);
+        const url = `/run-artifacts/${encodeURIComponent(taskId)}/${encodeURIComponent(run.run_id)}.json`;
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error('Failed to load run artifacts');
         }
@@ -321,7 +321,7 @@ function RunArtifactDetails({ taskId, run }: RunArtifactDetailsProps) {
         <h5 className="text-xs uppercase tracking-wider font-semibold text-stone-600 mb-2">
           Command
         </h5>
-        <pre className="bg-stone-50 border rounded p-2 text-xs overflow-auto">
+        <pre className="bg-stone-50 border p-2 text-xs overflow-auto">
           {run.command}
         </pre>
       </div>
@@ -330,13 +330,13 @@ function RunArtifactDetails({ taskId, run }: RunArtifactDetailsProps) {
         <ArtifactBlock title="Grade" text={JSON.stringify(run.grade, null, 2)} />
 
         {loading && (
-          <div className="lg:col-span-2 text-sm text-stone-500 border border-stone-200 rounded p-4">
+          <div className="lg:col-span-2 text-sm text-stone-500 border border-stone-200 p-4">
             Loading artifacts...
           </div>
         )}
 
         {error && (
-          <div className="lg:col-span-2 text-sm text-red-600 border border-red-200 bg-red-50 rounded p-4">
+          <div className="lg:col-span-2 text-sm text-red-600 border border-red-200 bg-red-50 p-4">
             {error}
           </div>
         )}
@@ -385,7 +385,7 @@ function ArtifactBlock({
         {title}
         {truncated && <span className="normal-case tracking-normal text-stone-400"> · truncated</span>}
       </h5>
-      <pre className="bg-stone-50 border rounded p-2 text-xs overflow-auto max-h-60">
+      <pre className="bg-stone-50 border p-2 text-xs overflow-auto max-h-60">
         {text}
       </pre>
     </div>

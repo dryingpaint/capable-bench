@@ -7,22 +7,17 @@ import TaskDetailModal from './TaskDetailModal';
 
 interface TasksTableProps {
   data: DashboardData;
+  typeFilter: string;
+  setTypeFilter: (value: string) => void;
 }
 
-export default function TasksTable({ data }: TasksTableProps) {
+export default function TasksTable({ data, typeFilter, setTypeFilter }: TasksTableProps) {
   const [search, setSearch] = useState('');
-  const [typeFilter, setTypeFilter] = useState('');
-  const [difficultyFilter, setDifficultyFilter] = useState('');
   const [modelFilter, setModelFilter] = useState('');
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
   const taskTypes = useMemo(() =>
     [...new Set(data.tasks.map(t => t.task_type))].sort(),
-    [data.tasks]
-  );
-
-  const difficulties = useMemo(() =>
-    [...new Set(data.tasks.map(t => t.difficulty).filter(Boolean))].sort(),
     [data.tasks]
   );
 
@@ -32,9 +27,6 @@ export default function TasksTable({ data }: TasksTableProps) {
     return data.tasks.filter(task => {
       // Type filter
       if (typeFilter && task.task_type !== typeFilter) return false;
-
-      // Difficulty filter
-      if (difficultyFilter && task.difficulty !== difficultyFilter) return false;
 
       // Search filter
       if (search) {
@@ -52,7 +44,7 @@ export default function TasksTable({ data }: TasksTableProps) {
 
       return true;
     });
-  }, [data.tasks, search, typeFilter, difficultyFilter]);
+  }, [data.tasks, search, typeFilter]);
 
   function formatScore(score: number | null | undefined): string {
     if (score === null || score === undefined) return '—';
@@ -69,7 +61,7 @@ export default function TasksTable({ data }: TasksTableProps) {
   function renderPills(value: string | undefined): React.ReactNode {
     if (!value) return null;
     return value.split(';').map(item => item.trim()).filter(Boolean).map((item, index) => (
-      <span key={index} className="inline-block px-2 py-1 text-xs rounded-md bg-stone-100 text-stone-700 mr-1 mb-1">
+      <span key={index} className="inline-block px-2 py-1 text-xs bg-stone-100 text-stone-700 mr-1 mb-1">
         {item}
       </span>
     ));
@@ -80,21 +72,18 @@ export default function TasksTable({ data }: TasksTableProps) {
   }
 
   function getTaskTags(task: TaskMetadata): string[] {
-    return data.task_tags?.[task.id] || [task.task_type, task.difficulty].filter((tag): tag is string => Boolean(tag));
+    return data.task_tags?.[task.id] || [task.task_type].filter(Boolean);
   }
 
-  function getTagColor(tag: string): string {
-    if (tag === 'easy') return 'bg-green-100 text-green-800';
-    if (tag === 'medium') return 'bg-amber-100 text-amber-800';
-    if (tag === 'hard') return 'bg-red-100 text-red-800';
-    return 'bg-blue-100 text-blue-800'; // Default for task types
+  function getTagColor(_tag: string): string {
+    return 'bg-stone-100 text-stone-700';
   }
 
   const selectedTask = selectedTaskId ? data.tasks.find(t => t.id === selectedTaskId) : null;
 
   return (
     <>
-      <div className="bg-white border border-stone-200 rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-white border border-stone-200 overflow-hidden">
         <div className="p-6 border-b border-stone-200 bg-stone-50">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold text-stone-900">Tasks</h3>
@@ -104,7 +93,7 @@ export default function TasksTable({ data }: TasksTableProps) {
           </div>
 
           {/* Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-stone-400" />
               <input
@@ -112,14 +101,14 @@ export default function TasksTable({ data }: TasksTableProps) {
                 placeholder="Search tasks, questions, capabilities..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-stone-300 focus:outline-none focus:ring-1 focus:ring-stone-500 focus:border-transparent"
               />
             </div>
 
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-500"
+              className="px-4 py-2 border border-stone-300 focus:outline-none focus:ring-1 focus:ring-stone-500"
             >
               <option value="">All types</option>
               {taskTypes.map(type => (
@@ -128,20 +117,9 @@ export default function TasksTable({ data }: TasksTableProps) {
             </select>
 
             <select
-              value={difficultyFilter}
-              onChange={(e) => setDifficultyFilter(e.target.value)}
-              className="px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-500"
-            >
-              <option value="">All difficulties</option>
-              {difficulties.map(diff => (
-                <option key={diff} value={diff}>{diff}</option>
-              ))}
-            </select>
-
-            <select
               value={modelFilter}
               onChange={(e) => setModelFilter(e.target.value)}
-              className="px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-500"
+              className="px-4 py-2 border border-stone-300 focus:outline-none focus:ring-1 focus:ring-stone-500"
             >
               <option value="">All model columns</option>
               {data.models.map(model => (
@@ -204,7 +182,7 @@ export default function TasksTable({ data }: TasksTableProps) {
                           {taskTags.map(tag => (
                             <span
                               key={tag}
-                              className={`inline-block px-2 py-1 text-xs rounded-md font-medium ${getTagColor(tag)}`}
+                              className={`inline-block px-2 py-1 text-xs font-medium ${getTagColor(tag)}`}
                             >
                               {tag}
                             </span>
@@ -241,9 +219,9 @@ export default function TasksTable({ data }: TasksTableProps) {
                               {formatScore(run.score)}
                             </div>
                             {run.score !== null && run.score !== undefined && (
-                              <div className="w-16 h-1 bg-stone-200 rounded-full mt-1 overflow-hidden">
+                              <div className="w-16 h-1 bg-stone-200 mt-1 overflow-hidden">
                                 <div
-                                  className="h-full bg-stone-600 rounded-full"
+                                  className="h-full bg-stone-600"
                                   style={{ width: `${Math.max(2, Math.min(100, run.score * 100))}%` }}
                                 />
                               </div>
@@ -258,7 +236,7 @@ export default function TasksTable({ data }: TasksTableProps) {
                                 {tags.map(tag => (
                                   <span
                                     key={tag}
-                                    className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs rounded bg-blue-100 text-blue-700"
+                                    className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700"
                                   >
                                     <Tag className="h-2.5 w-2.5" />
                                     {tag}

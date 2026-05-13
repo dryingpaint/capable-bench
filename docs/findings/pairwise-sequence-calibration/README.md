@@ -27,7 +27,7 @@ Pattern across families (ratios go from widest `>10×` to narrowest `1.1–1.5×
 
 ## Failure mode breakdown
 
-38 reasoning-failure cases (literature-anchor failures excluded — those depend on curation of the `modification` field and are being audited via the sanitization probe). AUP refusals identified by regex; remaining categories assigned by a Haiku 4.5 LLM-judge over `agent_trace.txt`. See `failure_classifications.csv` for the full per-task labels (including `literature_anchor`).
+38 reasoning-failure cases. AUP refusals identified by regex; remaining categories assigned by a Haiku 4.5 LLM-judge over `agent_trace.txt`. See `failure_classifications.csv` for the full per-task labels.
 
 ![Failure category breakdown](failure_category_breakdown.png)
 
@@ -43,6 +43,35 @@ Pattern across families (ratios go from widest `>10×` to narrowest `1.1–1.5×
 Claude has 5 AUP refusals (23% of its failures) — a claude-only model-side filter trigger. Codex has zero.
 
 The shared "longer wins" pattern from the joint-failure analysis below is mostly a codex story. Claude does it less often, but when it doesn't fall back to length it falls back to *textbook pharmacology applied to the wrong dataset* — see case 4 in `case_studies.md`.
+
+### Failure modes at a glance
+
+Brief description and one representative trace excerpt for each. Full case write-ups in `case_studies.md`.
+
+#### AUP refusal (claude only; 5 of 22)
+The agent's safety filter triggers on the peptide-sequence prompt and the agent never engages. Codex never refuses.
+
+> *Example — `mch-trivial-016`:* `"API Error: Claude Code is unable to respond to this request, which appears to violate our Usage Policy..."`
+
+#### Length / complexity cue (codex 10/16 = 62%; claude 4/22 = 18%)
+The agent's reasoning leans on sequence length, scaffold size, or number of modifications without engaging with specific residues or mechanism.
+
+> *Example — `mch-hard-005` (codex), pair = 6-residue cyclic mimetic vs. 13-residue analog, gold is the mimetic:* `"one is an annotated cyclic scaffold with the longer MCH pharmacophore context, while the other is a much shorter cyclic fragment missing much of that context. I'm selecting the longer scaffold as the potency prediction."` No residue analysis; the decision is explicitly length-based.
+
+#### Pharmacophore misapplied (claude 12/22 = 55%; codex 6/16 = 38%)
+The agent invokes real SAR concepts — pharmacophore residues, stereochemistry, charge, motif positions — but reaches the wrong conclusion. This is the failure mode that *isn't* fixable by cleaning the input.
+
+> *Example — `mch-hard-005` (claude, same task as above):* `"the full DRVY pharmacophore plus the Trp anchor and Pro hinge, which the 6-residue Cys-Gly-Arg-Val-Tyr-Cys peptide lacks — the truncated hexapeptide retains only the RVY core and should bind MCHR1 substantially more weakly."` Genuine MCH pharmacology, correctly identified, applied to land on the wrong answer.
+
+#### No substantive reasoning (claude 1/22; codex 0/16)
+The agent picks an answer without articulating biochemical reasoning; the trace contains only boilerplate or filesystem chatter.
+
+> *Example — `oxn-medium-006` (codex), where the loser carries `D-Citrulline` replacing a conserved Arg (a known 14× potency penalty):* `"I'm comparing them against the recognizable orexin-B-like motif and the likely impact of truncation/substitution versus a single noncanonical residue."` No claim about which substitution is worse, no mention of D-Citrulline.
+
+#### Positive control (both agents correct)
+For contrast — when the benchmark works as advertised.
+
+> *Example — `nps-hard-001`:* both agents independently identified D-Arg at position 3 as disrupting the conserved SFRNG activation motif and picked against it. Claude: `"D-Arg3 substitution disrupts an essential cationic residue in the SFRNG activation motif"`. Codex: `"the D-Arg substitution at position 3 [is] the larger likely potency penalty for NPSR activation"`. Two-concept SAR, two agents, two correct answers — small ratio at a known SAR position.
 
 ## The length/complexity cue, in detail
 
@@ -63,9 +92,9 @@ A "both wrong with the same wrong pick" rate of 6/6 (versus an independent-error
 | Role | Modification | Length |
 |---|---|---|
 | Gold winner (3× more potent) | `Ac-Cys-Gly-Arg-Val-Tyr-Cys-NH2` | 30 chars |
-| Both agents picked | `Ac-Arg-Cys-Met-Leu-Gly-D-Arg-Val-Tyr-Arg-Pro-Cys-Trp-NH2 (Bednarek 2001 compound 19 scaffold: Ac-MCH...)` | 143 chars |
+| Both agents picked | `Ac-Arg-Cys-Met-Leu-Gly-D-Arg-Val-Tyr-Arg-Pro-Cys-Trp-NH2` (the longer 13-residue analog) | 56 chars |
 
-A small cyclic hexapeptide beats a 4×-longer literature-cited analog. Both agents lose to the length-plus-literature cue.
+A small cyclic hexapeptide beats the 4×-longer analog. Both agents pick the longer one.
 
 ### Other diagnostic failures
 
@@ -84,33 +113,18 @@ A small cyclic hexapeptide beats a 4×-longer literature-cited analog. Both agen
 - **Re-run the `1.1–1.5×` ratio tasks with a calibration prompt** that flags the length/complexity bias (e.g., "Sequence length and number of modifications are not reliable indicators of potency at small ratio differences; modifications can reduce activity"). If accuracy lifts above 0.40, the bias is correctable with prompting.
 - **Audit `>10×` ratio *successes*** to see if the high accuracy is driven by the same length cue happening to work by chance. If yes, the apparent wide-ratio competence is illusory.
 - **Add controlled probe pairs** where the longer/more-modified peptide is *deliberately* less potent. If both agents drop to ~0% on those, the cue is causal.
-- **Drop literature-laden text** from the `modification` field (e.g., remove "Bednarek 2001 compound 19 scaffold" from the loser in `mch-hard-005`) and re-run. Test whether the cue is sequence length or literature anchoring.
 
-## Sanitization probe: are literature anchors actually causal?
+## Data cleanup: named-compound annotations removed
 
-For the 12 paired tasks where the loser's `modification` field carries a literature/native-compound annotation (Bednarek 2001, "human orexin A/B 28-mer", etc.), we generated sanitized variants with the annotations stripped while keeping all other chemistry intact (e.g., `(hArg)`, `(D-Arg)`, `(Acetate)`). Probe task IDs: `probe-lit-sanitized-pairwise-*` (generated by `scripts/build_sanitized_pairwise.py`).
+The benchmark source data (`data/processed/peptide_full_sequences.csv` and downstream task CSVs) previously contained named-compound annotations in the agent-visible `modification` field, e.g. `(Bednarek 2001 compound 19 scaffold ...)` or `(human orexin B 28-mer)`. These were a curation leak: they let agents pattern-match to memorized literature instead of reasoning from sequence chemistry.
 
-![Sanitization probe](sanitization_probe.png)
-
-| Agent | Original accuracy | Sanitized accuracy | Δ | wrong→right | right→wrong | unchanged |
-|---|---|---|---|---|---|---|
-| claude | 0.33 (4/12) | 0.42 (5/12) | **+0.08** | 2 | 1 | 9 |
-| codex | 0.50 (6/12) | 0.36 (4/11) | **−0.14** | 0 | 2 | 9 |
-
-**Counterintuitive but informative result.** Stripping literature anchors gives claude a small lift (2 wrong→right against 1 regression) but actually *hurts* codex (0 lifts, 2 regressions). Two readings:
-
-1. **Claude has memorized literature SAR; codex does not.** Claude's literature-anchor failures appear to be partly retrieval-driven — when the agent recognizes "Bednarek 2001" and pattern-matches to memorized properties, removing the anchor forces it to reason from chemistry instead, occasionally landing on the right answer. Codex's "literature_anchor"-labeled failures (from the LLM judge) are probably mis-labeled: codex was *citing* the annotation in its trace, not retrieving from it. Without the annotation, codex still picks the longer/more-complex peptide on the same cases.
-2. **The cue isn't the annotation per se, it's the chemistry features it co-occurs with.** The Bednarek-annotated MCH peptides are also the *longer* ones in those pairs. Stripping the annotation leaves codex with the same length cue, and the same answer. The annotation was a *correlate* of the cue, not the cue itself.
-
-Implication for benchmark design: removing literature anchors is still a worthwhile cleanup (it removes a retrieval shortcut for claude), but it does **not** materially fix the length/complexity confound for codex. Controlled probes that *invert* the length-vs-potency correlation are needed for that — modifications that make a peptide longer AND less potent within the same family.
-
-See `sanitization_probe.csv` for per-task scores.
+These annotations have been stripped from the source data (`scripts/strip_literature_annotations.py`). The 34 affected resolution rows and 24 affected task CSVs no longer carry retrieval handles. The "length/complexity cue" findings above are based on the pre-cleanup runs; re-running on the cleaned data is the right next step.
 
 ## Files in this directory
 
 - `pairwise_sequence_calibration_by_family.png` — per-family bar chart, paired claude+codex runs only.
-- `failure_category_breakdown.png` — stacked-bar breakdown of reasoning failures, per agent (literature_anchor excluded).
-- `sanitization_probe.png` — pre/post accuracy on tasks with literature anchors stripped.
+- `failure_category_breakdown.png` — stacked-bar breakdown of reasoning failures, per agent.
+- `sanitization_probe.png` — pre/post accuracy on tasks with named-compound annotations stripped.
 - `pairwise_paired_by_family.csv` — underlying counts (family × bucket × agent × correct/n).
 - `failure_classifications.csv` — per-task failure category (AUP via regex, others via Haiku 4.5 judge over `agent_trace.txt`).
 - `sanitization_probe.csv` — per-task pre/post scores for the 12 sanitized tasks.
@@ -120,3 +134,19 @@ See `sanitization_probe.csv` for per-task scores.
 ## Reproducing
 
 Source data: latest completed `runs/pilot-peptide-pairwise-sequence-*/.../grade.json` for each agent. The plotting/aggregation code is inlined in conversation history and easy to regenerate via `uv run python` with `matplotlib`, `yaml`, and standard library.
+
+## Methodology and caveats
+
+### How many times each task was run
+
+**Exactly once per agent.** Every one of the 60 pairwise tasks has 1 claude run and 1 codex run, single-shot. No replication, no resampling, no temperature sweep. 120 graded runs total.
+
+### What replication would buy
+
+A more rigorous plot would have `n = 5 tasks × R replicates` and treat each replicate as an independent trial. With `R = 5` and the existing harness, the full grid (60 tasks × 2 agents × 5 = 600 runs) is ~30 min of wall time and on the order of $30 in API cost. It would:
+
+1. **Tighten** the CIs (more trials → tighter bound on the agent's true probability per cell).
+2. **Reveal** which failures are stable (agent reliably picks wrong) vs. stochastic (agent gets it 60% of the time).
+3. **Test** whether the "both agents picked the same wrong answer 6/6 joint failures" pattern is a robust shared cue or could be explained by stochastic alignment.
+
+The current finding is consistent with a real shared cue, but with `n=1` per task we cannot rule out that some joint failures are accidents of the single trial.

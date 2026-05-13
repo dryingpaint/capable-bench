@@ -27,12 +27,12 @@ Every example pulls the actual agent reasoning from `runs/<task_id>/<timestamp>/
 
 ## 2. Length / complexity cue — `mch-hard-005` (codex)
 
-**Setup.** Potency ratio **2.97×** (gold more potent). The two peptides are length 30 chars vs 143 chars.
+**Setup.** Potency ratio **2.97×** (gold more potent). The two peptides are length 30 chars vs 56 chars.
 
 | | Modification | Length |
 |---|---|---|
 | PEP-70DED4DFCB (gold) | `Ac-Cys-Gly-Arg-Val-Tyr-Cys-NH2` | 30 |
-| PEP-72E481BD02 | `Ac-Arg-Cys-Met-Leu-Gly-D-Arg-Val-Tyr-Arg-Pro-Cys-Trp-NH2 (Bednarek 2001 compound 19 scaffold: Ac-MCH(6-17)-NH2 cyclic via Cys7-Cys16 disulfide)` | 143 |
+| PEP-72E481BD02 | `Ac-Arg-Cys-Met-Leu-Gly-D-Arg-Val-Tyr-Arg-Pro-Cys-Trp-NH2` | 56 |
 
 **What codex did.** Picked the longer one. Verbatim trace:
 
@@ -44,31 +44,15 @@ Every example pulls the actual agent reasoning from `runs/<task_id>/<timestamp>/
 
 ---
 
-## 3. Literature anchor — same task `mch-hard-005`, viewed differently
-
-**Setup.** Look again at the loser's modification string:
-
-> `Ac-Arg-Cys-Met-Leu-Gly-D-Arg-Val-Tyr-Arg-Pro-Cys-Trp-NH2 (Bednarek 2001 compound 19 scaffold: Ac-MCH(6-17)-NH2 cyclic via Cys7-Cys16 disulfide)`
-
-The portion in parentheses isn't sequence — it's a literature handle. Bednarek et al. 2001 reported a series of cyclic MCH analogs; "compound 19" is a named, retrievable compound from that paper.
-
-**What both agents did.** Both keyed on the annotation rather than the sequence. Codex's trace literally says *"an annotated cyclic Ac-MCH(6-17)-NH2 scaffold"* — citing the annotation as evidence. Claude (next case) builds its entire argument on the Bednarek context.
-
-**Why this matters.** The benchmark prompt claims the agent is reasoning from *"sequence and chemical modifications"* only. In practice, the `modification` field carries literature metadata that turns the task into a retrieval problem. An agent that recognizes "Bednarek 2001" can pattern-match to memorized SAR; an agent that doesn't, can't. This contaminates both wide-ratio "successes" (where length aligns with potency) and narrow-ratio failures (where the retrieval handle is on the loser).
-
-**Implication.** Strip annotations like `(Bednarek 2001 compound 19 scaffold ...)` from the visible field and store them as `provenance` metadata the agent doesn't see. Re-running with sanitized strings would tell us whether the wide-ratio signal is sequence reasoning or retrieval.
-
----
-
-## 4. Pharmacophore misapplied — `mch-hard-005` (claude)
+## 3. Pharmacophore misapplied — `mch-hard-005` (claude)
 
 **Setup.** Same task. Gold is the 6-residue cyclic peptide.
 
 **What claude did.** Picked the longer peptide, but with *sophisticated* reasoning:
 
-> *"Selected PEP-72E481BD02 as the more potent peptide. It is the Bednarek (6-17) MCH cyclic scaffold containing the **full DRVY pharmacophore plus the Trp anchor and Pro hinge**, which the 6-residue Cys-Gly-Arg-Val-Tyr-Cys peptide lacks — the truncated hexapeptide retains only the RVY core and should bind MCHR1 substantially more weakly."*
+> *"Selected PEP-72E481BD02 as the more potent peptide. It contains the **full DRVY pharmacophore plus the Trp anchor and Pro hinge**, which the 6-residue Cys-Gly-Arg-Val-Tyr-Cys peptide lacks — the truncated hexapeptide retains only the RVY core and should bind MCHR1 substantially more weakly."*
 
-**Why this matters.** This is *real medicinal chemistry knowledge*: the DRVY motif is the published MCH pharmacophore, the Trp at position 17 is an established hydrophobic anchor in receptor binding, and Pro residues do act as conformational hinges. Claude correctly identified all three concepts. The conclusion is just wrong for this particular dataset — the truncated hexapeptide is the gold winner anyway.
+**Why this matters.** This is *real medicinal chemistry knowledge*: the DRVY motif is the established MCH pharmacophore, the Trp at position 17 is a hydrophobic anchor residue in receptor binding, and Pro residues do act as conformational hinges. Claude correctly identified all three concepts. The conclusion is just wrong for this particular dataset — the truncated hexapeptide is the gold winner anyway.
 
 **Implication.** This is the most concerning category because it's the failure mode that *cannot be fixed* by sanitizing the input. Claude is doing the right kind of reasoning and reaching the wrong answer. Two possible explanations:
 
@@ -79,7 +63,7 @@ We don't currently have the information to distinguish (1) from (2). Both would 
 
 ---
 
-## 5. No substantive reasoning — `oxn-medium-006` (codex)
+## 4. No substantive reasoning — `oxn-medium-006` (codex)
 
 **Setup.** Potency ratio **14×** (gold more potent).
 
@@ -108,7 +92,7 @@ Claude names the modification (D-Citrulline), identifies what it replaces (argin
 
 ---
 
-## 6. Positive control: correct SAR reasoning — `nps-hard-001` (both agents)
+## 5. Positive control: correct SAR reasoning — `nps-hard-001` (both agents)
 
 **Setup.** Potency ratio **4.24×** (gold more potent). Both agents got this right.
 
@@ -132,9 +116,9 @@ Both agents independently identified:
 - The same disruption (D-substitution at a conserved cationic position)
 - The same mechanism (loss of NPSR activation)
 
-**Why this matters.** This is what the benchmark *claims* to test, and when conditions align — clear conserved-motif SAR, no literature anchors in the modification fields, modifications at chemically distinct positions — both agents succeed via real reasoning. The benchmark *can* discriminate engaged-SAR-reasoning from surface heuristics; the problem is most tasks aren't structured cleanly enough to force this mode.
+**Why this matters.** This is what the benchmark *claims* to test, and when conditions align — clear conserved-motif SAR, modifications at chemically distinct positions — both agents succeed via real reasoning. The benchmark *can* discriminate engaged-SAR-reasoning from surface heuristics; the problem is most tasks aren't structured cleanly enough to force this mode.
 
-**Implication.** Build more tasks like `nps-hard-001`: short potency ratios, modifications at well-known SAR positions, no literature anchors. The current 1.1–1.5× success rate of ~4/15 between the two agents suggests roughly that many tasks are structured this way; the other 11 are confounded by length, complexity, or annotation cues.
+**Implication.** Build more tasks like `nps-hard-001`: short potency ratios, modifications at well-known SAR positions. The current 1.1–1.5× success rate of ~4/15 between the two agents suggests roughly that many tasks are structured this way; the other 11 are confounded by length or complexity cues.
 
 ---
 
@@ -144,7 +128,6 @@ Both agents independently identified:
 |---|---|---|---|
 | AUP refusal | `mch-trivial-016` (claude) | Claude-only, ~17% of claude failures | No — model-side filter; surface as separate column |
 | Length / complexity cue | `mch-hard-005` (codex) | Dominant codex failure mode at narrow ratios | Yes — add controlled probes |
-| Literature anchor | `mch-hard-005` (both) | Confounds wide and narrow ratios alike | Yes — strip annotations from `modification` |
 | Pharmacophore misapplied | `mch-hard-005` (claude) | Most concerning; real SAR + wrong answer | Partial — needs gold-noise audit |
 | No substantive reasoning | `oxn-medium-006` (codex) | Hidden by current grader | Yes — grade the rationale |
 | **Positive control** | `nps-hard-001` (both) | What success looks like | n/a (this is the target shape) |

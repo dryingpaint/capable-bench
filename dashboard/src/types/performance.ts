@@ -76,11 +76,6 @@ export interface DashboardData {
   latest_runs: Record<string, Record<string, RunDetails>>;
   task_tags?: Record<string, string[]>;
   runs?: RunDetails[];
-  calibration?: {
-    quality_gate_passed?: boolean;
-    hard_fraction?: number;
-    saturation_target?: string;
-  };
 }
 
 export interface TaggedRun extends PerformanceRun {

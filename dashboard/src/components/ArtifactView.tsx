@@ -3,13 +3,18 @@ import Markdown from '@/components/Markdown';
 
 interface ArtifactViewProps {
   artifact: Artifact;
+  findingId: string;
 }
 
-export default function ArtifactView({ artifact }: ArtifactViewProps) {
+export default function ArtifactView({ artifact, findingId }: ArtifactViewProps) {
+  if (artifact.kind === 'image') {
+    return <ImageView findingId={findingId} relativePath={artifact.relativePath} />;
+  }
+
   if (artifact.kind === 'markdown') {
     return (
       <div className="px-4 py-3 bg-white">
-        <Markdown>{artifact.content}</Markdown>
+        <Markdown findingId={findingId}>{artifact.content}</Markdown>
         {artifact.truncated && <TruncationNote />}
       </div>
     );
@@ -49,7 +54,7 @@ function CsvView({ text, truncated }: { text: string; truncated: boolean }) {
   const [header, ...body] = rows;
   return (
     <div className="px-4 py-3 bg-white">
-      <div className="overflow-x-auto max-h-[60vh] border border-stone-200 rounded">
+      <div className="overflow-x-auto max-h-[60vh] border border-stone-200">
         <table className="min-w-full text-xs">
           <thead className="bg-stone-100 sticky top-0">
             <tr>
@@ -90,9 +95,26 @@ function RawView({ text, truncated }: { text: string; truncated: boolean }) {
   );
 }
 
+function ImageView({ findingId, relativePath }: { findingId: string; relativePath: string }) {
+  const src = `/finding-files/${encodeURIComponent(findingId)}/${relativePath
+    .split('/')
+    .map(encodeURIComponent)
+    .join('/')}`;
+  return (
+    <div className="px-4 py-3 bg-white flex justify-center">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={relativePath}
+        className="max-w-full h-auto border border-stone-200"
+      />
+    </div>
+  );
+}
+
 function TruncationNote() {
   return (
-    <div className="mt-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 inline-block">
+    <div className="mt-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 px-2 py-1 inline-block">
       File truncated — preview only.
     </div>
   );

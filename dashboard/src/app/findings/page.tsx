@@ -2,10 +2,9 @@ import Link from 'next/link';
 import { ArrowLeft, Calendar, FileText, ChevronRight } from 'lucide-react';
 import { listFindings } from '@/lib/findings';
 
-export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Research Findings · Capable Bench',
+  title: 'Case studies and reports · Capable Bench',
 };
 
 export default async function FindingsPage() {
@@ -13,22 +12,18 @@ export default async function FindingsPage() {
 
   return (
     <div className="min-h-screen bg-stone-50">
-      <header className="bg-gradient-to-b from-stone-100 to-stone-50 border-b border-stone-200">
-        <div className="max-w-6xl mx-auto px-8 py-8">
+      <header className="border-b border-stone-200">
+        <div className="max-w-6xl mx-auto px-8 py-6">
           <Link
             href="/"
-            className="inline-flex items-center gap-1 text-sm text-stone-600 hover:text-stone-900 mb-4"
+            className="inline-flex items-center gap-1 text-sm text-stone-500 hover:text-stone-900 mb-3"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-3.5 w-3.5" />
             Dashboard
           </Link>
-          <div className="text-xs uppercase tracking-wider text-stone-600 font-semibold mb-2">
-            Capable Bench
-          </div>
-          <h1 className="text-3xl font-bold text-stone-900 mb-1">Research Findings</h1>
-          <p className="text-stone-600">
-            {findings.length} finding{findings.length === 1 ? '' : 's'} — diagnostic results that
-            expose specific reasoning failures, blind spots, or calibration issues.
+          <h1 className="text-2xl font-semibold text-stone-900">Case studies and reports</h1>
+          <p className="text-sm text-stone-500 mt-1">
+            {findings.length} item{findings.length === 1 ? '' : 's'}
           </p>
         </div>
       </header>
@@ -42,7 +37,7 @@ export default async function FindingsPage() {
               <Link
                 key={finding.id}
                 href={`/findings/${finding.id}`}
-                className="block border border-stone-200 rounded-lg bg-white hover:border-stone-300 hover:shadow-sm transition-all"
+                className="block border border-stone-200 bg-white hover:border-stone-400 transition-colors"
               >
                 <div className="px-5 py-4 flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">

@@ -14,6 +14,8 @@ import {
 
 interface ChartsGridProps {
   data: DashboardData;
+  onTaskTypeClick?: (taskType: string) => void;
+  selectedTaskType?: string;
 }
 
 const COLORS = ['#1f4f53', '#c97064', '#d4a373', '#5a8a73', '#7b6c8a', '#c4a35a', '#456b8a'];
@@ -22,7 +24,7 @@ function colorFor(index: number) {
   return COLORS[index % COLORS.length];
 }
 
-export default function ChartsGrid({ data }: ChartsGridProps) {
+export default function ChartsGrid({ data, onTaskTypeClick, selectedTaskType }: ChartsGridProps) {
   // Prepare leaderboard data
   const leaderboardData = data.models
     .map((model, index) => ({
@@ -60,7 +62,7 @@ export default function ChartsGrid({ data }: ChartsGridProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Model Leaderboard */}
-      <div className="lg:col-span-2 bg-white border border-stone-200 rounded-xl p-6 shadow-sm">
+      <div className="lg:col-span-2 bg-white border border-stone-200 p-6">
         <div className="flex justify-between items-start mb-6">
           <div>
             <h3 className="text-lg font-semibold text-stone-900">Model Leaderboard</h3>
@@ -70,7 +72,7 @@ export default function ChartsGrid({ data }: ChartsGridProps) {
             {data.models.map((model, index) => (
               <div key={model} className="flex items-center gap-2">
                 <div
-                  className="w-3 h-3 rounded"
+                  className="w-3 h-3"
                   style={{ backgroundColor: colorFor(index) }}
                 />
                 {model}
@@ -95,7 +97,7 @@ export default function ChartsGrid({ data }: ChartsGridProps) {
                   'Mean score'
                 ]}
               />
-              <Bar dataKey="score" radius={[0, 6, 6, 0]}>
+              <Bar dataKey="score" radius={[0, 0, 0, 0]}>
                 {leaderboardData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
@@ -106,14 +108,34 @@ export default function ChartsGrid({ data }: ChartsGridProps) {
       </div>
 
       {/* Mean score by task type */}
-      <div className="bg-white border border-stone-200 rounded-xl p-6 shadow-sm">
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-stone-900">Mean score by task type</h3>
-          <p className="text-sm text-stone-600">Per-model mean on each task family</p>
+      <div className="bg-white border border-stone-200 p-6">
+        <div className="mb-6 flex items-start justify-between gap-3">
+          <div>
+            <h3 className="text-lg font-semibold text-stone-900">Mean score by task type</h3>
+            <p className="text-sm text-stone-600">
+              {onTaskTypeClick ? 'Click a bar to filter the table below' : 'Per-model mean on each task family'}
+            </p>
+          </div>
+          {selectedTaskType && onTaskTypeClick && (
+            <button
+              onClick={() => onTaskTypeClick(selectedTaskType)}
+              className="text-xs text-stone-500 hover:text-stone-900 underline"
+            >
+              Clear filter
+            </button>
+          )}
         </div>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={taskTypeData}>
+            <BarChart
+              data={taskTypeData}
+              onClick={(state) => {
+                const label = state?.activeLabel;
+                if (label !== undefined && onTaskTypeClick) {
+                  onTaskTypeClick(String(label));
+                }
+              }}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#e7e5e4" />
               <XAxis
                 dataKey="taskType"
@@ -121,9 +143,31 @@ export default function ChartsGrid({ data }: ChartsGridProps) {
                 textAnchor="end"
                 height={80}
                 fontSize={11}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                tick={(props: any) => {
+                  const value = String(props.payload?.value ?? '');
+                  const x = Number(props.x ?? 0);
+                  const y = Number(props.y ?? 0);
+                  const isSelected = selectedTaskType === value;
+                  return (
+                    <text
+                      x={x}
+                      y={y}
+                      dy={4}
+                      textAnchor="end"
+                      transform={`rotate(-45, ${x}, ${y})`}
+                      fontSize={11}
+                      fontWeight={isSelected ? 700 : 400}
+                      fill={isSelected ? '#1c1917' : '#57534e'}
+                    >
+                      {value}
+                    </text>
+                  );
+                }}
               />
               <YAxis domain={[0, 1]} tickFormatter={(value) => value.toFixed(1)} />
               <Tooltip
+                cursor={onTaskTypeClick ? { fill: '#e7e5e4', opacity: 0.5 } : false}
                 formatter={(value, name) => [
                   value === null || value === undefined ? '—' : Number(value).toFixed(3),
                   String(name ?? '')
@@ -134,7 +178,8 @@ export default function ChartsGrid({ data }: ChartsGridProps) {
                   key={model}
                   dataKey={model}
                   fill={colorFor(index)}
-                  radius={[2, 2, 0, 0]}
+                  radius={[0, 0, 0, 0]}
+                  style={onTaskTypeClick ? { cursor: 'pointer' } : undefined}
                 />
               ))}
             </BarChart>

@@ -67,10 +67,7 @@ export default function MetricsCards({ data }: MetricsCardsProps) {
       {cards.map((card) => (
         <div
           key={card.label}
-          className={`
-            bg-white border border-stone-200 rounded-xl p-4 shadow-sm
-            ${card.accent ? 'bg-gradient-to-br from-stone-50 to-white' : ''}
-          `}
+          className="bg-white border border-stone-200 p-4"
         >
           <div className="text-xs uppercase tracking-wider text-stone-500 font-semibold mb-2">
             {card.label}

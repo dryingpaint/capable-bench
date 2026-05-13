@@ -6,6 +6,22 @@ import type { ReactNode } from 'react';
 
 interface MarkdownProps {
   children: string;
+  /**
+   * Finding id used to resolve relative image URLs (e.g. `./chart.png`) against
+   * the `/api/findings/<id>/file/...` route. Omit for markdown rendered outside
+   * a finding context — relative URLs will then be left as-is.
+   */
+  findingId?: string;
+}
+
+function resolveImageUrl(href: string | undefined, findingId: string | undefined): string | undefined {
+  if (!href) return href;
+  if (/^(https?:)?\/\//i.test(href) || href.startsWith('data:')) return href;
+  if (!findingId) return href;
+  const stripped = href.replace(/^\.?\/+/, '');
+  if (stripped.startsWith('..') || stripped === '') return href;
+  const encoded = stripped.split('/').map(encodeURIComponent).join('/');
+  return `/finding-files/${encodeURIComponent(findingId)}/${encoded}`;
 }
 
 type MarkdownNode = {
@@ -48,7 +64,7 @@ function transformNewlines(node: MarkdownNode) {
   node.children = children;
 }
 
-export default function Markdown({ children }: MarkdownProps) {
+export default function Markdown({ children, findingId }: MarkdownProps) {
   return (
     <div className="markdown-body text-sm text-stone-800 leading-relaxed">
       <ReactMarkdown
@@ -82,6 +98,18 @@ export default function Markdown({ children }: MarkdownProps) {
               {children}
             </a>
           ),
+          img: ({ src, alt, title }) => {
+            const resolved = resolveImageUrl(typeof src === 'string' ? src : undefined, findingId);
+            // eslint-disable-next-line @next/next/no-img-element
+            return (
+              <img
+                src={resolved}
+                alt={alt ?? ''}
+                title={title}
+                className="my-4 max-w-full h-auto border border-stone-200"
+              />
+            );
+          },
           blockquote: ({ children }) => (
             <blockquote className="border-l-4 border-stone-300 pl-4 py-1 my-3 bg-stone-50 text-stone-700 italic">
               {children}
@@ -89,7 +117,7 @@ export default function Markdown({ children }: MarkdownProps) {
           ),
           hr: () => <hr className="my-6 border-stone-200" />,
           pre: ({ children }: { children?: ReactNode }) => (
-            <pre className="bg-stone-50 border border-stone-200 rounded-lg p-4 overflow-x-auto my-4 text-xs font-mono text-stone-800">
+            <pre className="bg-stone-50 border border-stone-200 p-4 overflow-x-auto my-4 text-xs font-mono text-stone-800">
               {children}
             </pre>
           ),
@@ -99,7 +127,7 @@ export default function Markdown({ children }: MarkdownProps) {
               return <code className={className}>{children}</code>;
             }
             return (
-              <code className="bg-stone-100 text-stone-800 px-1.5 py-0.5 rounded text-[0.85em] font-mono">
+              <code className="bg-stone-100 text-stone-800 px-1.5 py-0.5 text-[0.85em] font-mono">
                 {children}
               </code>
             );
