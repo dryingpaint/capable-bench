@@ -81,7 +81,6 @@ contains 52 tasks and passes `uv run capablebench audit-quality`.
 
 Latest local calibration artifacts are summarized in `runs/calibration_summary.json`:
 
-- naive baseline over all 52 tasks: `mean_score = 0.3707`,
 - Codex stratified 11-task slice: `mean_score = 0.4970`,
 - Claude stratified 11-task slice: `mean_score = 0.5879`.
 

@@ -138,12 +138,6 @@ uv run capablebench validate
 uv run capablebench audit-quality
 ```
 
-Run a smoke-test baseline across every task:
-
-```bash
-uv run capablebench run-suite \
-  --agent-command 'uv run capablebench baseline-answer --task-dir {task_dir}'
-```
 
 Run a stratified calibration subset by naming task IDs:
 

@@ -200,8 +200,6 @@ the uncertainty instead of overfitting one assay.
 - Task packets contain only reviewed, anonymized, and releasable data.
 - Each task has a hidden answer file or explicit expert-review rubric.
 - The visible data do not contain held-out outcome labels by accident.
-- Each task has at least one baseline attempt from a simple scripted method or
-  non-agent heuristic.
 - Expert spot checks confirm that strong answers require biological reasoning,
   not only CSV sorting.
 - Foundation-model output files include provenance, model/version metadata, and

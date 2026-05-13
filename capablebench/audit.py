@@ -92,7 +92,6 @@ def audit_benchmark_quality(
 
     if calibration_summary:
         calibration_scores = [
-            calibration_summary.get("baseline_full_suite", {}).get("mean_score"),
             calibration_summary.get("codex_stratified", {}).get("mean_score"),
             calibration_summary.get("claude_stratified", {}).get("mean_score"),
         ]

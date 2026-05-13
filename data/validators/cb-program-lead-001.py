@@ -2,8 +2,7 @@
 Validation notebook for cb-program-lead-001.
 
 Derives the gold answer from the inputs by real arithmetic, proves the
-gold is uniquely determined, computes the random-guess baseline, and
-shows what plausible-but-wrong interpretations score.
+gold is uniquely determined, and shows what plausible-but-wrong interpretations score.
 
 Run from the repo root:  uv run python data/tasks/cb-program-lead-001/validate.py
 """
@@ -206,21 +205,6 @@ print(f"  Trap 5 (pick E, lose on margin):            {trap5}")
 print(f"           score = {score(trap5)[0]}/{score(trap5)[1]}")
 
 
-# ---------------------------------------------------------------------------
-# Random-guess baseline
-# ---------------------------------------------------------------------------
-space = gold["answer_space"]
-n_lead = len(space["lead_candidate"])
-n_rej  = len(space["rejection_reason_for_A"])
-n_marg = len(space["margin_at_lead"])
-joint = n_lead * n_rej * n_marg
-print("\n" + "=" * 90)
-print("RANDOM-GUESS BASELINE")
-print("=" * 90)
-print(f"  |lead_candidate|         = {n_lead}")
-print(f"  |rejection_reason_for_A| = {n_rej}")
-print(f"  |margin_at_lead|         = {n_marg}")
-print(f"  P(all three correct by uniform guess) = 1/{joint} = {1/joint:.4f}")
 
 
 # ---------------------------------------------------------------------------

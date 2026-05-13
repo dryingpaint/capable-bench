@@ -154,8 +154,6 @@ def _score(grade: dict[str, Any] | None) -> float | None:
 
 def _classify_model(command: str) -> str:
     lower = command.lower()
-    if "baseline-answer" in lower:
-        return "Baseline"
     if "codex" in lower:
         return "Codex"
     if "claude" in lower:
