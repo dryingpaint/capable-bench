@@ -59,11 +59,7 @@ try:
     runs_dir = Path('runs')
 
     # Build the data directly (based on build_viewer but return JSON instead of HTML)
-    all_tasks = list_tasks(tasks_dir)
-
-    # Filter out tasks with poor validators (expert_rubric uses keyword matching)
-    tasks = [task for task in all_tasks if task.get('label_status') != 'expert_rubric']
-
+    tasks = list_tasks(tasks_dir)
     task_ids = {task['id'] for task in tasks}
     runs = [run for run in _collect_runs(runs_dir, answers_dir) if run['task_id'] in task_ids and run.get('model') != 'Other']
     latest_by_task_model = _latest_by_task_model(runs)
