@@ -1,0 +1,13 @@
+id: cb-nps-polymorphism-001
+task_type: program_lead_selection
+answer_file: answer.json
+capability_targets:
+- biochemical_reasoning
+- sar_extrapolation
+- literature_retrieval
+- intra_receptor_variant_selectivity
+evidence_layers:
+- identity
+label_status: exact_match
+data_files:
+- analogs.csv

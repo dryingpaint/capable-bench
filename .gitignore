@@ -10,6 +10,8 @@ data/processed/*
 data/tasks/*
 !data/tasks/.gitkeep
 !data/tasks/README.md
+!data/tasks/cb-*/
 data/answers/*
 !data/answers/.gitkeep
 !data/answers/README.md
+!data/answers/cb-*.yaml

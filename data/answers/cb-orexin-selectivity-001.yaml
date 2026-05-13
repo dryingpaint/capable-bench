@@ -1,0 +1,33 @@
+id: cb-orexin-selectivity-001
+task_type: program_lead_selection
+label_status: exact_match
+gold:
+  most_R2_preferring: OXNv25.5
+answer_space:
+  most_R2_preferring:
+    - MOXv1
+    - OXNv12.2
+    - OXNv14.15
+    - OXNv14.16
+    - OXNv15.7
+    - OXNv16.13
+    - OXNv16.18
+    - OXNv16.19
+    - OXNv16.20
+    - OXNv2
+    - OXNv25.10
+    - OXNv25.3
+    - OXNv25.5
+    - OXNv25.6
+    - OXNv25.7
+    - OXNv25.9
+    - OXNv7
+random_guess_baseline: 0.0625   # 1/16
+notes: |
+  Gold computed from data/processed/invitro_assays.csv as the geometric
+  mean OX1R EC50 divided by the geometric mean OX2R EC50, aggregated
+  across replicates per compound. See data/validators/cb-orexin-selectivity-001.py
+  for the derivation. The trap is OXNv2 ("hardened OXB: D-Leu15") which
+  is the Asahi et al. 2003 published winner at 1473x selectivity — but
+  OXNv25.5 (unpublished [Tyr12, Glu13] substitution) is the actual winner
+  at 8856x selectivity.
