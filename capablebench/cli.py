@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 
 from .audit import audit_benchmark_quality
@@ -82,6 +83,12 @@ def main() -> None:
         default="local",
         help="Execution backend. Default: local.",
     )
+    run.add_argument(
+        "--max-containers",
+        type=int,
+        default=None,
+        help="Cap parallel Modal containers (sets MODAL_MAX_CONTAINERS). Only used with --remote modal. Default 3 if unset.",
+    )
 
     suite = sub.add_parser("run-suite", help="Run every listed task with one agent command.")
     suite.add_argument("--agent-command", required=True)
@@ -96,6 +103,12 @@ def main() -> None:
         choices=["local", "modal"],
         default="local",
         help="Execution backend. Default: local.",
+    )
+    suite.add_argument(
+        "--max-containers",
+        type=int,
+        default=None,
+        help="Cap parallel Modal containers (sets MODAL_MAX_CONTAINERS). Only used with --remote modal. Default 3 if unset.",
     )
 
     summarize = sub.add_parser("summarize", help="Aggregate grade files under runs/.")
@@ -146,6 +159,8 @@ def main() -> None:
         )
     elif args.command == "run":
         if args.remote == "modal":
+            if args.max_containers is not None:
+                os.environ["MODAL_MAX_CONTAINERS"] = str(args.max_containers)
             from .modal_runner import run_task_modal
 
             result = run_task_modal(
@@ -168,6 +183,8 @@ def main() -> None:
         _print_json(result)
     elif args.command == "run-suite":
         if args.remote == "modal":
+            if args.max_containers is not None:
+                os.environ["MODAL_MAX_CONTAINERS"] = str(args.max_containers)
             from .modal_runner import run_suite_modal
 
             result = run_suite_modal(

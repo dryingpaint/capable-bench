@@ -39,10 +39,22 @@ secrets = [
 ]
 
 
+# Cap parallel containers so we don't fan out faster than the upstream
+# LLM rate limits. codex on gpt-5.5 burns ~70-100K tokens per task and
+# the OpenAI org TPM cap is 500K/min, so >=5 parallel runs cascade-fail
+# with "stream disconnected ... rate limit reached". 3 keeps peak usage
+# at ~300K TPM with headroom. Override per-run with --max-containers (CLI)
+# or MODAL_MAX_CONTAINERS (env). Read at module import; if a fresh value
+# is needed, set the env var BEFORE importing capablebench.modal_app /
+# capablebench.modal_runner.
+_MAX_CONTAINERS = int(os.environ.get("MODAL_MAX_CONTAINERS", "3"))
+
+
 @app.function(
     image=image,
     timeout=3600,
     secrets=secrets,
+    max_containers=_MAX_CONTAINERS,
 )
 def run_benchmark_task_remote(
     task_bundle: dict[str, Any],
