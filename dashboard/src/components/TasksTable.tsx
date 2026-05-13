@@ -76,50 +76,17 @@ export default function TasksTable({ data }: TasksTableProps) {
   }
 
   function getRunTags(taskId: string, model: string): string[] {
-    const runs = data.runs || [];
-    const run = runs.find((item) => item.task_id === taskId && item.model === model);
-    return run?.tags || [];
+    return data.latest_runs?.[taskId]?.[model]?.tags || [];
   }
 
   function getTaskTags(task: TaskMetadata): string[] {
-    const tags: string[] = [];
-
-    // Add task type tag
-    if (task.task_type) {
-      tags.push(task.task_type);
-    }
-
-    // Add difficulty tag
-    if (task.difficulty) {
-      tags.push(task.difficulty);
-    }
-
-    // Check if this is an interesting finding by examining all runs for this task
-    // Look for tasks with unusual patterns like saturation, format errors, or extreme scores
-    const taskRuns = data.runs?.filter((run) => run.task_id === task.id) || [];
-
-    const hasInterestingPattern = taskRuns.some((run) => {
-      const runTags = run.tags || [];
-      return runTags.some((tag: string) =>
-        tag.includes('saturation') ||
-        tag.includes('format_error') ||
-        tag.includes('execution_error') ||
-        (run.score !== null && run.score !== undefined && (run.score < 0.2 || run.score > 0.95)) // Very low or very high scores
-      );
-    });
-
-    if (hasInterestingPattern) {
-      tags.push('interesting finding');
-    }
-
-    return tags;
+    return data.task_tags?.[task.id] || [task.task_type, task.difficulty].filter((tag): tag is string => Boolean(tag));
   }
 
   function getTagColor(tag: string): string {
     if (tag === 'easy') return 'bg-green-100 text-green-800';
     if (tag === 'medium') return 'bg-amber-100 text-amber-800';
     if (tag === 'hard') return 'bg-red-100 text-red-800';
-    if (tag === 'interesting finding') return 'bg-purple-100 text-purple-800';
     return 'bg-blue-100 text-blue-800'; // Default for task types
   }
 

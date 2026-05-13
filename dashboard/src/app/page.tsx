@@ -1,12 +1,11 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import Link from 'next/link';
 import { DashboardData } from '@/types/performance';
 import Header from '@/components/Header';
 import ChartsGrid from '@/components/ChartsGrid';
 import TasksTable from '@/components/TasksTable';
-import FindingsViewer from '@/components/FindingsViewer';
 import { Providers } from '@/components/Providers';
 import { FileText } from 'lucide-react';
 
@@ -19,8 +18,6 @@ async function fetchDashboardData(): Promise<DashboardData> {
 }
 
 function DashboardContent() {
-  const [showFindings, setShowFindings] = useState(false);
-
   const { data, isLoading, error } = useQuery({
     queryKey: ['dashboard'],
     queryFn: fetchDashboardData,
@@ -58,25 +55,19 @@ function DashboardContent() {
       <Header data={data} />
 
       <main className="max-w-7xl mx-auto px-8 py-6 space-y-6">
-        {/* Findings Button */}
         <div className="flex justify-end mb-4">
-          <button
-            onClick={() => setShowFindings(true)}
+          <Link
+            href="/findings"
             className="inline-flex items-center gap-2 px-4 py-2 bg-stone-900 text-white rounded-lg hover:bg-stone-700 transition-colors shadow-sm"
           >
             <FileText className="h-4 w-4" />
             View Research Findings
-          </button>
+          </Link>
         </div>
 
         <ChartsGrid data={data} />
         <TasksTable data={data} />
       </main>
-
-      {/* Findings Modal */}
-      {showFindings && (
-        <FindingsViewer onClose={() => setShowFindings(false)} />
-      )}
     </div>
   );
 }

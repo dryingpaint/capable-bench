@@ -29,8 +29,11 @@ if [ ! -d "node_modules" ]; then
 fi
 
 # Start the development server
+export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=1024}"
+
 echo "🌐 Dashboard will be available at: http://localhost:3000"
 echo "📊 Data will be loaded from: ../data/tasks, ../data/answers, ../runs"
+echo "🧠 Node heap is capped via NODE_OPTIONS=${NODE_OPTIONS}"
 echo ""
 echo "Press Ctrl+C to stop"
 echo ""

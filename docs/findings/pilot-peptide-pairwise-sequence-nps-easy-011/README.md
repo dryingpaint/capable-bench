@@ -4,8 +4,6 @@
 
 **Date:** 2026-05-12
 **Task type:** `next_experiment` (pairwise potency prediction from sequence)
-**Difficulty bucket (as labeled):** `easy` (60.1× potency ratio)
-**Real difficulty:** hard — shared blind spot in current frontier LLMs
 
 ## The task
 
@@ -46,7 +44,7 @@ The gold is `best_ec50_nm` sorted ascending; the underlying lab records are robu
 | 2026-01-06 | hNPSR1 Ile107 | IP-1 | 75.10 | 73.99 |
 | 2026-03-11 | hNPSR1 Asn107 | b-Arrestin | 5000.00 | 4.74 |
 
-3 records. Partial agonist on Ca2+ (Emax 41%) and IP-1 (74%); **functionally inactive** on β-arrestin. Plates Z' > 0.5 — this is real chemistry, not bad data.
+3 records. Partial agonist on Ca2+ (Emax 41%) and IP-1 (74%); **functionally inactive** on β-arrestin. All plates Z' > 0.5.
 
 So the modified peptide isn't just less potent — it's a *partial agonist* and *β-arrestin-dead*. The gap is both potency and efficacy, in the same direction.
 
@@ -89,30 +87,3 @@ Three specific reasoning failures both agents committed, plus one efficacy-relat
 3. **No N-terminal active core principle.** NPS biology says the N-terminal `SFRNG...` is the active core; the C-terminal `TSFQRAKS` region is dispensable or destabilizing. `SFRNGVGTGMKKTSFQR-NH2` is exactly a truncation *before* `TSFQRAKS` with a C-amide cap — a textbook way to boost potency for this peptide family. Neither agent invoked "truncation can be good."
 
 4. **Conflated potency and efficacy (Claude specifically).** Claude asserted modifications would improve "potency" without distinguishing potency from efficacy. The data shows the modified peptide loses ~50% Emax and becomes β-arrestin-inactive — heavy backbone modification (β-homoarginine adds a CH2 to the main chain; N-methylation alters H-bonding) can convert full agonists to partial. This is a separate failure mode from #1–3 and is specific to thinking about EC50 in isolation.
-
-## What this means for the benchmark
-
-- **Keep this task.** It's a high-quality reasoning probe — both frontier agents fail it via correct-sounding textbook SAR, which is the most diagnostic possible failure mode.
-- **The `easy/medium/hard/trivial` bucket labels are misleading.** "Easy" here refers to the potency *ratio* (60×), not the task's actual difficulty for an LLM. Both agents got this 60× pair wrong while getting the 2× pair right. Worth renaming buckets to `ratio_2_5x` / `ratio_5_30x` / `ratio_30_100x` / `ratio_gte_100x` to avoid confusing readers.
-- **Targeted task ideas seeded by this finding:**
-  - More "combo-mod vs focused-truncation" pairs to confirm this isn't a one-off.
-  - Pairs that isolate internal-lipidation vs terminal-lipidation explicitly.
-  - Pairs that test efficacy reasoning (full agonist vs partial agonist) since potency-only framing missed it.
-
-## Reproducing
-
-```bash
-uv run capablebench run \
-  pilot-peptide-pairwise-sequence-nps-easy-011 \
-  --runs-dir /absolute/path/to/runs \
-  --agent-command '<codex-or-claude-command>'
-```
-
-Use absolute `--runs-dir`; relative paths fail because the runner subprocess `cwd`s into the run directory before the shell expands `$(cat {prompt_file})`.
-
-## Source run directories (ephemeral)
-
-- Codex run: `runs/saturation_codex/pilot-peptide-pairwise-sequence-nps-easy-011/20260512-224351/`
-- Claude run: `runs/saturation_claude/pilot-peptide-pairwise-sequence-nps-easy-011/20260512-224437/`
-
-These are gitignored — the preserved traces in this folder are the durable record.

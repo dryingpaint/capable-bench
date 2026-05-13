@@ -50,22 +50,3 @@ See [`golden_trace_mch-easy-011.md`](golden_trace_mch-easy-011.md).
 2. The peptide is a combo variant with multiple simultaneous modifications and no single-mod controls. We can describe each modification's likely effect but cannot quantitatively attribute the observed potency gap.
 3. The `modification` field is a stub like `D-Cys7` or `Trp17 f Ala` whose interpretation requires a parent reference we don't store.
 
-## Concrete recommendations if we want to actually build the golden-trace corpus
-
-In rough order of effort/value:
-
-1. **Extend the curator to write `parent_compound_id` and `parent_best_ec50_nm` into each task's metadata where applicable.** Many of our peptides are deltas off a small set of reference parents (full hMCH, MCH compound 19, native NPS, NPSv1.0, etc.). Adding the parent reference makes any delta-vs-delta task reasonable to explain mechanistically.
-2. **Drop pairwise tasks where the two peptides have different parent series and no parent data is in the panel.** That's the MCH easy-011 failure mode. Either reconstruct full sequences from delta + parent, or exclude.
-3. **Add a `gold_reasoning` field to answer YAMLs with a 3-tier confidence-labeled rationale** (HIGH / MEDIUM / SPECULATIVE), produced by an LLM-with-verifier loop. The NPS easy-011 example demonstrates this is workable and worth ~80% accuracy for clean tasks.
-4. **For the hardest counterintuitive golds (cyclic peptides, biased agonists, partial agonists), commission a single-page expert writeup** rather than rely on auto-generation. These are exactly the diagnostic tasks worth getting right.
-
-## What this means for the broader benchmark
-
-The "no keyword-based evaluation" rule pushes toward objective gold answers — which we already have. **Golden traces are the complement: they make the gold answer auditable.** The two together (objective label + auditable rationale) are what would let an external reader trust the benchmark without needing to re-derive every result from raw data.
-
-The honest answer to "can we get fully accurate mechanistic reasoning?" is:
-
-- **Yes for clean tasks** with common parent + family-SAR precedent + rich lab data (~80% confidence, with explicit uncertainty flags).
-- **No for ~30–40% of current tasks** without panel-level fixes — specifically, adding parent compound references and pruning cross-series pairs.
-
-I'd estimate ~40–50 of the 69 sequence-only tasks are in the "clean" category and could get good traces today; the rest need panel work first.

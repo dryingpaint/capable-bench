@@ -13,17 +13,9 @@ type DashboardRun = {
   command: string;
   returncode: number | null;
   duration_seconds: number | null;
-  answer_source: string;
-  stdout_file: string;
-  stderr_file: string;
-  trace_file: string;
   grade: JsonObject;
   score: number | null;
   timestamp: string;
-  answer_text: string;
-  stdout_text: string;
-  stderr_text: string;
-  trace_text: string;
   tags?: string[];
 };
 
@@ -92,7 +84,7 @@ async function buildDashboardData(capableBenchDir: string): Promise<JsonObject> 
     models,
     model_summary: modelSummary(Object.values(latestRuns), models),
     latest_runs: latestRuns,
-    runs,
+    task_tags: taskTags(tasks),
     calibration: await readJsonOptional(path.join(runsDir, 'calibration_summary.json')),
   };
 }
@@ -149,17 +141,9 @@ async function collectRuns(runsDir: string): Promise<DashboardRun[]> {
       command,
       returncode: numberValue(summary.returncode),
       duration_seconds: numberValue(summary.duration_seconds),
-      answer_source: artifactPath(runDir, summary.answer_source, 'answer.json'),
-      stdout_file: artifactPath(runDir, summary.stdout_file, 'stdout.txt'),
-      stderr_file: artifactPath(runDir, summary.stderr_file, 'stderr.txt'),
-      trace_file: artifactPath(runDir, summary.trace_file, 'agent_trace.txt'),
       grade,
       score,
       timestamp: stringValue(summary.run_id) || path.basename(runDir),
-      answer_text: '',
-      stdout_text: '',
-      stderr_text: '',
-      trace_text: '',
     });
   }
 
@@ -202,6 +186,27 @@ function latestByTaskModel(runs: DashboardRun[]): Record<string, Record<string, 
     }
   }
   return latest;
+}
+
+function taskTags(
+  tasks: Array<JsonObject & { id: string }>
+): Record<string, string[]> {
+  return Object.fromEntries(
+    tasks.map((task) => {
+      const tags: string[] = [];
+      const taskType = stringValue(task.task_type);
+      const difficulty = stringValue(task.difficulty);
+
+      if (taskType) {
+        tags.push(taskType);
+      }
+      if (difficulty) {
+        tags.push(difficulty);
+      }
+
+      return [task.id, tags];
+    })
+  );
 }
 
 function modelSummary(
@@ -474,14 +479,6 @@ function parseScalar(value: string): unknown {
     return value.slice(1, -1);
   }
   return value;
-}
-
-function artifactPath(runDir: string, value: unknown, defaultName: string): string {
-  const candidate = typeof value === 'string' && value ? value : defaultName;
-  if (path.isAbsolute(candidate) && candidate.startsWith(runDir)) {
-    return candidate;
-  }
-  return path.join(runDir, path.basename(candidate));
 }
 
 function classifyModel(command: string): string {

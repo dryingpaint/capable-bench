@@ -28,9 +28,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
   }
 
   function getRunTags(model: string): string[] {
-    const runs = data.runs || [];
-    const run = runs.find((item) => item.task_id === task.id && item.model === model);
-    return run?.tags || [];
+    return latestRuns[model]?.tags || [];
   }
 
   function renderGoldAnswer() {

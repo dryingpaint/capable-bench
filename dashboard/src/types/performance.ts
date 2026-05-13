@@ -23,7 +23,6 @@ export interface RunDetails {
   command: string;
   returncode?: number;
   duration_seconds?: number;
-  answer_source: string;
   answer_text?: string;
   stdout_text?: string;
   stderr_text?: string;
@@ -75,6 +74,7 @@ export interface DashboardData {
   models: string[];
   model_summary: Record<string, ModelSummary>;
   latest_runs: Record<string, Record<string, RunDetails>>;
+  task_tags?: Record<string, string[]>;
   runs?: RunDetails[];
   calibration?: {
     quality_gate_passed?: boolean;

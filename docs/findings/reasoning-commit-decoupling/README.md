@@ -85,17 +85,9 @@ In every case:
 
 The redesigned hit_prediction task with full chemistry + bias features changed (2) — rationales now name the right things — but did not move (3) or (4). The new features made the failure more *legible* without making it more *correctable*.
 
-## Implications
-
-- **Aggregate scores understate the actual capability**: the rationale text shows the agents *can* identify the right signals. The commit is the bottleneck.
-- **Adding more visible features won't help** as long as the grader only looks at the binary commit. We confirmed this experimentally with the hit_prediction redesign — 0.458 → 0.458 across 24 tasks.
-- **A grading change might**: rewarding `(prediction, confidence)` pairs that are calibrated (high-confidence correct, low-confidence wrong) would put weight on the part of the answer the agents actually do well, and would penalize the always-active commit pattern even when it gets the binary right.
-- **This pattern is not unique to one model**: Claude and Codex converge on the same failure from different chemistry interpretations (Claude misreads AEEA-AEEA, Codex correctly identifies it; both still commit active).
-
 ## Files
 
 This finding pulls evidence from multiple existing artifacts; no new traces preserved here. Cross-references:
 
 - [`../hit-prediction-002-aeea-as-pk-booster/`](../hit-prediction-002-aeea-as-pk-booster/) — full Claude + Codex traces on the focal hit_prediction task.
 - [`../pilot-peptide-pairwise-sequence-nps-easy-011/`](../pilot-peptide-pairwise-sequence-nps-easy-011/) — same pattern in a sequence-only SAR task.
-- Multitarget dual-mono-active suite traces under `runs/pilot-peptide-multitarget-sequence-dual-mono-active-*/` (gitignored, but reproducible from `data/tasks/pilot-peptide-multitarget-sequence-dual-mono-active-*` via `run-suite`).

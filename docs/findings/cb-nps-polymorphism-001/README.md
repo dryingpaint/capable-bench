@@ -1,10 +1,9 @@
 # cb-nps-polymorphism-001
 
-**One-liner:** Predict-from-sequence task on intra-receptor variant selectivity (NPSR1 Asn107 vs Ile107). Both frontier agents fail honestly on Modal at 1/14 random baseline. Both converge on the same wrong compound (`NPSv5.4`) — neither picks the literature-truncation trap I designed, instead both fall for a new "looks-comprehensively-optimized" trap (multiple D-amino acids + standard palmitoyl lipidation > a single unusual lipidation linker).
+**One-liner:** Predict-from-sequence task on intra-receptor variant selectivity (NPSR1 Asn107 vs Ile107). Both frontier agents fail at 1/14 random baseline. Both converge on the same wrong compound (`NPSv5.4`), falling for a "looks-comprehensively-optimized" trap (multiple D-amino acids + standard palmitoyl lipidation > a single unusual lipidation linker).
 
 **Date:** 2026-05-13
 **Task type:** `program_lead_selection` (sequence_to_ranking variant — single exact-match field)
-**Real difficulty:** hard — both honest frontier attempts score 0/1.
 **Key property:** task uses only repo data (no fabrication). Gold is computed from `data/processed/invitro_assays.csv` aggregating ~25 replicate EC50 measurements across the 14 candidate compounds at both hNPSR1-Asn107 and hNPSR1-Ile107 variants.
 
 ## The task
@@ -14,7 +13,7 @@ The agent receives `analogs.csv` listing 14 peptide compound IDs with their sequ
 The candidate panel contains:
 
 - 7 internal NPS modifications (NPSv5.4, NPSv10.16, NPSv16.13, NPSv21.9, NPSv31.7, NPSv2-proKKv1, NPSv18.9)
-- 2 literature truncations (hNPS(1-10), rNPS(1-10)) — the trap I designed in
+- 2 literature truncations (hNPS(1-10), rNPS(1-10))
 - 1 native human NPS (variant-neutral baseline)
 - 2 wrong-direction decoys (NPSv18.16, NPSv18.26 — these prefer Asn107)
 - 1 inactive decoy (NPSv8 — full D-amino acid retro version)
@@ -22,7 +21,7 @@ The candidate panel contains:
 
 **Gold answer:** `NPSv18.9` — native human NPS sequence with an unusually heavy lipidation linker at K11 (gamma-Glu + two AEEA spacers + C20 diacid; ~30-atom total chain). Measured 277× Ile107 preference.
 
-**Intended trap:** `hNPS(1-10)` and `rNPS(1-10)`, the published N-terminal truncations. They rank #2 and #3 in the panel at 111× and 105× preference. An agent that retrieves "NPS truncation literature → prefers Ile107" would pick one of these.
+The two published N-terminal truncations `hNPS(1-10)` and `rNPS(1-10)` rank #2 and #3 in the panel at 111× and 105× preference — the answers an agent would give if it retrieved "NPS truncation literature → prefers Ile107."
 
 ## Why the gold is correct (raw assay verification)
 
@@ -48,37 +47,26 @@ Gap from `NPSv18.9` to `rNPS(1-10)` is 2.5×. Both `hNPS(1-10)` and `rNPS(1-10)`
 
 ## Results
 
-| Executor | Agent | Predicted | Score | What it did |
-|---|---|---|---|---|
-| Modal | codex (gpt-5-codex) | `NPSv5.4` | **0/1** | 8 commands. Read files, computed native NPS sequence positioning, made guess. |
-| Modal | claude (sonnet-4-0) | `NPSv5.4` | **0/1** | 31 actions. 4 WebSearches on NPS pharmacology, lipidation chemistry, and the Asn107Ile polymorphism specifically. |
+| Agent | Predicted | Score | What it did |
+|---|---|---|---|
+| Codex | `NPSv5.4` | **0/1** | Read files, computed native NPS sequence positioning, made guess. No external retrieval. |
+| Claude | `NPSv5.4` | **0/1** | Four web searches on NPS pharmacology, lipidation chemistry, and the Asn107Ile polymorphism specifically. |
 
-Both agents converged on the same wrong answer despite different reasoning paths. Both stayed in the sandbox — zero reads of `/data/answers/` or `/data/validators/`.
+Both agents converged on the same wrong answer despite different reasoning paths.
 
-## Codex result (Modal)
+## Codex result
 
 **Predicted:** `NPSv5.4` — wrong.
 **Trace:** [`codex_modal_stdout.txt`](codex_modal_stdout.txt)
 
-Codex listed files, read prompt + analogs.csv, ran a python snippet to index the native NPS sequence positions, then committed. Terse reasoning chain. The shell sequence:
+Codex read the prompt and analogs.csv, ran a short Python snippet to index the native NPS sequence positions, and committed. No external retrieval. Picked the compound based on visible modifications without specific variant-selectivity SAR.
 
-```
-pwd && rg --files && sed -n '1,200p' analogs.csv
-python - <<'PY' import csv; ... fieldnames + row count
-sed -n prompt.md / task.yaml
-find .. -maxdepth 3 -type f
-python - <<'PY' native='SFRNGVGTGMKKTSFQRAKS' position indexing
-python -m json.tool answer.json
-```
-
-No external retrieval. Picked the compound based on visible modifications without specific variant-selectivity SAR.
-
-## Claude result (Modal)
+## Claude result
 
 **Predicted:** `NPSv5.4` — wrong.
 **Trace:** [`claude_modal_stdout.txt`](claude_modal_stdout.txt)
 
-31 actions total. Four diagnostic WebSearches:
+Four diagnostic searches:
 
 1. `neuropeptide S NPSR1 Asn107Ile polymorphism structure activity relationship SAR`
 2. `neuropeptide S peptide modifications SAR lipidation D-amino acids structure activity`
@@ -87,7 +75,7 @@ No external retrieval. Picked the compound based on visible modifications withou
 
 Search #2 and #4 are the relevant ones: claude searched for the *combination* of D-amino acid + palmitoyl lipidation, which exactly matches `NPSv5.4`'s modification profile (`[D-Ser]-FRNGVGTGM-[D-Lys]-K[(γ-E)-(Pal)]-[D-Thr]-NH2`). It found Asahi 2003 (D-Leu15 hardened OXB) and analogous NPS work, decided that "multiple D-amino acids + lipidation = the published optimization template," picked `NPSv5.4`.
 
-The trap claude actually fell for is *not* my designed literature-truncation trap. It's a deeper one: "the canonical published peptide-optimization template (D-aa + palmitoyl) means more selective." That template is well-documented for stability/half-life, less so for variant selectivity, but claude conflates the two.
+The trap claude fell for is not the literature-truncation one: it's "the canonical published peptide-optimization template (D-aa + palmitoyl) means more selective." That template is documented for stability/half-life, not for variant selectivity, but claude conflates the two.
 
 ## Failure mode taxonomy
 
@@ -95,45 +83,8 @@ The trap claude actually fell for is *not* my designed literature-truncation tra
 
 2. **Canonical-template mis-application (claude specifically).** Claude searched for and found the well-published "D-amino acid + palmitoyl" template (Asahi 2003 hardened OXB, similar GLP-1 analog work) and applied it to the NPS variant question. That template optimizes proteolytic stability and half-life, *not* variant selectivity. Claude conflated the two via template-matching rather than reasoning about which feature is mechanistically relevant to a polymorphism that changes a single residue in the binding pocket.
 
-3. **Literature-truncation trap was NOT triggered.** The two literature compounds I expected to fool the agents (hNPS(1-10), rNPS(1-10)) were ignored. Both rank in the top 3 and would have been the "obvious published" answer — but neither agent retrieved the truncation SAR. This is a different failure: the agents found *some* published SAR but not the right one for this specific question.
+3. **Literature-truncation trap was NOT triggered.** The two literature compounds hNPS(1-10) and rNPS(1-10) — top-3 by gold preference — were ignored. Neither agent retrieved the truncation SAR. The agents found *some* published SAR but not the variant-relevant one.
 
-4. **Convergent wrong answer.** Both codex and claude land on `NPSv5.4` via independent reasoning paths. This makes the wrong answer especially diagnostic — it's not a one-model quirk but a shared bias.
+4. **Convergent wrong answer.** Codex and claude land on `NPSv5.4` via independent reasoning paths — a shared bias, not a one-model quirk.
 
-## What this means for the benchmark
-
-- **Keep this task.** Adds a second sandboxed prediction task with independent measurement of frontier reasoning. Convergent failure across both agents is a strong negative-direction signal.
-
-- **The trap I designed in is not the trap that fired.** Worth noting: when authoring tasks with a hypothesized trap, run the agents *before* writing the README to find the trap that actually triggers. The literature-truncation trap was theoretical; the modification-count trap is what fires in practice. Both are real failure modes but only one is testable in this panel as constructed.
-
-- **Modification chemistry vs modification count.** This task surfaces a second deeper failure: agents treat number-of-visible-modifications as a quality proxy. A complementary task that isolates this — same panel with reordered descriptions, or sequences shown without the modification descriptions — would let us tell whether agents are reading the modification chemistry at all or just counting tokens.
-
-- **The literature retrieval is real but mis-routed.** Claude's WebSearch for `palmitic acid lipidation "gamma-glutamic acid" modifications` is the exact correct query for a typical peptide-optimization task. But this isn't a typical peptide-optimization task — it's a variant-discriminating one. Future tasks should probe whether agents can *distinguish task-relevant retrieval queries* from canonical ones.
-
-## Operational findings (data infrastructure)
-
-- **`data/tasks/*` and `data/answers/*` are git-ignored.** The cb-* task directories and answer YAMLs disappear between sessions (presumably swept by `capablebench curate-pilot --clean` or a similar cleanup). After the first Modal run, the grade came back null because the gold YAML was missing. I restored it from preserved snapshots, regraded, confirmed both agents 0/1. Recommendation: either add `!data/tasks/cb-*` and `!data/answers/cb-*` exceptions to `.gitignore`, or move cb-* tasks to a tracked subdirectory. The current state risks irreproducibility.
-
-- **Modal sandbox confirmed correct** for the second time. Both agents stayed within their run_dir + internet. Zero filesystem escape attempts.
-
-## Reproducing
-
-```bash
-# Sandboxed runs via Modal:
-uv run capablebench run cb-nps-polymorphism-001 \
-  --remote modal \
-  --agent-command 'codex exec --json --skip-git-repo-check --cd {task_dir} --dangerously-bypass-approvals-and-sandbox "$(cat {task_dir}/prompt.md)"' \
-  --timeout-seconds 900
-
-ANTHROPIC_API_KEY=… uv run capablebench run cb-nps-polymorphism-001 \
-  --remote modal \
-  --agent-command 'claude -p --output-format stream-json --verbose --permission-mode bypassPermissions --model claude-sonnet-4-20250514 "$(cat {task_dir}/prompt.md)"' \
-  --timeout-seconds 900
-
-# Validate the gold derives from raw repo data:
-uv run python data/validators/cb-nps-polymorphism-001.py
-```
-
-## Source run directories
-
-- Modal codex: `runs/cb-nps-polymorphism-001/20260513-083756-ba6d62b3-modal/`
-- Modal claude (sonnet-4-0): `runs/cb-nps-polymorphism-001/20260513-083816-d71b01bb-modal/`
+5. **Mis-routed literature retrieval.** Claude's search for `palmitic acid lipidation "gamma-glutamic acid" modifications` is the correct query for a typical peptide-optimization task. This task is variant-discriminating, not optimization-driven, but the canonical-template query fires anyway.

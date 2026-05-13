@@ -84,10 +84,6 @@ Both agents converge on the same wrong answer through different chemistry interp
 
 Pattern: bias and PK concerns are listed under `main_risk` but never override the proximal-potency-driven `prediction`. The risk fields read like a hedge for plausible deniability rather than load-bearing reasoning.
 
-## What this implies for the benchmark
-
-The redesigned `hit_prediction` task (with `modification` + per-assay EC50/Emax exposed) is **not** trivially solved by the new features. Both frontier agents see the discriminating signals but fail to weight them above the in-vitro-potency prior. The task remains diagnostic — both models score at the always-active baseline rate on this subset — but the failure mode has shifted from "blind to features" to "sees features, mis-weights them in the final call".
-
 ## Full 24-task suite result (2026-05-13)
 
 Confirmed across all 24 hit_prediction tasks (3 compounds × 2 doses × 4 windows):
@@ -110,21 +106,6 @@ Per-compound:
 | NPS(1-20) + Ahx (stabilized, no lipid) | 4/8 | 3/8 (38%) | 4/8 (50%) |
 
 The unlipidated/biased compound (NXNv10.1+AEEA) is the most diagnostic class — its 6 inactive rows should be predictable from the visible chemistry and bias signal. Neither model predicted inactive on any of them.
-
-## Verdict on the column redesign
-
-The new visible features made the agents' reasoning **legible** (rationales now name bias, mention PK uncertainty, discuss specific Emax values) but did **not** change their commit decisions. The redesign converted a "blind to features" failure into a "sees features, holds wrong priors" failure — useful for understanding the agents, but the aggregate score is unchanged.
-
-To actually move the score on this task family would likely require either:
-1. **Hand-fed annotations** (`pk_class: poor`, `bias_class: gq_biased`) — risks making the task too easy by removing the chemistry-interpretation step.
-2. **Reward calibrated uncertainty** — change the gold to accept hedged predictions with confidence calibration, rather than binary commit.
-3. **Filter the task pool** to only ambiguous cases (e.g. lipidated compounds at boundary windows) where chemistry-prior reasoning alone is insufficient.
-
-Concrete coachable misconceptions surfaced here:
-
-1. **Claude:** named modification ≠ PK booster. AEEA is a spacer. Lipidation is the PK chemistry.
-2. **Both:** "main risk" field is treated as a hedge, not a prediction-changing factor.
-3. **Both:** proximal Gq potency is treated as load-bearing for in vivo significance even when (a) the dose is sub-saturating, (b) the bias is severe, (c) the chemistry has no PK support.
 
 ## Related findings
 
