@@ -1,4 +1,4 @@
-# NPSR1 N107I: agents pick the optimization trap, miss the long-arm mechanism
+# NPSR1 N107I: agents apply a stability template to a variant-selectivity question
 
 Predict-from-sequence task on intra-receptor variant selectivity (NPSR1 Asn107 vs Ile107). Both frontier agents fail at 1/14 random baseline. Both converge on the same wrong compound (`NPSv5.4`), falling for a "looks-comprehensively-optimized" trap (multiple D-amino acids + standard palmitoyl lipidation > a single unusual lipidation linker).
 
@@ -100,35 +100,3 @@ The trap claude fell for is not the literature-truncation one: it's "the canonic
 
 5. **Mis-routed literature retrieval.** Claude's searches for `lipidation D-amino acids` and `D-amino acids palmitic acid` are correct queries for a typical peptide-optimization task. This task is variant-discriminating, not optimization-driven, but the canonical-template queries fire anyway and the canonical-template answer (`NPSv5.4`) gets selected.
 
-## Re-run on tightened panel (Modal, 2026-05-13)
-
-The original 14-compound panel had nine candidates within 2.5× of the gold preference, which made it possible to confidently land on the wrong answer through close-discrimination reasoning. The panel was tightened to 5 compounds — keeping the gold (`NPSv18.9`), the trap (`NPSv5.4`), one sibling control (`NPSv18.16` — same K11 lipidation site as the gold but standard C16 palmitoyl, prefers Asn107), the native baseline (`NPS`), and an all-D decoy (`NPSv8`). The gap to the runner-up grew from 2.5× to **4.73×**, and the random-guess baseline went from 7.14% to 20%.
-
-Codex was re-run on Modal (clean container per run, no shared filesystem with claude, no `grade.json` leakage). Claude was attempted but the Modal container is missing Anthropic API credentials (`401 authentication_failed`), so claude could not be evaluated cleanly. Locally, claude continues to refuse this task with the AUP filter.
-
-### Codex result on tightened panel
-
-**Predicted:** `NPSv5.4` — wrong, same trap.
-**Score:** 0.0.
-**Trace:** runs/cb-nps-polymorphism-001/20260513-201847-db7dadc0-modal/
-
-Codex's verbatim reasoning:
-
-> *"The CSV is small: native NPS, two full-length lipidated analogs, one truncated/lipidated 1-13-like analog with D substitutions, and a full retro-inverso D-peptide. The key literature signal so far is that NPS truncations around residues 1-7/1-8 can become highly Ile107-selective because Asn107 is much less tolerant of changes in the N-terminal/structured region."*
->
-> *"The literature table that matters most reports native NPS as only modestly Ile107-favored, while disruption/truncation in the N-terminal/5-13 region can push Asn107/Ile107 EC50 ratios into the hundreds. Within this panel, the only analog combining truncation with stereochemical disruption near the critical N-terminal/5-13 segment is `NPSv5.4`, so I'm writing that as the prediction."*
-
-Codex ran 4 web-search batches, narrowed on the published "truncation + D-aa near the N-terminus → Ile107 selectivity" template, and matched it to `NPSv5.4`. The mechanism it picks is plausible from the literature; it just happens to be the wrong mechanism for the actual winner.
-
-### What the re-run rules out
-
-The hypothesis "panel size / close runners-up is the confounder" is **falsified for codex**: with the close competitors removed and a 4.73× gap to the runner-up, codex still picks `NPSv5.4` based on the same template match. The failure mode is upstream of panel design — codex is doing template-matching to published NPS truncation SAR rather than reasoning about which ligand modifications would amplify the specific Asn→Ile polymorphism at position 107.
-
-To force the right answer, the task would need to either:
-- explicitly surface chain-length / arm-geometry metadata so the unique extended lipidation in `NPSv18.9` is visible without atom-counting from the modification string, or
-- add structural metadata showing what residue 107 contacts in the bound ligand, so the "long hydrophobic arm reaches position 107" reasoning is grounded.
-
-### Claude — unresolved
-
-Local: AUP refusal (claude-opus-4-7 in claude-code's local harness) — claude won't engage with the peptide prompt.
-Modal: 401 authentication error — the Modal container is missing valid Anthropic credentials. Until a `claude-auth` Modal secret is provisioned (mirroring `codex-auth`), claude cannot be evaluated on Modal.
