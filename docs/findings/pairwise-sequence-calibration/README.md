@@ -102,15 +102,4 @@ A small cyclic hexapeptide beats the 4×-longer analog. Both agents pick the lon
 - **`nps-hard-002`**: gold is plain `GFRNGVGTGMKKTSFQRAKS-NH2`; both pick the same backbone with `(Nw-Arg)` and `(N-Me-Lys)` added.
 - **`oxn-hard-005`**: gold is a substituted sequence; loser has the same substitutions plus visual elaboration (`Ac-`, spaces, additional N-terminal residues). Both pick the more-elaborate-looking option.
 
-## Interpretation
-
-1. At wide potency ratios, the length/complexity heuristic happens to track potency, so agents look competent. As ratios shrink, the heuristic decouples from the true SAR signal — sometimes more elaborate analogs are *less* potent (modifications didn't carry forward in real campaigns) — and the agents fail in the same direction.
-2. The benchmark cannot conclude "agents do sequence-aware SAR reasoning" from above-random accuracy at wide ratios. Those wins may be the same wrong heuristic firing in the direction the gold happens to go.
-3. The `selected_option` field carries no rationale (pairwise tasks only ask for the pick), so we can't introspect what features the agents claim to be using. To go deeper, grep the saved `agent_trace.txt` files in `runs/pilot-peptide-pairwise-sequence-*-hard-*/` for terms like "longer", "scaffold", "modification", "optimized", "advanced".
-
-## Suggested follow-ups
-
-- **Re-run the `1.1–1.5×` ratio tasks with a calibration prompt** that flags the length/complexity bias (e.g., "Sequence length and number of modifications are not reliable indicators of potency at small ratio differences; modifications can reduce activity"). If accuracy lifts above 0.40, the bias is correctable with prompting.
-- **Audit `>10×` ratio *successes*** to see if the high accuracy is driven by the same length cue happening to work by chance. If yes, the apparent wide-ratio competence is illusory.
-- **Add controlled probe pairs** where the longer/more-modified peptide is *deliberately* less potent. If both agents drop to ~0% on those, the cue is causal.
 

@@ -1,4 +1,4 @@
-# NPSR1 N107I: agents apply a stability template to a variant-selectivity question
+# NPSR1 N107I: agents misinterpret findings from literature
 
 Predict-from-sequence task on intra-receptor variant selectivity (NPSR1 Asn107 vs Ile107). Both frontier agents fail at 1/14 random baseline. Both converge on the same wrong compound (`NPSv5.4`), falling for a "looks-comprehensively-optimized" trap (multiple D-amino acids + standard palmitoyl lipidation > a single unusual lipidation linker).
 
@@ -94,9 +94,4 @@ The trap claude fell for is not the literature-truncation one: it's "the canonic
 
 2. **Canonical-template mis-application (claude specifically).** Claude searched for and found the well-published "D-amino acid + palmitoyl" template (Asahi 2003 hardened OXB, similar GLP-1 analog work) and applied it to the NPS variant question. That template optimizes proteolytic stability and half-life, *not* variant selectivity. Claude conflated the two via template-matching rather than reasoning about which feature is mechanistically relevant to a polymorphism that changes a single residue in the binding pocket.
 
-3. **Literature-truncation trap was NOT triggered.** The two literature compounds hNPS(1-10) and rNPS(1-10) — top-3 by gold preference — were ignored despite both agents finding them in retrieval. Codex explicitly noted the truncations "do not appear to identify one of the CSV IDs directly as the >200-ratio compound" and skipped them; claude went straight to the D-aa + lipidation template.
-
-4. **Convergent wrong answer.** Codex and claude land on `NPSv5.4` via independent reasoning paths and independent retrieval — a shared bias, not a one-model quirk.
-
-5. **Mis-routed literature retrieval.** Claude's searches for `lipidation D-amino acids` and `D-amino acids palmitic acid` are correct queries for a typical peptide-optimization task. This task is variant-discriminating, not optimization-driven, but the canonical-template queries fire anyway and the canonical-template answer (`NPSv5.4`) gets selected.
 
