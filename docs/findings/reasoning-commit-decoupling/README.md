@@ -1,6 +1,6 @@
 # Reasoning–commit decoupling: agents name the right risks, then commit on proximal potency anyway
 
-**One-liner:** Across hit_prediction, multitarget, and the existing SAR findings, Claude and Codex correctly identify the load-bearing risks (bias, PK liabilities, partial agonism, combinatorial modification interference) in their `rationale` and `main_risk` text — and then commit a prediction that ignores those risks in favor of the most prominent in vitro potency signal. The text is calibrated; the prediction and confidence are not.
+Across hit_prediction, multitarget, and the existing SAR findings, Claude and Codex correctly identify the load-bearing risks (bias, PK liabilities, partial agonism, combinatorial modification interference) in their `rationale` and `main_risk` text — and then commit a prediction that ignores those risks in favor of the most prominent in vitro potency signal. The text is calibrated; the prediction and confidence are not.
 
 **Date:** 2026-05-13
 **Scope:** Cross-task pattern (`hit_prediction`, `multitarget_activity`, `peptide-pairwise-sequence`)
@@ -85,9 +85,3 @@ In every case:
 
 The redesigned hit_prediction task with full chemistry + bias features changed (2) — rationales now name the right things — but did not move (3) or (4). The new features made the failure more *legible* without making it more *correctable*.
 
-## Files
-
-This finding pulls evidence from multiple existing artifacts; no new traces preserved here. Cross-references:
-
-- [`../hit-prediction-002-aeea-as-pk-booster/`](../hit-prediction-002-aeea-as-pk-booster/) — full Claude + Codex traces on the focal hit_prediction task.
-- [`../pilot-peptide-pairwise-sequence-nps-easy-011/`](../pilot-peptide-pairwise-sequence-nps-easy-011/) — same pattern in a sequence-only SAR task.

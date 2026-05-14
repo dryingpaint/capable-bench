@@ -1,6 +1,6 @@
-# Pairwise sequence calibration — agents pick by length, not by SAR
+# Pairwise peptide potency: agents pick by length, not SAR, when the gap is narrow
 
-**One-liner:** On the 60 `next_experiment` pairwise-potency tasks (predict the more potent of two peptides from sequence alone), claude and codex are above random when the potency ratio is wide and **below random when the ratio is narrow**, with a shared failure mode: both agents systematically pick the *longer / more-modified* peptide when the actual potency difference is small.
+On the 60 `next_experiment` pairwise-potency tasks (predict the more potent of two peptides from sequence alone), claude and codex are above random when the potency ratio is wide and **below random when the ratio is narrow**, with a shared failure mode: both agents systematically pick the *longer / more-modified* peptide when the actual potency difference is small.
 
 **Date:** 2026-05-13
 **Task type:** `next_experiment` (the 61 `pilot-peptide-pairwise-sequence-*` tasks; one not yet paired)
@@ -114,39 +114,3 @@ A small cyclic hexapeptide beats the 4×-longer analog. Both agents pick the lon
 - **Audit `>10×` ratio *successes*** to see if the high accuracy is driven by the same length cue happening to work by chance. If yes, the apparent wide-ratio competence is illusory.
 - **Add controlled probe pairs** where the longer/more-modified peptide is *deliberately* less potent. If both agents drop to ~0% on those, the cue is causal.
 
-## Data cleanup: named-compound annotations removed
-
-The benchmark source data (`data/processed/peptide_full_sequences.csv` and downstream task CSVs) previously contained named-compound annotations in the agent-visible `modification` field, e.g. `(Bednarek 2001 compound 19 scaffold ...)` or `(human orexin B 28-mer)`. These were a curation leak: they let agents pattern-match to memorized literature instead of reasoning from sequence chemistry.
-
-These annotations have been stripped from the source data (`scripts/strip_literature_annotations.py`). The 34 affected resolution rows and 24 affected task CSVs no longer carry retrieval handles. The "length/complexity cue" findings above are based on the pre-cleanup runs; re-running on the cleaned data is the right next step.
-
-## Files in this directory
-
-- `pairwise_sequence_calibration_by_family.png` — per-family bar chart, paired claude+codex runs only.
-- `failure_category_breakdown.png` — stacked-bar breakdown of reasoning failures, per agent.
-- `sanitization_probe.png` — pre/post accuracy on tasks with named-compound annotations stripped.
-- `pairwise_paired_by_family.csv` — underlying counts (family × bucket × agent × correct/n).
-- `failure_classifications.csv` — per-task failure category (AUP via regex, others via Haiku 4.5 judge over `agent_trace.txt`).
-- `sanitization_probe.csv` — per-task pre/post scores for the 12 sanitized tasks.
-- `case_studies.md` — one detailed case study per failure mode plus a positive control.
-- `README.md` — this document.
-
-## Reproducing
-
-Source data: latest completed `runs/pilot-peptide-pairwise-sequence-*/.../grade.json` for each agent. The plotting/aggregation code is inlined in conversation history and easy to regenerate via `uv run python` with `matplotlib`, `yaml`, and standard library.
-
-## Methodology and caveats
-
-### How many times each task was run
-
-**Exactly once per agent.** Every one of the 60 pairwise tasks has 1 claude run and 1 codex run, single-shot. No replication, no resampling, no temperature sweep. 120 graded runs total.
-
-### What replication would buy
-
-A more rigorous plot would have `n = 5 tasks × R replicates` and treat each replicate as an independent trial. With `R = 5` and the existing harness, the full grid (60 tasks × 2 agents × 5 = 600 runs) is ~30 min of wall time and on the order of $30 in API cost. It would:
-
-1. **Tighten** the CIs (more trials → tighter bound on the agent's true probability per cell).
-2. **Reveal** which failures are stable (agent reliably picks wrong) vs. stochastic (agent gets it 60% of the time).
-3. **Test** whether the "both agents picked the same wrong answer 6/6 joint failures" pattern is a robust shared cue or could be explained by stochastic alignment.
-
-The current finding is consistent with a real shared cue, but with `n=1` per task we cannot rule out that some joint failures are accidents of the single trial.

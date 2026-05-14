@@ -1,6 +1,6 @@
 # pilot-hit-prediction-002 — proximal-potency dominates over PK / bias concerns
 
-**One-liner:** Both Claude and Codex predict `active` on an unlipidated, Gq-biased peptide at the lower dose (50 µg, 1-h window). Both agents *acknowledge* the bias and PK concerns in their rationales, then weight low Ca²⁺/IP-1 EC50 above them and commit `active`. Gold is `inactive`.
+Both Claude and Codex predict `active` on an unlipidated, Gq-biased peptide at the lower dose (50 µg, 1-h window). Both agents *acknowledge* the bias and PK concerns in their rationales, then weight low Ca²⁺/IP-1 EC50 above them and commit `active`. Gold is `inactive`.
 
 **Date:** 2026-05-13
 **Task type:** `hit_prediction`
@@ -107,11 +107,3 @@ Per-compound:
 
 The unlipidated/biased compound (NXNv10.1+AEEA) is the most diagnostic class — its 6 inactive rows should be predictable from the visible chemistry and bias signal. Neither model predicted inactive on any of them.
 
-## Related findings
-
-- `pilot-peptide-pairwise-sequence-nps-easy-011` — earlier finding on the **additivity assumption** (combo modifications) and a parallel "lipidation = potency boost" misread for *internal* (vs terminal) lipidation. Same family of chemistry-knowledge gaps.
-
-## Files
-
-- `claude_trace.txt`, `claude_answer.json` — full Claude run on 2026-05-13.
-- `codex_trace.txt`, `codex_answer.json` — full Codex run on 2026-05-13.

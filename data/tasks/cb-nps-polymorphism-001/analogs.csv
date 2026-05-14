@@ -1,15 +1,6 @@
 compound_id,modification
 NPS,Native hNPS (WT)
-NPSv10.16,(D-Ser)FRNGVGTGMK(N-Me-Lys)(N-Me-Thr)SFQRAKS-NH2
-NPSv16.13,(D-Ser)F(Nw-Arg)NGVGTGMKK(N-Me-Thr)SFQRAKS-NH2
 NPSv18.16,SFRNGVGTGMK[(gamma-E)(C16palm)]KTSFQRAKS-NH2
-NPSv18.26,SFRNGVGTGMKKTSFQRAK[(gamma-E)-(C18:0)]S-NH2
 NPSv18.9,SFRNGVGTGMK-K[(gammaGlu)-(AEEA)-(AEEA)-(C20 diacid)]-TSFQRAKS-NH2 (acetate)
-NPSv2-proKKv1,(D-Pro)-GGSR-SFRNGVGTGMK-K[(gamma-E)-(Pal)]-TSFQRAKS-NH2 (Acetate)
-NPSv21.9,TFRNGVGTGMKKTSFQRAKS-NH2
-NPSv31.7,Ac-(D-Ser)FRNGVGTGMK-K[(gammaE)(C16palm)]-(N-Me-Thr)SFQRAKS-NH2
-NPSv34.14,"SF(Nomega,Nomega-dimethyl-Arg)NGVGTGMK-K[(gamma-E)-(C18:1)]-TSFQRAKS-NH2"
 NPSv5.4,[D-Ser]-FRNGVGTGM-[D-Lys]-K[(gamma-E)-(Pal)]-[D-Thr]-NH2 (Acetate)
 NPSv8,H-D-Ser-D-Lys-D-Ala-D-Arg-D-Gln-D-Phe-D-Ser-D-Thr-D-Lys-D-Lys-D-Met-D-Gly-D-Thr-D-Gly-D-Val-D-Gly-D-Asn-D-Arg-D-Phe-D-Ser-NH2
-hNPS(1-10),reference
-rNPS(1-10),"Rat NPS, 1-10 truncation"

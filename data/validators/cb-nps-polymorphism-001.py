@@ -79,7 +79,9 @@ print(f"\nRandom-guess baseline: 1/{len(CANDIDATES)} = {1/len(CANDIDATES):.4f}")
 
 LITERATURE_TRAPS = {"hNPS(1-10)", "rNPS(1-10)", "NPS"}
 for trap in LITERATURE_TRAPS:
-    rank = next(i for i, r in enumerate(rows, 1) if r[0] == trap)
+    rank = next((i for i, r in enumerate(rows, 1) if r[0] == trap), None)
+    if rank is None:
+        continue
     pref = next(r[3] for r in rows if r[0] == trap)
     print(f"  literature trap {trap:>14}: rank #{rank}, pref {pref:.2f}x")
 
