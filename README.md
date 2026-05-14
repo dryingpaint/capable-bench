@@ -148,6 +148,19 @@ uv run capablebench run-suite \
   --agent-command 'codex exec --json --skip-git-repo-check --cd {task_dir} --dangerously-bypass-approvals-and-sandbox "$(cat {prompt_file})"'
 ```
 
+For a saved subset, drop a YAML manifest under `data/task-sets/<name>.yaml`
+with a `tasks:` list of task IDs and pass `--task-set <name>` (or a path).
+Manifests are merged with any explicit `--task-id` flags:
+
+```bash
+# Run all 60 pairwise potency-prediction tasks on Modal
+uv run capablebench run-suite \
+  --task-set pairwise \
+  --remote modal \
+  --max-containers 10 \
+  --agent-command 'codex exec --json --cd {task_dir} "$(cat {prompt_file})"'
+```
+
 ## Performance Dashboard
 
 ### Next.js Dashboard (Recommended)

@@ -12,6 +12,7 @@ from .ingest import ingest_mastersheet
 from .invivo import extract_mouse_data
 from .run import run_task
 from .suite import run_suite, summarize_runs
+from .task_sets import load_task_set
 from .tasks import list_tasks
 from .validate import validate_benchmark
 from .viewer import build_viewer, refresh_dashboard_cache, validate_dashboard_data
@@ -97,6 +98,11 @@ def main() -> None:
     suite.add_argument("--runs-dir", type=Path, default=RUNS_DIR)
     suite.add_argument("--limit", type=int, default=None)
     suite.add_argument("--task-id", action="append", default=None)
+    suite.add_argument(
+        "--task-set",
+        default=None,
+        help="Name or path of a task-set manifest under data/task-sets/ (YAML with a `tasks:` list). Merged with any --task-id flags.",
+    )
     suite.add_argument("--timeout-seconds", type=int, default=1800)
     suite.add_argument(
         "--remote",
@@ -191,6 +197,10 @@ def main() -> None:
             )
         _print_json(result)
     elif args.command == "run-suite":
+        task_ids = list(args.task_id) if args.task_id else []
+        if args.task_set is not None:
+            task_ids.extend(load_task_set(args.task_set))
+        task_ids = task_ids or None
         if args.remote == "modal":
             if args.max_containers is not None:
                 os.environ["MODAL_MAX_CONTAINERS"] = str(args.max_containers)
@@ -202,7 +212,7 @@ def main() -> None:
                 args.runs_dir,
                 args.agent_command,
                 limit=args.limit,
-                task_ids=args.task_id,
+                task_ids=task_ids,
                 timeout_seconds=args.timeout_seconds,
             )
         else:
@@ -212,7 +222,7 @@ def main() -> None:
                 args.runs_dir,
                 args.agent_command,
                 limit=args.limit,
-                task_ids=args.task_id,
+                task_ids=task_ids,
                 timeout_seconds=args.timeout_seconds,
             )
         _print_json(result)
