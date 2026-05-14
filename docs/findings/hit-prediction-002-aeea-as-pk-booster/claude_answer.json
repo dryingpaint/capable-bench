@@ -1,7 +1,0 @@
-{
-  "prediction": "active",
-  "confidence": 0.75,
-  "rationale": "This peptide targets orexin (OX2R) and neuropeptide S receptors (hNPSR1), both key regulators of sleep-wake cycles. The compound shows exceptional potency in G-protein coupled pathways (Ca2+ EC50: 4.8 nM, IP-1 EC50: 5.5 nM) with high efficacy (>90%). The NXNv10.1 modification plus AEEA-AEEA linker suggests PK optimization to improve in vivo exposure. Despite the relatively short 1-hour window, the sub-10 nM potency combined with sleep-relevant targets and PK-enhanced modifications makes significant sleep time effects likely at the 50 μg dose.",
-  "effect_direction": "decreased sleep time",
-  "main_risk": "The weaker arrestin pathway engagement (596 nM EC50) and modest cAMP efficacy (64%) suggest potential for biased signaling that could limit duration of effect or cause tolerance. Additionally, the 1-hour measurement window may be too short to capture full pharmacodynamic effects if there are absorption/distribution delays despite the linker modifications."
-}

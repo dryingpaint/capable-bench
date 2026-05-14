@@ -1,7 +1,0 @@
-{
-  "prediction": "active",
-  "confidence": 0.72,
-  "rationale": "The peptide shows strong agonist-like pharmacology in proximal G-protein-linked readouts, with low-nM Ca2+ and IP-1 EC50 values and near-full to supramaximal efficacy. Arrestin and cAMP are much weaker, indicating pathway bias rather than a broadly inactive profile. For a 50 ug, 1 hour sleep_time endpoint, this level of proximal potency and efficacy is sufficient to predict a significant short-window in vivo effect despite peptide PK uncertainty from the AEEA-AEEA linker chemistry and lack of an explicit long-acting lipidation. The receptor panel is consistent with arousal/sleep-wake biology, so the expected effect is a reduction in sleep_time rather than an increase.",
-  "effect_direction": "decreased sleep_time",
-  "main_risk": "Short in vivo exposure from peptide clearance or limited CNS-relevant exposure could blunt translation, especially because activity is strongest in proximal Ca2+/IP-1 assays while arrestin and cAMP potency are much weaker."
-}
