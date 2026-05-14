@@ -15,7 +15,6 @@ OUT_CSV = REPO / "docs/findings/pairwise-sequence-calibration/failure_classifica
 CATEGORIES = [
     "aup_refusal",
     "length_or_complexity_cue",
-    "literature_anchor",
     "pharmacophore_misapplied",
     "no_substantive_reasoning",
 ]
@@ -79,8 +78,7 @@ Pick exactly ONE category that best describes the failure mode. Output ONLY the 
 
 CATEGORIES:
 - length_or_complexity_cue: The agent's reasoning leans on sequence length, scaffold size, or sheer number of modifications without engaging with specific residues, motifs, or mechanism.
-- literature_anchor: The agent reasoned about a literature reference, named compound, or "scaffold" annotation in the modification string rather than from the sequence chemistry itself.
-- pharmacophore_misapplied: The agent invoked real SAR concepts (pharmacophore residues, stereochemistry, charge, motif positions, binding mechanism) but reached the wrong conclusion.
+- pharmacophore_misapplied: The agent invoked real SAR concepts (pharmacophore residues, stereochemistry, charge, motif positions, binding mechanism) but reached the wrong conclusion. This includes failures where the agent anchored on a literature reference, named compound, or scaffold annotation while still attempting mechanism-based reasoning.
 - no_substantive_reasoning: The agent picked an answer without articulating biochemical reasoning; the trace contains only boilerplate, filesystem chatter, or one-line non-mechanistic claims.
 
 TASK CONTEXT
@@ -93,7 +91,7 @@ Peptide 2 ({p2['peptide_id']}): {p2['modification']}
 AGENT REASONING TRACE
 {trace_snippet}
 
-Output exactly one of: length_or_complexity_cue, literature_anchor, pharmacophore_misapplied, no_substantive_reasoning"""
+Output exactly one of: length_or_complexity_cue, pharmacophore_misapplied, no_substantive_reasoning"""
 
 
 def classify_via_claude(prompt: str) -> str:
