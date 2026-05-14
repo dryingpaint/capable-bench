@@ -1,5 +1,3 @@
-# Breakdown of failures in pairwise potency predictions
-
 Across the 60 `next_experiment` pairwise-potency tasks (predict the more potent of two peptides from sequence alone), claude and codex produced **50 reasoning failures** between them (29 claude, 21 codex). The dominant failure mode for both agents is **pharmacophore misapplied** — real SAR concepts invoked, wrong conclusion reached.
 
 **Date:** 2026-05-13

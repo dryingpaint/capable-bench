@@ -1,5 +1,3 @@
-# Agents pick the more modified peptide; the simpler one is 60× more potent (pilot-peptide-pairwise-sequence-nps-easy-011)
-
 Both codex and claude pick the heavily-modified peptide over a simple truncated amide. Gold contradicts: the truncation is 60× more potent *and* a clean full agonist, while the combo-modified peptide is a weak partial agonist.
 
 **Date:** 2026-05-12
@@ -95,4 +93,3 @@ What the correct rationale looks like from the same inputs.
 1. *The N-terminal SF... motif of NPS is the receptor-recognition core.* NPS = 20-residue peptide `SFRNGVGTGMKKTSFQRAKS`. The N-terminal Ser-Phe is essential for full Gq-coupled potency at NPSR1 (Reinscheid 2005; Roth 2006). Any modification at position 1 typically costs ≥10× in potency.
 2. *PEP-17D19C9AD5 = NPS-(1–17)-NH₂* — a 17-residue truncation of native NPS with a C-terminal amide cap. The active N-terminal core is intact; the C-terminal `AKS` (positions 18–20) is removed. That segment is dispensable for in vitro potency and is a metabolism-driven liability, not a binding contact. Truncate + amide-cap is a standard medchem move that *boosts* observed in vitro potency.
 3. *PEP-C9FE4F8ED3 modifies position 1 with D-Ser.* D-amino-acid substitution at position 1 inverts N-terminal chirality and breaks the helix nucleation NPS uses for receptor engagement. Expected effect: ≥10× potency loss.
-

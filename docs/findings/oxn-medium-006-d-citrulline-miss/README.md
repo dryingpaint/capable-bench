@@ -1,5 +1,3 @@
-# Codex misses the D-Citrulline pharmacophore hit (oxn-medium-006)
-
 **Date:** 2026-05-14
 **Task:** `pilot-peptide-pairwise-sequence-oxn-medium-006`
 **Family:** OXN / OX2R

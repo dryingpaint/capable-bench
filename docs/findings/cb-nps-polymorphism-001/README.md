@@ -1,5 +1,3 @@
-# Agents apply a published stability-optimization template to a question about variant selectivity (cb-nps-polymorphism-001)
-
 Predict-from-sequence task on intra-receptor variant selectivity (NPSR1 Asn107 vs Ile107). Both frontier agents fail at 1/14 random baseline. Both converge on the same wrong compound (`NPSv5.4`), falling for a "looks-comprehensively-optimized" trap (multiple D-amino acids + standard palmitoyl lipidation > a single unusual lipidation linker).
 
 **Date:** 2026-05-13
@@ -93,5 +91,4 @@ The trap claude fell for is not the literature-truncation one: it's "the canonic
 1. **Modification-count heuristic (both agents).** `NPSv5.4` carries 4 visible modifications (D-Ser, D-Lys, D-Thr, palmitoyl) versus `NPSv18.9`'s single visible feature (one heavy lipidation chain). Both agents reward modification count over modification chemistry. The actual selectivity-driving feature in `NPSv18.9` — the unusually long C20-diacid + dual-AEEA linker that creates a binding-pocket footprint asymmetry between Asn107 and Ile107 — is invisible to a "count the substitutions" reading.
 
 2. **Canonical-template mis-application (claude specifically).** Claude searched for and found the well-published "D-amino acid + palmitoyl" template (Asahi 2003 hardened OXB, similar GLP-1 analog work) and applied it to the NPS variant question. That template optimizes proteolytic stability and half-life, *not* variant selectivity. Claude conflated the two via template-matching rather than reasoning about which feature is mechanistically relevant to a polymorphism that changes a single residue in the binding pocket.
-
 
