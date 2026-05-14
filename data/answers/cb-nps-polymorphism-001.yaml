@@ -5,21 +5,21 @@ gold:
   most_Ile107_preferring: NPSv18.9
 answer_space:
   most_Ile107_preferring:
-    - hNPS(1-10)
-    - NPS
-    - NPSv10.16
-    - NPSv16.13
-    - NPSv18.16
-    - NPSv18.26
-    - NPSv18.9
-    - NPSv2-proKKv1
-    - NPSv21.9
-    - NPSv31.7
-    - NPSv34.14
-    - NPSv5.4
-    - NPSv8
-    - rNPS(1-10)
-random_guess_baseline: 0.0714   # 1/14
+  - hNPS(1-10)
+  - NPS
+  - NPSv10.16
+  - NPSv16.13
+  - NPSv18.16
+  - NPSv18.26
+  - NPSv18.9
+  - NPSv2-proKKv1
+  - NPSv21.9
+  - NPSv31.7
+  - NPSv34.14
+  - NPSv5.4
+  - NPSv8
+  - rNPS(1-10)
+random_guess_baseline: 0.0714
 notes: |
   Gold computed from data/processed/invitro_assays.csv as the geometric
   mean hNPSR1-Asn107 EC50 divided by the geometric mean hNPSR1-Ile107
@@ -32,3 +32,32 @@ notes: |
   pattern (C20 diacid + dual AEEA linker). A secondary literature
   reference is "NPS" itself (native human NPS, ~7x Ile107 preference) —
   an agent that anchors on native ligand would land far from the answer.
+gold_reasoning: |
+  **Gold: `NPSv18.9`** — computed Ile107 preference 276.7×, the largest in the 14-compound panel.
+
+  ## Derivation
+
+  Gold is the geometric mean of `hNPSR1-Asn107 EC50` divided by the geometric mean of `hNPSR1-Ile107 EC50`, aggregated across replicates per (compound, receptor) in `data/processed/invitro_assays.csv`. Validator: `data/validators/cb-nps-polymorphism-001.py`.
+
+  ## Top of the panel by Ile107 preference
+
+  | compound | Asn107 EC50 (nM) | Ile107 EC50 (nM) | preference | n(A) | n(I) | published? |
+  |---|---:|---:|---:|---:|---:|---|
+  | **NPSv18.9** | 260.8 | 0.94 | **277×** | 5 | 1 | no |
+  | rNPS(1–10) | 2090 | 18.8 | 111× | 1 | 1 | yes (Reinscheid lab) |
+  | hNPS(1–10) | 776 | 7.4 | 105× | 1 | 1 | yes |
+  | NPSv16.13 | 1026 | 11.1 | 93× | 17 | 4 | no |
+  | NPSv31.7 | 423 | 5.2 | 81× | 4 | 2 | no |
+  | NPSv10.16 | 1243 | 18.0 | 69× | 3 | 2 | no |
+  | NPSv5.4 | 52.3 | 0.89 | 59× | 8 | 2 | no |
+  | NPS (native) | 25.8 | 3.8 | 6.8× | 167 | 77 | yes (Reinscheid 2002) |
+
+  Gap from `NPSv18.9` to the #2 candidate `rNPS(1–10)` is 2.5×.
+
+  ## Why NPSv18.9 wins
+
+  `NPSv18.9` is the native human NPS sequence with an unusually heavy lipidation linker at K11: gamma-Glu + two AEEA spacers + a C20 dicarboxylic acid (~30-atom total chain). The extended hydrophobic stalk on the Asn107 variant appears to clash with side-chain bulk at position 107 in the receptor, but the smaller Ile107 side chain accommodates it — producing the largest Ile107 preference in the panel.
+
+  The two published N-terminal truncations `hNPS(1–10)` and `rNPS(1–10)` rank #2 and #3 at 111× and 105×, and would be the answers a retrieval-only agent gives ("NPS truncation literature → Ile107 preference"). The actual winner is an unpublished internal modification with a 2.5× larger preference — the trap design is "looks-comprehensively-optimized" candidates (multiple D-aa + standard palmitoyl) versus a single unusual linker.
+
+  Random-guess baseline: 1/14 = 7.14%.

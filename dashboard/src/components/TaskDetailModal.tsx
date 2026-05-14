@@ -3,6 +3,7 @@
 import { TaskMetadata, DashboardData, RunDetails } from '@/types/performance';
 import { X, Tag } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import Markdown from './Markdown';
 
 interface TaskDetailModalProps {
   task: TaskMetadata;
@@ -87,6 +88,17 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
             </div>
           )}
 
+          {typeof goldAnswer.gold_reasoning === 'string' && goldAnswer.gold_reasoning.trim().length > 0 && (
+            <div className="mt-4 bg-white border border-green-200 p-4">
+              <div className="text-green-800 font-bold text-xs uppercase tracking-wide mb-2">
+                Gold reasoning
+              </div>
+              <div className="text-stone-800">
+                <Markdown>{goldAnswer.gold_reasoning}</Markdown>
+              </div>
+            </div>
+          )}
+
           <details className="mt-4">
             <summary className="cursor-pointer text-stone-600 text-xs font-medium">
               Raw gold YAML
@@ -108,7 +120,7 @@ export default function TaskDetailModal({ task, data, onClose }: TaskDetailModal
           <div>
             <h2 className="text-xl font-bold text-stone-900 font-mono">{task.id}</h2>
             <div className="text-stone-600 text-sm mt-1">
-              {[task.task_type, task.difficulty].filter(Boolean).join(' · ')}
+              {task.task_type}
             </div>
           </div>
           <button
