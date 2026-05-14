@@ -1,6 +1,6 @@
-# pilot-peptide-pairwise-sequence-nps-easy-011
+# NPS pairwise: agents read modification count as potency; truncation wins 60×
 
-**One-liner:** Both codex and claude pick the heavily-modified peptide over a simple truncated amide. Gold contradicts: the truncation is 60× more potent *and* a clean full agonist, while the combo-modified peptide is a weak partial agonist.
+Both codex and claude pick the heavily-modified peptide over a simple truncated amide. Gold contradicts: the truncation is 60× more potent *and* a clean full agonist, while the combo-modified peptide is a weak partial agonist.
 
 **Date:** 2026-05-12
 **Task type:** `next_experiment` (pairwise potency prediction from sequence)
@@ -87,3 +87,27 @@ Three specific reasoning failures both agents committed, plus one efficacy-relat
 3. **No N-terminal active core principle.** NPS biology says the N-terminal `SFRNG...` is the active core; the C-terminal `TSFQRAKS` region is dispensable or destabilizing. `SFRNGVGTGMKKTSFQR-NH2` is exactly a truncation *before* `TSFQRAKS` with a C-amide cap — a textbook way to boost potency for this peptide family. Neither agent invoked "truncation can be good."
 
 4. **Conflated potency and efficacy (Claude specifically).** Claude asserted modifications would improve "potency" without distinguishing potency from efficacy. The data shows the modified peptide loses ~50% Emax and becomes β-arrestin-inactive — heavy backbone modification (β-homoarginine adds a CH2 to the main chain; N-methylation alters H-bonding) can convert full agonists to partial. This is a separate failure mode from #1–3 and is specific to thinking about EC50 in isolation.
+
+## Golden reasoning trace
+
+What the correct rationale looks like from the same inputs.
+
+**HIGH-confidence (well-documented in NPS / GPCR ligand SAR):**
+
+1. *The N-terminal SF... motif of NPS is the receptor-recognition core.* NPS = 20-residue peptide `SFRNGVGTGMKKTSFQRAKS`. The N-terminal Ser-Phe is essential for full Gq-coupled potency at NPSR1 (Reinscheid 2005; Roth 2006). Any modification at position 1 typically costs ≥10× in potency.
+2. *PEP-17D19C9AD5 = NPS-(1–17)-NH₂* — a 17-residue truncation of native NPS with a C-terminal amide cap. The active N-terminal core is intact; the C-terminal `AKS` (positions 18–20) is removed. That segment is dispensable for in vitro potency and is a metabolism-driven liability, not a binding contact. Truncate + amide-cap is a standard medchem move that *boosts* observed in vitro potency.
+3. *PEP-C9FE4F8ED3 modifies position 1 with D-Ser.* D-amino-acid substitution at position 1 inverts N-terminal chirality and breaks the helix nucleation NPS uses for receptor engagement. Expected effect: ≥10× potency loss.
+
+**MEDIUM-confidence (plausible from family):**
+
+4. *β-homoarginine at position 3* adds a CH₂ to the backbone, perturbing local geometry. Generally tolerated as a stability modification but rarely improves potency.
+5. *Internal lipidation (C16-palm at K12, inside the sequence)* differs mechanistically from C-terminal lipidation. Internal lipidation can sequester the peptide in cell membranes away from the receptor pocket or sterically obstruct binding. The drop to partial agonism on Ca²⁺ (Emax 41%) is consistent with an altered binding pose that engages the receptor incompletely.
+
+**SPECULATIVE (cannot be quantitatively pinned from this data alone):**
+
+6. *β-arrestin functional loss.* The combo variant is agonist on Ca²⁺/IP-1 but inactive on β-arrestin — consistent with a biased partial-agonist phenotype where the altered pose couples G-protein machinery suboptimally and fails to recruit β-arrestin. Cannot be confirmed without single-modification controls.
+7. *Exact contribution of each modification.* Five simultaneous modifications without per-modification ablation data — cannot quantitatively attribute the observed gap to any one substitution.
+
+**Bottom line.** Gold label is supported by direct lab observation (60× potency, 40-point Emax gap, β-arrestin loss — three independent signals), established NPS-family SAR (N-terminal modification = bad; C-terminal AKS truncation = neutral-to-good), and plausible secondary mechanisms (internal lipidation, backbone modification) for the Emax / β-arrestin gap. Cannot resolve from this data alone: quantitative per-modification attribution, and whether the β-arrestin loss is a pose effect or a separate failure. Estimated overall confidence in the mechanistic rationale: ~80%.
+
+**Contrast with the agent failures above:** the correct rationale leads with the N-terminal active-core principle (claim 1) and treats truncation as a *positive* (claim 2). Neither Claude nor Codex invoked the N-terminal-core principle; both read the truncation as an "unmodified" baseline rather than as a textbook potency-boost move. The agents' modification-by-modification attribution table (Claude's bulleted list) covers the same five modifications the gold trace covers under MEDIUM/SPECULATIVE — but assigns each one a net-positive sign with no combinatorial discount.

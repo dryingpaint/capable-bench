@@ -1,4 +1,4 @@
-# pilot-hit-prediction-002 — proximal-potency dominates over PK / bias concerns
+# Hit prediction: proximal potency overrides PK and bias concerns
 
 Both Claude and Codex predict `active` on an unlipidated, Gq-biased peptide at the lower dose (50 µg, 1-h window). Both agents *acknowledge* the bias and PK concerns in their rationales, then weight low Ca²⁺/IP-1 EC50 above them and commit `active`. Gold is `inactive`.
 

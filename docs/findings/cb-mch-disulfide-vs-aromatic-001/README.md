@@ -1,6 +1,6 @@
-# cb-mch-disulfide-vs-aromatic-001 — published "optimized" analog trap
+# MCH: agents trust Bednarek's analog; native hMCH wins 30×
 
-**One-liner:** A pairwise potency prediction where one option is the native hMCH 19-mer and the other is Bednarek 2001 compound 19 (a published truncated/cyclic MCH(6-17) analog with N-acetyl cap, D-Cys, and C-terminal Trp-NH2). Both Claude and Codex pick the Bednarek-optimized analog, applying textbook lead-optimization SAR: caps + D-amino-acid + aromatic extension + N-terminal truncation = more potent. The published assay data say the opposite — the native 19-mer is ~30× more potent at MCHR1.
+A pairwise potency prediction where one option is the native hMCH 19-mer and the other is Bednarek 2001 compound 19 (a published truncated/cyclic MCH(6-17) analog with N-acetyl cap, D-Cys, and C-terminal Trp-NH2). Both Claude and Codex pick the Bednarek-optimized analog, applying textbook lead-optimization SAR: caps + D-amino-acid + aromatic extension + N-terminal truncation = more potent. The published assay data say the opposite — the native 19-mer is ~30× more potent at MCHR1.
 
 **Date:** 2026-05-13
 **Task type:** `next_experiment` (pairwise option selection; reused for binary potency comparison)

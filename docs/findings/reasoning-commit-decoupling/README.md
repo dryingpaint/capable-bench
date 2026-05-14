@@ -1,4 +1,4 @@
-# Reasoning–commit decoupling: agents name the right risks, then commit on proximal potency anyway
+# Reasoning–commit decoupling: agents name the right risks, then commit anyway
 
 Across hit_prediction, multitarget, and the existing SAR findings, Claude and Codex correctly identify the load-bearing risks (bias, PK liabilities, partial agonism, combinatorial modification interference) in their `rationale` and `main_risk` text — and then commit a prediction that ignores those risks in favor of the most prominent in vitro potency signal. The text is calibrated; the prediction and confidence are not.
 

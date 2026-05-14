@@ -1,4 +1,4 @@
-# Pairwise peptide potency: agents pick by length, not SAR, when the gap is narrow
+# Pairwise potency: agents pick by length, not SAR, at narrow gaps
 
 On the 60 `next_experiment` pairwise-potency tasks (predict the more potent of two peptides from sequence alone), claude and codex are above random when the potency ratio is wide and **below random when the ratio is narrow**, with a shared failure mode: both agents systematically pick the *longer / more-modified* peptide when the actual potency difference is small.
 

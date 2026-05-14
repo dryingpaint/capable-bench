@@ -1,133 +1,164 @@
 # Case studies — pairwise potency failure modes
 
-One illustrative case per failure mode identified in `README.md`, plus a positive-control case showing real SAR reasoning when it works.
+One illustrative case per failure mode identified in `README.md`, plus a positive-control case showing real SAR reasoning when it works. Every quote is verbatim from `runs/<task_id>/<timestamp>/agent_trace.txt`; click the *Full agent trace* toggle to expand each one inline.
 
-Every example pulls the actual agent reasoning from `runs/<task_id>/<timestamp>/agent_trace.txt`. Quotes are verbatim.
+The full per-task category labels for all 53 graded failures are in `failure_classifications.csv`.
 
 ---
 
 ## 1. AUP refusal — `mch-trivial-016` (claude)
 
-**Setup.** Potency ratio **26,316×** (gold more potent).
+**Setup.** A 9-residue cyclic mimetic vs. a 17-residue native MCH-like peptide.
 
 | | Modification |
 |---|---|
 | PEP-4BE58CE8E0 | `Ac-Cys-Met-Leu-Gly-Arg-Val-Tyr-Arg-Cys-NH2` |
 | PEP-F13501AAC3 (gold) | `Asp-Phe-Asp-Met-Leu-Arg-Cys-Met-Leu-Gly-Arg-Val-Tyr-Arg-Pro-Cys-Trp` |
 
-**What claude did.** Did not engage with the task at all. The trace contains only:
+**What claude did.** Did not engage. The trace contains only:
 
 > *"API Error: Claude Code is unable to respond to this request, which appears to violate our Usage Policy (https://www.anthropic.com/legal/aup). Try rephrasing the request or attempting a different approach."*
 
-**Why this matters.** The task prompt explicitly begins with *"Safety and scope: this is a non-clinical benchmark over anonymized internal research data. Do not provide therapeutic advice, wet-lab protocols..."* — yet claude's safety classifier still triggers, presumably on the peptide-sequence content itself. This is one of 5 such refusals (all claude, all in MCH or NPS families). Codex never refuses.
+[Full agent trace](traces/mch-trivial-016-claude.jsonl)
 
-**Implication.** The benchmark cannot currently distinguish "claude can't do peptide SAR" from "claude refuses peptide tasks." Until refusals are surfaced as a separate column, claude's failure rate is inflated by ~17%.
+**Why this matters.** The task prompt explicitly begins with *"Safety and scope: this is a non-clinical benchmark over anonymized internal research data. Do not provide therapeutic advice, wet-lab protocols..."* — yet claude's safety classifier still triggers, presumably on the peptide-sequence content itself. 5 of claude's 22 reasoning failures (23%) are AUP refusals; codex has 0.
+
+**Implication.** Until refusals are surfaced as a separate column, claude's failure rate is inflated by ~23%. The benchmark cannot currently distinguish "claude can't do peptide SAR" from "claude refuses peptide tasks."
+
+**More examples (claude AUP refusals).** `mch-easy-013`, `mch-medium-010`, `mch-trivial-016`, `mch-trivial-017`, `nps-trivial-020`. All MCH or NPS family.
 
 ---
 
-## 2. Length / complexity cue — `mch-hard-005` (codex)
+## 2. Length / complexity cue — `oxn-hard-001` (codex)
 
-**Setup.** Potency ratio **2.97×** (gold more potent). The two peptides are length 30 chars vs 56 chars.
+**Setup.** Two OX2R-family peptides; gold is the shorter analog with non-natural residue substitutions. Potency ratio **4.46×** (gold more potent).
 
 | | Modification | Length |
 |---|---|---|
-| PEP-70DED4DFCB (gold) | `Ac-Cys-Gly-Arg-Val-Tyr-Cys-NH2` | 30 |
-| PEP-72E481BD02 | `Ac-Arg-Cys-Met-Leu-Gly-D-Arg-Val-Tyr-Arg-Pro-Cys-Trp-NH2` | 56 |
+| PEP-3238F2B9CF (gold) | `GLQGX LQ(hArg)XL QASGN HAAGI LT(Nle)-NH2` | 14 residues |
+| PEP-8806C23CA2 | `RSGPPGLQGRLQRLLQA(Thr)GNHAAGILTM-NH2` | 28 residues |
 
 **What codex did.** Picked the longer one. Verbatim trace:
 
-> *"The two candidates differ sharply: one is an annotated cyclic Ac-MCH(6-17)-NH2 scaffold with the longer MCH pharmacophore context and D-Arg substitution, while the other is a much shorter cyclic fragment missing much of that context. **I'm selecting the longer scaffold as the potency prediction.**"*
+> *"The stronger sequence signal is the full-length, native-like OX2R peptide versus the shorter analog with multiple nonstandard substitutions. I'm going to select the full-length native-like entry as the predicted lower-EC50 peptide."*
 
-**Why this matters.** No residue-level analysis. The decision is explicitly phrased as length-based (*"the longer scaffold"*) with the only specific feature mentioned being "D-Arg substitution" — which codex doesn't reason about, just acknowledges. The 6-mer mimetic wins in reality (~3× more potent in held-out assays), but codex's prior says "more pharmacophore context = more potent."
+[Full agent trace](traces/oxn-hard-001-codex.jsonl)
 
-**Implication.** At the 1.1–1.5× ratio range, codex's failures average 7/9 = 78% picking-the-longer-one. This is the dominant failure mode at the difficulty level the benchmark is supposed to discriminate.
+**Why this matters.** The decision is explicitly length-based ("full-length, native-like" → potency call). Codex doesn't engage with the specific non-natural residues (hArg, Nle, X) at all — it treats their presence as a generic "modified analog" signal rather than reasoning about what those substitutions do at OX2R. The shorter peptide wins ~4× because the substitutions are at receptor-engagement positions; codex can't access that reasoning from a "full-length wins" prior.
+
+**Implication.** Codex's failures at narrow potency ratios (1.1–1.5×) average 7/9 = 78% picking-the-longer-one. This is the dominant codex failure mode at the difficulty level the benchmark is supposed to discriminate.
+
+**More examples (codex length cue).** `mch-easy-012`, `nps-easy-013`, `nps-easy-014`, `nps-medium-010`, `nps-trivial-019`, `oxn-easy-015`, `oxn-hard-005`, `oxn-trivial-019` — 10 total in the dataset.
 
 ---
 
-## 3. Pharmacophore misapplied — `mch-hard-005` (claude)
+## 3. Pharmacophore misapplied — `nps-easy-012` (claude)
 
-**Setup.** Same task. Gold is the 6-residue cyclic peptide.
+**Setup.** Two NPS analogs; gold is the simpler peptide with a single D-Thr substitution. Potency ratio **79×** (gold more potent — robust gold).
 
-**What claude did.** Picked the longer peptide, but with *sophisticated* reasoning:
+| | Modification | Visible "optimizations" |
+|---|---|---|
+| PEP-EBF5A06DFA (gold) | `SFRNGVGTGMKK(D-Thr)SFQRAKS` | 1 — D-Thr at position 13 |
+| PEP-93846D9997 | `(D-Ser)F(4-F-Phe)NGVGTGMKK(N-Me-Thr)SFQRAKS-NH2` | 4 — D-Ser1, 4-F-Phe at position 3, N-Me-Thr13, C-terminal amide |
 
-> *"Selected PEP-72E481BD02 as the more potent peptide. It contains the **full DRVY pharmacophore plus the Trp anchor and Pro hinge**, which the 6-residue Cys-Gly-Arg-Val-Tyr-Cys peptide lacks — the truncated hexapeptide retains only the RVY core and should bind MCHR1 substantially more weakly."*
+**What claude did.** Picked the heavily-modified peptide with *named-series-level* reasoning:
 
-**Why this matters.** This is *real medicinal chemistry knowledge*: the DRVY motif is the established MCH pharmacophore, the Trp at position 17 is a hydrophobic anchor residue in receptor binding, and Pro residues do act as conformational hinges. Claude correctly identified all three concepts. The conclusion is just wrong for this particular dataset — the truncated hexapeptide is the gold winner anyway.
+> *"R3 → 4-F-Phe (hydrophobic/aromatic at position 3 — a well-known SAR-driven potency enhancement at NPSR; consistent with the [t-Bu-Ala3]NPS / [Cha3]NPS analog series)."*
+>
+> *"PEP-93846D9997 combines multiple potency- and stability-enhancing modifications, including the canonical position-3 hydrophobic substitution that drives large EC50 reductions in NPS SAR series."*
 
-**Implication.** This is the most concerning category because it's the failure mode that *cannot be fixed* by sanitizing the input. Claude is doing the right kind of reasoning and reaching the wrong answer. Two possible explanations:
+[Full agent trace](traces/nps-easy-012-claude.jsonl)
 
-1. **The gold is non-obvious by SAR.** The dataset may contain a peptide that breaks textbook expectations — maybe the minimal mimetic has unusual conformational rigidity that compensates for missing residues. If true, this is a *good* benchmark item that exposes the limits of textbook SAR.
-2. **The gold is noisy.** At a 2.97× potency ratio in a single in-vitro assay, the call may not be robust. A re-derivation from raw replicates would tell us whether the "correct" answer survives noise.
+**Why this matters.** This is *real medicinal-chemistry knowledge*: [t-Bu-Ala3]NPS and [Cha3]NPS are published NPSR analog series, position-3 aromatic/hydrophobic substitutions are a documented potency-enhancing move in NPS SAR, D-Ser1 / N-Me-Thr / C-terminal amide are all canonical peptide-stability features. Claude correctly identifies four named, published SAR principles. The conclusion is just wrong for this dataset — the held-out assay says the single-D-Thr peptide is 79× more potent.
 
-We don't currently have the information to distinguish (1) from (2). Both would be useful follow-ups.
+This is the most concerning failure mode because it isn't fixable by sanitizing the input. Claude is doing the right kind of reasoning and reaching the wrong answer. Two possibilities:
+
+1. **The gold's mechanism beats the textbook expectation.** The mid-sequence D-Thr at position 13 may produce a local conformational change that the published series doesn't predict. If true, this is a *good* benchmark item — it exposes the limit of textbook SAR.
+2. **The visible modification count is misleading the agent.** Claude counts four features for the loser, one for the gold, and reasons "more SAR-validated modifications → more potent." That's the same length/count cue as codex's failure mode (Case 2) just dressed in more sophisticated language.
+
+The 79× ratio rules out gold-noise, so the failure is real — not an artifact of close-discrimination.
+
+**More examples (claude pharmacophore misapplied).** `mch-easy-014`, `mch-hard-002`, `mch-medium-007`, `nps-easy-014`, `nps-hard-002`, `nps-hard-004`, `nps-medium-010`, `nps-trivial-017`, `oxn-easy-014`, `oxn-hard-003`, `oxn-medium-009` — 12 total in the dataset.
 
 ---
 
 ## 4. No substantive reasoning — `oxn-medium-006` (codex)
 
-**Setup.** Potency ratio **14×** (gold more potent).
+**Setup.** Potency ratio **14×** (gold more potent). Loser carries a D-Citrulline substitution at a conserved Arg.
 
 | | Modification |
 |---|---|
 | PEP-F9A8AC8ACB (gold) | `RQK GLQGR LYRLL QGSGN HAAGI LT(Nle)-NH2` |
 | PEP-1644F77D58 | `RSGPPGLQGRLQ(D-Citrulline)LLQASGNHAAGILTM-NH2` |
 
-**What codex did.** Picked the wrong one with this complete trace:
+**What codex did.** Picked the wrong one. Full reasoning trace:
 
 > *"I'll inspect the task directory contents and the peptide sequence file, then make the potency call from the structural differences only."*
 >
 > *"The two candidates are both amidated OXN/OX2R peptide analogs. I'm comparing them against the recognizable orexin-B-like motif and the likely impact of truncation/substitution versus a single noncanonical residue."*
 
-That's it. No conclusion sentence, no claim about *which* substitution is worse, no mention of D-Citrulline specifically.
+That's it. No conclusion sentence, no claim about which substitution is worse, no mention of D-Citrulline.
+
+[Full codex trace](traces/oxn-medium-006-codex.jsonl)
 
 **Compare to claude on the same task** (correct):
 
 > *"...PEP-1644F77D58 is orexin-B with a **D-Citrulline replacing a conserved mid-sequence arginine** — a combined D-stereochemistry + charge-loss modification at a key pharmacophore residue that typically causes a large EC50 increase at OX2R."*
 
-Claude names the modification (D-Citrulline), identifies what it replaces (arginine → citrulline is canonical charge-removal), notes the position context (mid-sequence pharmacophore residue), and combines two independent effects (stereochemistry + charge). Codex never engages with any of those features.
+[Full claude trace](traces/oxn-medium-006-claude.jsonl)
 
-**Why this matters.** Codex's traces are systematically shorter and less mechanistic than claude's. On tasks where the SAR is non-trivial (small potency ratios), codex's thinner reasoning gets caught. The grader doesn't see this — both agents output `selected_option` and nothing else — but it's visible in the trace.
+Claude names the modification (D-Citrulline), identifies what it replaces (arginine → citrulline is canonical charge-removal), notes the position context (mid-sequence pharmacophore residue), and combines two independent effects (stereochemistry + charge).
 
-**Implication.** If you grade only `selected_option`, codex and claude look equivalent on most tasks. If you grade the rationale, claude is doing substantively more chemistry. The benchmark is currently invisible to this distinction.
+**Why this matters.** Codex's traces are systematically shorter and less mechanistic than claude's. The current grader sees only `selected_option` — so codex's thinner reasoning is invisible at the metric level even when it produces the same answer claude got via real chemistry. If you graded the rationale, you'd see the gap; if you only grade the pick, the agents look equivalent.
+
+**More examples (codex no-substantive-reasoning).** This is a rare classification (1 codex case across 60 tasks). The broader pattern — short codex traces, single-clause picks — shows up as `length_or_complexity_cue` whenever codex's terse rationale leans on a surface feature.
 
 ---
 
-## 5. Positive control: correct SAR reasoning — `nps-hard-001` (both agents)
+## 5. Positive control — `nps-hard-001` (both agents correct)
 
-**Setup.** Potency ratio **4.24×** (gold more potent). Both agents got this right.
+**Setup.** Potency ratio **4.24×**. Gold is the peptide with peripheral modifications; loser has a D-Arg at position 3 inside the conserved SFRNG activation motif.
 
 | | Modification |
 |---|---|
 | PEP-57AA9A237F (gold) | `(D-Ser)FRNGVGTGMK(N-Me-Lys)(N-Me-Thr)SFQRAKS-NH2` |
 | PEP-DCA805671F | `SF(D-Arg)NGVGTGMKKTSFQRAKS` |
 
-Native NPS sequence is `SFRNGVGTGMKKTSFQRAKS`. Gold has modifications at the *peripheral* positions (D-Ser1, mid-region N-methylation, C-terminal amide). Loser has a D-Arg substitution at position 3 — inside the conserved SFRNG activation motif.
+Native NPS sequence is `SFRNGVGTGMKKTSFQRAKS`. The loser's D-Arg3 substitution is *inside* the SFRNG activation motif; the gold's modifications (D-Ser1, mid-region N-methylations, C-terminal amide) are at peripheral positions.
 
-**What claude did:**
+**What both agents did.** Claude:
 
 > *"its modifications (D-Ser1, mid-region N-methylations, C-terminal amide) preserve the critical N-terminal pharmacophore, whereas PEP-DCA805671F's **D-Arg3 substitution disrupts an essential cationic residue in the SFRNG activation motif**."*
 
-**What codex did:**
+[Full claude trace](traces/nps-hard-001-claude.jsonl)
+
+Codex:
 
 > *"I'm treating the **D-Arg substitution at position 3 as the larger likely potency penalty for NPSR activation**, compared with the other peptide's D-Ser/N-methyl/C-amide pattern."*
 
-Both agents independently identified:
-- The same critical residue (Arg3 of NPS)
-- The same disruption (D-substitution at a conserved cationic position)
-- The same mechanism (loss of NPSR activation)
+[Full codex trace](traces/nps-hard-001-codex.jsonl)
 
-**Why this matters.** This is what the benchmark *claims* to test, and when conditions align — clear conserved-motif SAR, modifications at chemically distinct positions — both agents succeed via real reasoning. The benchmark *can* discriminate engaged-SAR-reasoning from surface heuristics; the problem is most tasks aren't structured cleanly enough to force this mode.
+Both independently identified the same critical residue (Arg3), the same disruption (D-substitution at a conserved cationic position), and the same mechanism (loss of NPSR activation).
 
-**Implication.** Build more tasks like `nps-hard-001`: short potency ratios, modifications at well-known SAR positions. The current 1.1–1.5× success rate of ~4/15 between the two agents suggests roughly that many tasks are structured this way; the other 11 are confounded by length or complexity cues.
+**Why this matters.** This is what the benchmark *claims* to test, and when conditions align — clear conserved-motif SAR, modifications at chemically distinct positions, modest potency ratio — both agents succeed via real reasoning. The benchmark *can* discriminate engaged-SAR reasoning from surface heuristics; the problem is most tasks aren't structured cleanly enough to force this mode.
+
+**Implication.** Build more tasks like `nps-hard-001`: narrow potency ratios, modifications at well-known SAR positions. The current 1.1–1.5× success rate of ~4/15 between the two agents is suggestive but unverified — some of those 4 wins may be length-cue picks that happened to land correctly, not real SAR reasoning. An audit would settle it.
 
 ---
 
 ## Summary
 
-| Category | Example | Severity | Fixable by prompt/data change? |
-|---|---|---|---|
-| AUP refusal | `mch-trivial-016` (claude) | Claude-only, ~17% of claude failures | No — model-side filter; surface as separate column |
-| Length / complexity cue | `mch-hard-005` (codex) | Dominant codex failure mode at narrow ratios | Yes — add controlled probes |
-| Pharmacophore misapplied | `mch-hard-005` (claude) | Most concerning; real SAR + wrong answer | Partial — needs gold-noise audit |
-| No substantive reasoning | `oxn-medium-006` (codex) | Hidden by current grader | Yes — grade the rationale |
-| **Positive control** | `nps-hard-001` (both) | What success looks like | n/a (this is the target shape) |
+| Category | Example | n (claude / codex) | Concern level | Fix path |
+|---|---|---|---|---|
+| AUP refusal | `mch-trivial-016` | 5 / 0 | Inflates claude failure rate by ~23% | Surface as a separate column; not addressable in-task |
+| Length / complexity cue | `oxn-hard-001` (codex) | 4 / 10 | Dominant codex failure at narrow ratios | Controlled probes that invert length-vs-potency |
+| Pharmacophore misapplied | `nps-easy-012` (claude) | 12 / 6 | Real SAR + wrong answer; hardest to address | Likely requires changes to agent reasoning, not benchmark design |
+| No substantive reasoning | `oxn-medium-006` (codex) | 1 / 0 | Hidden by current grader | Grade the rationale, not just the pick |
+| **Positive control** | `nps-hard-001` | n/a | What success looks like | Build more tasks of this shape |
+
+## Closing synthesis
+
+Three of the five failure modes are addressable through benchmark or grader changes: **AUP refusal** needs surfacing as a separate signal, **length/complexity cue** can be probed with deliberately length-inverted pairs, and **no-substantive-reasoning** becomes visible the moment you grade rationale text alongside the picked answer.
+
+**Pharmacophore misapplied is the failure mode the benchmark cannot fix.** Claude is invoking real, published, named SAR series and reaching the wrong conclusion. That's not a benchmark-design problem — it's an agent-capability gap that's only legible because the benchmark has held-out experimental data that contradicts the textbook expectation. Cases like `nps-easy-012` (where claude cites `[t-Bu-Ala3]NPS / [Cha3]NPS` by name and still picks wrong) are the items that justify keeping the benchmark.
+
