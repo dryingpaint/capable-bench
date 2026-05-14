@@ -1,0 +1,2 @@
+task_id,family,bucket,pep1_id,pep1_mod,pep1_canonical,pep1_dropped,pep2_id,pep2_mod,pep2_canonical,pep2_dropped,gold,tied_after_strip,pep1_pll,pep2_pll,pll_gap_p1_minus_p2,predicted,correct
+pilot-peptide-pairwise-sequence-mch-hard-005,MCH,hard,PEP-72E481BD02,Ac-Arg-Cys-Met-Leu-Gly-D-Arg-Val-Tyr-Arg-Pro-Cys-Trp-NH2,RCMLGRVYRPCW,,PEP-70DED4DFCB,Ac-Cys-Gly-Arg-Val-Tyr-Cys-NH2,CGRVYC,,PEP-70DED4DFCB,False,-3.484015464782715,-3.288875102996826,-0.19514036178588867,PEP-70DED4DFCB,True
