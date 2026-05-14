@@ -1,4 +1,4 @@
-# NPS pairwise: agents read modification count as potency; truncation wins 60×
+# Agents pick the more modified peptide; the simpler one is 60× more potent (pilot-peptide-pairwise-sequence-nps-easy-011)
 
 Both codex and claude pick the heavily-modified peptide over a simple truncated amide. Gold contradicts: the truncation is 60× more potent *and* a clean full agonist, while the combo-modified peptide is a weak partial agonist.
 
@@ -76,23 +76,21 @@ Then collapsed all five into an additive claim:
 
 > "The extensive chemical optimization in PEP-C9FE4F8ED3, particularly the lipidation, should provide significantly higher potency at NPS receptors compared to the unmodified sequence."
 
-## Failure mode taxonomy
+## Failure modes
 
 Three specific reasoning failures both agents committed, plus one efficacy-related one Claude missed explicitly:
 
-1. **Additivity assumption.** Both agents treated 5 simultaneous modifications as additive improvements. In real medchem, combo modifications routinely *destroy* the active conformation — each may be net-positive in isolation but collectively distort binding geometry. Neither agent flagged combinatorial risk or proposed that "5 modifications at once" is qualitatively different from "1 modification at a time."
+1. **Additive-modification fallacy.** Both agents treated 5 simultaneous modifications as additive improvements, missing that combo modifications routinely destroy the active conformation even when each is net-positive in isolation.
 
-2. **"Lipidation = potency boost" misapplied to internal lipidation.** C16-palm at K12 is in the *middle* of the sequence (position 12 of ~20), not at a terminus. Internal lipidation often sequesters the peptide in membranes *away from* the receptor pocket, or sterically blocks binding. Terminal lipidation (the classic potency trick used in e.g. GLP-1 analogs) is mechanistically different. Claude's phrase "major potency enhancer for membrane-associated receptors" is true for terminal lipidation; misapplied here.
+2. **"Lipidation = potency boost" misapplied to internal lipidation.** C16-palm at K12 sits mid-sequence (position 12 of ~20), where internal lipidation typically sequesters the peptide in membranes or sterically blocks binding — a mechanism distinct from the terminal lipidation trick used in e.g. GLP-1 analogs.
 
-3. **No N-terminal active core principle.** NPS biology says the N-terminal `SFRNG...` is the active core; the C-terminal `TSFQRAKS` region is dispensable or destabilizing. `SFRNGVGTGMKKTSFQR-NH2` is exactly a truncation *before* `TSFQRAKS` with a C-amide cap — a textbook way to boost potency for this peptide family. Neither agent invoked "truncation can be good."
+3. **No N-terminal active core principle.** Neither agent invoked the textbook "truncation before `TSFQRAKS` + C-amide cap boosts potency" move, despite `SFRNGVGTGMKKTSFQR-NH2` being exactly that.
 
-4. **Conflated potency and efficacy (Claude specifically).** Claude asserted modifications would improve "potency" without distinguishing potency from efficacy. The data shows the modified peptide loses ~50% Emax and becomes β-arrestin-inactive — heavy backbone modification (β-homoarginine adds a CH2 to the main chain; N-methylation alters H-bonding) can convert full agonists to partial. This is a separate failure mode from #1–3 and is specific to thinking about EC50 in isolation.
+4. **Conflated potency and efficacy (Claude specifically).** Claude asserted modifications would improve "potency" without distinguishing it from efficacy, missing that the heavy backbone modifications (β-homoarginine, N-methylation) convert the full agonist to a partial one (~50% Emax loss, β-arrestin-inactive).
 
 ## Golden reasoning trace
 
 What the correct rationale looks like from the same inputs.
-
-**HIGH-confidence (well-documented in NPS / GPCR ligand SAR):**
 
 1. *The N-terminal SF... motif of NPS is the receptor-recognition core.* NPS = 20-residue peptide `SFRNGVGTGMKKTSFQRAKS`. The N-terminal Ser-Phe is essential for full Gq-coupled potency at NPSR1 (Reinscheid 2005; Roth 2006). Any modification at position 1 typically costs ≥10× in potency.
 2. *PEP-17D19C9AD5 = NPS-(1–17)-NH₂* — a 17-residue truncation of native NPS with a C-terminal amide cap. The active N-terminal core is intact; the C-terminal `AKS` (positions 18–20) is removed. That segment is dispensable for in vitro potency and is a metabolism-driven liability, not a binding contact. Truncate + amide-cap is a standard medchem move that *boosts* observed in vitro potency.

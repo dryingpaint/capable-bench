@@ -9,8 +9,9 @@ Two surfaces, one underlying class:
 Metric: masked pseudo-log-likelihood per residue. For each position i in a
 sequence of length L, mask position i, run a single forward pass, take
 log p(true_aa_i | x_\\{i}). Average across positions. Higher = more natural
-under the ESM-2 prior. The probe hypothesis is that the more potent peptide
-in a pair has higher mean PLL.
+under the ESM-2 prior. The pairwise probe ranks the peptide with higher mean
+PLL first as a deliberately simple zero-shot baseline; this is not a claim
+that sequence naturalness generally implies receptor potency.
 
 Non-canonical residues (D-Xxx, N-Me-Xxx, HomoArg, Nle, [AEEA] linkers, etc.)
 are stripped to the closest canonical L-amino acid before scoring. This is

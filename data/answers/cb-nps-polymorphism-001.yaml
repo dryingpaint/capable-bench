@@ -11,58 +11,51 @@ answer_space:
   - NPSv5.4
   - NPSv8
 random_guess_baseline: 0.2
-notes: |
-  Panel tightened from 14 to 5 compounds on 2026-05-13. The close
-  runners-up that competed within 2.5x of the gold (hNPS(1-10),
-  rNPS(1-10), NPSv16.13, NPSv31.7, NPSv10.16, NPSv21.9, NPSv2-proKKv1,
-  NPSv34.14, NPSv18.26) were removed so the task tests recognition of
-  the mechanism (long extended lipidation arm at K11 reaches the
-  Asn107/Ile107 contact) rather than discrimination between close
-  candidates.
-
-  Retained panel:
-    - NPSv18.9 (gold, 277x Ile107 preference) — gamma-Glu + 2x AEEA +
-      C20 diacid at K11, ~30-atom extended arm reaches position 107.
-    - NPSv5.4 (trap, 59x) — D-Ser/D-Lys/D-Thr scatter + standard
-      palmitoyl at K11. "Looks comprehensively optimized" but the
-      ~16-atom palmitoyl chain doesn't reach as far.
-    - NPSv18.16 (sibling control) — same K11 lipidation site as the
-      gold but standard C16 palmitoyl + extra K12. Tests whether
-      agents discriminate chain length when site is held constant.
-    - NPS (native baseline, 6.8x) — no variant-selective modification.
-    - NPSv8 (decoy, inactive) — all-D retro version.
-
-  Gold computed from data/processed/invitro_assays.csv as the geometric
-  mean hNPSR1-Asn107 EC50 divided by the geometric mean hNPSR1-Ile107
-  EC50, aggregated across replicates. Validator:
-  data/validators/cb-nps-polymorphism-001.py.
-gold_reasoning: |
-  **Gold: `NPSv18.9`** — computed Ile107 preference 276.7× in the tightened 5-compound panel.
-
-  ## Derivation
-
-  Gold is the geometric mean of `hNPSR1-Asn107 EC50` divided by the geometric mean of `hNPSR1-Ile107 EC50`, aggregated across replicates per (compound, receptor) in `data/processed/invitro_assays.csv`. Validator: `data/validators/cb-nps-polymorphism-001.py`.
-
-  ## The 5-compound panel
-
-  | compound | Asn107 EC50 (nM) | Ile107 EC50 (nM) | preference | role |
-  |---|---:|---:|---:|---|
-  | **NPSv18.9** | 260.8 | 0.94 | **277×** | gold (long extended K11 lipidation) |
-  | NPSv5.4 | 52.3 | 0.89 | 59× | trap (D-aa scatter + standard palmitoyl) |
-  | NPS (native) | 25.8 | 3.8 | 6.8× | baseline (Reinscheid 2002) |
-  | NPSv18.16 | n/a | n/a | < 1 | sibling control (same K11 site, shorter palmitoyl, prefers Asn107) |
-  | NPSv8 | — | — | inactive | all-D retro decoy |
-
-  ## Why NPSv18.9 wins
-
-  `NPSv18.9` is native human NPS with an unusually heavy lipidation linker at K11: gamma-Glu + two AEEA spacers + a C20 diacid (~30-atom extended arm). The Asn107→Ile107 substitution swaps a polar amide for a bulky hydrophobic side chain in the K11 contact region of the receptor. A long hydrophobic arm reaching that pocket:
-    - clashes with Asn107 (polar–hydrophobic mismatch) → high EC50;
-    - matches Ile107 (lipophilic–lipophilic) → low EC50.
-
-  `NPSv5.4` is the trap: four visible modifications (D-Ser, D-Lys, D-Thr, palmitoyl-at-K11) look "comprehensively optimized," but the standard ~16-atom palmitoyl chain doesn't reach far enough into the binding pocket to make differential contact at position 107. `NPSv18.16` is the key sibling control — same K11 lipidation site as the gold, same general modification class, but the shorter C16 palmitoyl chain actually prefers Asn107 (wrong direction). That contrast tells you chain length and arm geometry — not modification count — drive the variant selectivity.
-
-  Random-guess baseline: 1/5 = 20%.
-
-  ## Panel history
-
-  Tightened on 2026-05-13 from an original 14-compound panel. The removed candidates (hNPS(1-10), rNPS(1-10), and six other internal modifications) ranged 44× to 111× — close enough to the gold that confident reasoning could land on them by mistake. The current panel removes that ambiguity to test mechanism recognition.
+notes: "Panel tightened from 14 to 5 compounds on 2026-05-13. The close\nrunners-up\
+  \ that competed within 2.5x of the gold (hNPS(1-10),\nrNPS(1-10), NPSv16.13, NPSv31.7,\
+  \ NPSv10.16, NPSv21.9, NPSv2-proKKv1,\nNPSv34.14, NPSv18.26) were removed so the\
+  \ task tests recognition of\nthe mechanism (long extended lipidation arm at K11\
+  \ reaches the\nAsn107/Ile107 contact) rather than discrimination between close\n\
+  candidates.\n\nRetained panel:\n  - NPSv18.9 (gold, 277x Ile107 preference) \u2014\
+  \ gamma-Glu + 2x AEEA +\n    C20 diacid at K11, ~30-atom extended arm reaches position\
+  \ 107.\n  - NPSv5.4 (trap, 59x) \u2014 D-Ser/D-Lys/D-Thr scatter + standard\n  \
+  \  palmitoyl at K11. \"Looks comprehensively optimized\" but the\n    ~16-atom palmitoyl\
+  \ chain doesn't reach as far.\n  - NPSv18.16 (sibling control) \u2014 same K11 lipidation\
+  \ site as the\n    gold but standard C16 palmitoyl + extra K12. Tests whether\n\
+  \    agents discriminate chain length when site is held constant.\n  - NPS (native\
+  \ baseline, 6.8x) \u2014 no variant-selective modification.\n  - NPSv8 (decoy, inactive)\
+  \ \u2014 all-D retro version.\n\nGold computed from data/processed/invitro_assays.csv\
+  \ as the geometric\nmean hNPSR1-Asn107 EC50 divided by the geometric mean hNPSR1-Ile107\n\
+  EC50, aggregated across replicates. Validator:\ndata/validators/cb-nps-polymorphism-001.py.\n"
+gold_reasoning: "**Gold: `NPSv18.9`** \u2014 computed Ile107 preference 276.7\xD7\
+  \ in the tightened 5-compound panel.\n\n## Derivation\n\nGold is the geometric mean\
+  \ of `hNPSR1-Asn107 EC50` divided by the geometric mean of `hNPSR1-Ile107 EC50`,\
+  \ aggregated across replicates per (compound, receptor) in `data/processed/invitro_assays.csv`.\
+  \ Validator: `data/validators/cb-nps-polymorphism-001.py`.\n\n## The 5-compound\
+  \ panel\n\n| compound | Asn107 EC50 (nM) | Ile107 EC50 (nM) | preference | role\
+  \ |\n|---|---:|---:|---:|---|\n| **NPSv18.9** | 260.8 | 0.94 | **277\xD7** | gold\
+  \ (long extended K11 lipidation) |\n| NPSv5.4 | 52.3 | 0.89 | 59\xD7 | trap (D-aa\
+  \ scatter + standard palmitoyl) |\n| NPS (native) | 25.8 | 3.8 | 6.8\xD7 | baseline\
+  \ (Reinscheid 2002) |\n| NPSv18.16 | n/a | n/a | < 1 | sibling control (same K11\
+  \ site, shorter palmitoyl, prefers Asn107) |\n| NPSv8 | \u2014 | \u2014 | inactive\
+  \ | all-D retro decoy |\n\n## Why NPSv18.9 wins\n\n`NPSv18.9` is native human NPS\
+  \ with an unusually heavy lipidation linker at K11: gamma-Glu + two AEEA spacers\
+  \ + a C20 diacid (~30-atom extended arm). The Asn107\u2192Ile107 substitution swaps\
+  \ a polar amide for a bulky hydrophobic side chain in the K11 contact region of\
+  \ the receptor. A long hydrophobic arm reaching that pocket:\n  - clashes with Asn107\
+  \ (polar\u2013hydrophobic mismatch) \u2192 high EC50;\n  - matches Ile107 (lipophilic\u2013\
+  lipophilic) \u2192 low EC50.\n\n`NPSv5.4` is the trap: four visible modifications\
+  \ (D-Ser, D-Lys, D-Thr, palmitoyl-at-K11) look \"comprehensively optimized,\" but\
+  \ the standard ~16-atom palmitoyl chain doesn't reach far enough into the binding\
+  \ pocket to make differential contact at position 107. `NPSv18.16` is the key sibling\
+  \ control \u2014 same K11 lipidation site as the gold, same general modification\
+  \ class, but the shorter C16 palmitoyl chain actually prefers Asn107 (wrong direction).\
+  \ That contrast tells you chain length and arm geometry \u2014 not modification\
+  \ count \u2014 drive the variant selectivity.\n\nRandom-guess baseline: 1/5 = 20%.\n\
+  \n## Panel history\n\nTightened on 2026-05-13 from an original 14-compound panel.\
+  \ The removed candidates (hNPS(1-10), rNPS(1-10), and six other internal modifications)\
+  \ ranged 44\xD7 to 111\xD7 \u2014 close enough to the gold that confident reasoning\
+  \ could land on them by mistake. The current panel removes that ambiguity to test\
+  \ mechanism recognition.\n"
+effect_size: curated
+effect_size_note: cb-* curated task

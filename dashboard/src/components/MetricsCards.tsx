@@ -13,7 +13,6 @@ type MetricCard = {
 
 export default function MetricsCards({ data }: MetricsCardsProps) {
   const taskTypes = [...new Set(data.tasks.map(t => t.task_type))].length;
-  const hardTasks = data.tasks.filter(t => t.difficulty?.toLowerCase() === 'hard').length;
 
   // Calculate top performing model
   const ranked = data.models
@@ -29,11 +28,6 @@ export default function MetricsCards({ data }: MetricsCardsProps) {
       label: 'Tasks',
       value: data.tasks.length.toString(),
       delta: `${taskTypes} task types`,
-    },
-    {
-      label: 'Hard tasks',
-      value: hardTasks.toString(),
-      delta: `${Math.round(100 * hardTasks / Math.max(data.tasks.length, 1))}% of suite`,
     },
     {
       label: 'Models scored',
@@ -63,7 +57,7 @@ export default function MetricsCards({ data }: MetricsCardsProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {cards.map((card) => (
         <div
           key={card.label}

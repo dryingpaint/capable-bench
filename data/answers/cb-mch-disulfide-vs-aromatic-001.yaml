@@ -6,34 +6,33 @@ gold_top:
 gold_ranking:
 - PEP-77A315C29A
 - PEP-021CF7B0A5
-outcome_definition: lower best_ec50_nm in held-out in vitro functional assays (potency ratio 30.67x; PEP-77A315C29A best EC50
-  = 0.15 nM at MCHR1 binding, PEP-021CF7B0A5 best EC50 = 4.6 nM at MCHR1 binding; source = Bednarek 2001 Table 1 alanine scan
+outcome_definition: lower best_ec50_nm in held-out in vitro functional assays (potency
+  ratio 30.67x; PEP-77A315C29A best EC50 = 0.15 nM at MCHR1 binding, PEP-021CF7B0A5
+  best EC50 = 4.6 nM at MCHR1 binding; source = Bednarek 2001 Table 1 alanine scan
   on full hMCH and Table 5 D-amino-acid scan on compound 19)
-gold_reasoning: |
-  **Gold: `PEP-77A315C29A`** (the native hMCH 19-mer) — observed potency ratio 30.67× at MCHR1 binding.
-
-  ## Held-out measurements (from `data/processed/invitro_assays.csv`)
-
-  | compound | best EC50 / IC50 at MCHR1 (nM) | source |
-  |---|---:|---|
-  | **PEP-77A315C29A** (`DFDMLRCMLGRVYRPCAQV`, native hMCH) | **0.15** | Bednarek 2001 Table 1 (alanine scan, full hMCH) |
-  | PEP-021CF7B0A5 (`Ac-Arg-D-Cys-Met-Leu-Gly-Arg-Val-Tyr-Arg-Pro-Cys-Trp-NH2`, compound 19 scaffold) | 4.6 | Bednarek 2001 Table 5 (D-aa scan on compound 19) |
-
-  ## Why the native 19-mer wins
-
-  The Bednarek 2001 "compound 19" scaffold is a truncated cyclic MCH(6–17) analog with three apparent optimizations:
-  - N-terminal Ac- cap and C-terminal -NH₂ cap (reduce charge-desolvation cost),
-  - C-terminal Trp (adds an aromatic contact),
-  - D-Cys7 (proposed to optimize disulfide ring geometry),
-  - removed N-terminal `DFDML` (claimed non-pharmacophoric tail).
-
-  Empirically (`data/processed/invitro_assays.csv`):
-  - D-Cys7 *disrupts* the Cys7–Cys16 disulfide rather than optimizing it. Without the native bridge, the peptide partly linearizes and loses the cyclic active conformation. Bednarek 2001 Table 5 shows D-Cys scans cost 1–3 orders of magnitude.
-  - The `DFDML` N-terminal tail is *not* non-pharmacophoric — it participates in MCHR1 receptor contacts in the full peptide. Truncation removes those contacts.
-  - The native C-terminal `Cys-Ala-Gln-Val` makes a Gln18 H-bond and adjacent receptor contacts; the truncated `Cys-Trp-NH₂` shape loses them, and the added Trp aromatic doesn't recover the loss.
-
-  Net effect: ~30× weaker, consistent with the measurement.
-
-  ## Trap design
-
-  This task was deliberately constructed to test whether agents apply textbook lead-optimization SAR (caps + D-aa + aromatic + truncation = better) by analogy, without checking against the actual data. Both Claude and Codex fall for it; the published measurements contradict the textbook intuition.
+gold_reasoning: "**Gold: `PEP-77A315C29A`** (the native hMCH 19-mer) \u2014 observed\
+  \ potency ratio 30.67\xD7 at MCHR1 binding.\n\n## Held-out measurements (from `data/processed/invitro_assays.csv`)\n\
+  \n| compound | best EC50 / IC50 at MCHR1 (nM) | source |\n|---|---:|---|\n| **PEP-77A315C29A**\
+  \ (`DFDMLRCMLGRVYRPCAQV`, native hMCH) | **0.15** | Bednarek 2001 Table 1 (alanine\
+  \ scan, full hMCH) |\n| PEP-021CF7B0A5 (`Ac-Arg-D-Cys-Met-Leu-Gly-Arg-Val-Tyr-Arg-Pro-Cys-Trp-NH2`,\
+  \ compound 19 scaffold) | 4.6 | Bednarek 2001 Table 5 (D-aa scan on compound 19)\
+  \ |\n\n## Why the native 19-mer wins\n\nThe Bednarek 2001 \"compound 19\" scaffold\
+  \ is a truncated cyclic MCH(6\u201317) analog with three apparent optimizations:\n\
+  - N-terminal Ac- cap and C-terminal -NH\u2082 cap (reduce charge-desolvation cost),\n\
+  - C-terminal Trp (adds an aromatic contact),\n- D-Cys7 (proposed to optimize disulfide\
+  \ ring geometry),\n- removed N-terminal `DFDML` (claimed non-pharmacophoric tail).\n\
+  \nEmpirically (`data/processed/invitro_assays.csv`):\n- D-Cys7 *disrupts* the Cys7\u2013\
+  Cys16 disulfide rather than optimizing it. Without the native bridge, the peptide\
+  \ partly linearizes and loses the cyclic active conformation. Bednarek 2001 Table\
+  \ 5 shows D-Cys scans cost 1\u20133 orders of magnitude.\n- The `DFDML` N-terminal\
+  \ tail is *not* non-pharmacophoric \u2014 it participates in MCHR1 receptor contacts\
+  \ in the full peptide. Truncation removes those contacts.\n- The native C-terminal\
+  \ `Cys-Ala-Gln-Val` makes a Gln18 H-bond and adjacent receptor contacts; the truncated\
+  \ `Cys-Trp-NH\u2082` shape loses them, and the added Trp aromatic doesn't recover\
+  \ the loss.\n\nNet effect: ~30\xD7 weaker, consistent with the measurement.\n\n\
+  ## Trap design\n\nThis task was deliberately constructed to test whether agents\
+  \ apply textbook lead-optimization SAR (caps + D-aa + aromatic + truncation = better)\
+  \ by analogy, without checking against the actual data. Both Claude and Codex fall\
+  \ for it; the published measurements contradict the textbook intuition.\n"
+effect_size: curated
+effect_size_note: cb-* curated task

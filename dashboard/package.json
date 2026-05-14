@@ -5,9 +5,12 @@
   "scripts": {
     "dev": "next dev --webpack",
     "dev:turbo": "next dev --turbo",
+    "bake": "tsx scripts/bake-static.ts",
+    "prebuild": "npm run bake",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "deploy": "npm run build && wrangler pages deploy out"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.100.10",
@@ -27,6 +30,8 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.21.0",
+    "typescript": "^5",
+    "wrangler": "^4.90.1"
   }
 }

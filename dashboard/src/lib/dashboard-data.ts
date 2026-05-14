@@ -1,11 +1,9 @@
-import { NextResponse } from 'next/server';
 import path from 'path';
 import fs from 'fs/promises';
-import crypto from 'crypto';
 
 type JsonObject = Record<string, unknown>;
 
-type DashboardRun = {
+export type DashboardRun = {
   task_id: string;
   model: string;
   run_id: string;
@@ -16,56 +14,23 @@ type DashboardRun = {
   grade: JsonObject;
   score: number | null;
   timestamp: string;
+  aup_refusal: boolean;
   tags?: string[];
 };
 
-type CacheState = {
-  data: JsonObject;
-  hash: string;
-  timestamp: number;
-};
-
-let cache: CacheState | null = null;
-
-const CACHE_TTL = 30 * 1000;
-const TEXT_PREVIEW_BYTES = 64 * 1024;
-
-export async function GET() {
-  try {
-    const capableBenchDir = path.resolve(process.cwd(), '..');
-    const now = Date.now();
-
-    if (cache && now - cache.timestamp < CACHE_TTL) {
-      return NextResponse.json(cache.data);
-    }
-
-    const currentHash = await getDashboardHash(capableBenchDir);
-    if (cache && cache.hash === currentHash) {
-      cache.timestamp = now;
-      return NextResponse.json(cache.data);
-    }
-
-    const data = await buildDashboardData(capableBenchDir);
-    cache = {
-      data,
-      hash: currentHash,
-      timestamp: now,
-    };
-
-    return NextResponse.json(data);
-  } catch (error: unknown) {
-    console.error('Error generating dashboard data:', error);
-    return NextResponse.json(
-      {
-        error: 'Failed to generate dashboard data',
-        details: error instanceof Error ? error.message : String(error),
-      },
-      { status: 500 }
-    );
-  }
+export interface RunSummaryLocation {
+  taskId: string;
+  runId: string;
+  runDir: string;
 }
 
-async function buildDashboardData(capableBenchDir: string): Promise<JsonObject> {
+const TEXT_PREVIEW_BYTES = 64 * 1024;
+
+export function defaultCapableBenchDir(): string {
+  return path.resolve(process.cwd(), '..');
+}
+
+export async function buildDashboardData(capableBenchDir: string): Promise<JsonObject> {
   const tasksDir = path.join(capableBenchDir, 'data', 'tasks');
   const answersDir = path.join(capableBenchDir, 'data', 'answers');
   const runsDir = path.join(capableBenchDir, 'runs');
@@ -85,8 +50,19 @@ async function buildDashboardData(capableBenchDir: string): Promise<JsonObject> 
     model_summary: modelSummary(Object.values(latestRuns), models),
     latest_runs: latestRuns,
     task_tags: taskTags(tasks),
-    calibration: await readJsonOptional(path.join(runsDir, 'calibration_summary.json')),
   };
+}
+
+export async function enumerateRunDirs(runsDir: string): Promise<RunSummaryLocation[]> {
+  const summaryPaths = await findRunSummaries(runsDir);
+  return summaryPaths.map((summaryPath) => {
+    const runDir = path.dirname(summaryPath);
+    return {
+      taskId: path.basename(path.dirname(runDir)),
+      runId: path.basename(runDir),
+      runDir,
+    };
+  });
 }
 
 async function listTasks(tasksDir: string, answersDir: string): Promise<Array<JsonObject & { id: string }>> {
@@ -122,9 +98,7 @@ async function collectRuns(runsDir: string): Promise<DashboardRun[]> {
 
   for (const summaryPath of summaryPaths) {
     const summary = await readJsonOptional(summaryPath);
-    if (!summary) {
-      continue;
-    }
+    if (!summary) continue;
 
     const runDir = path.dirname(summaryPath);
     const taskId = stringValue(summary.task_id) || path.basename(path.dirname(runDir));
@@ -132,6 +106,7 @@ async function collectRuns(runsDir: string): Promise<DashboardRun[]> {
     const command = stringValue(summary.command);
     const model = classifyModel(command);
     const score = scoreFromGrade(grade);
+    const aupRefusal = model === 'Claude' && (await detectAupRefusal(path.join(runDir, 'stdout.txt')));
 
     runs.push({
       task_id: taskId,
@@ -144,6 +119,7 @@ async function collectRuns(runsDir: string): Promise<DashboardRun[]> {
       grade,
       score,
       timestamp: stringValue(summary.run_id) || path.basename(runDir),
+      aup_refusal: aupRefusal,
     });
   }
 
@@ -155,16 +131,12 @@ async function findRunSummaries(runsDir: string): Promise<string[]> {
   const taskEntries = await safeReadDir(runsDir);
 
   for (const taskEntry of taskEntries) {
-    if (!taskEntry.isDirectory()) {
-      continue;
-    }
+    if (!taskEntry.isDirectory()) continue;
 
     const taskDir = path.join(runsDir, taskEntry.name);
     const runEntries = await safeReadDir(taskDir);
     for (const runEntry of runEntries) {
-      if (!runEntry.isDirectory()) {
-        continue;
-      }
+      if (!runEntry.isDirectory()) continue;
 
       const summaryPath = path.join(taskDir, runEntry.name, 'run_summary.json');
       if (await exists(summaryPath)) {
@@ -188,22 +160,12 @@ function latestByTaskModel(runs: DashboardRun[]): Record<string, Record<string, 
   return latest;
 }
 
-function taskTags(
-  tasks: Array<JsonObject & { id: string }>
-): Record<string, string[]> {
+function taskTags(tasks: Array<JsonObject & { id: string }>): Record<string, string[]> {
   return Object.fromEntries(
     tasks.map((task) => {
       const tags: string[] = [];
       const taskType = stringValue(task.task_type);
-      const difficulty = stringValue(task.difficulty);
-
-      if (taskType) {
-        tags.push(taskType);
-      }
-      if (difficulty) {
-        tags.push(difficulty);
-      }
-
+      if (taskType) tags.push(taskType);
       return [task.id, tags];
     })
   );
@@ -228,12 +190,9 @@ function modelSummary(
       mean_score: scores.length
         ? round4(scores.reduce((total, score) => total + score, 0) / scores.length)
         : null,
-      parsed_rate: meanBool(
-        runs
-          .filter((run) => run.grade)
-      .map((run) => run.grade?.parsed_answer)
-      ),
+      parsed_rate: meanBool(runs.filter((run) => run.grade).map((run) => run.grade?.parsed_answer)),
       error_rate: meanBool(runs.map((run) => run.returncode !== 0 && run.returncode != null)),
+      aup_refusal_count: runs.filter((run) => run.aup_refusal).length,
     };
   }
 
@@ -245,9 +204,7 @@ async function dataFileSummaries(taskDir: string): Promise<JsonObject[]> {
   const files: JsonObject[] = [];
 
   for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
-    if (!entry.isFile() || entry.name === 'prompt.md' || entry.name === 'task.yaml') {
-      continue;
-    }
+    if (!entry.isFile() || entry.name === 'prompt.md' || entry.name === 'task.yaml') continue;
 
     const filePath = path.join(taskDir, entry.name);
     const stat = await fs.stat(filePath);
@@ -257,82 +214,10 @@ async function dataFileSummaries(taskDir: string): Promise<JsonObject[]> {
       preview: await readPreviewLines(filePath, 8),
     });
 
-    if (files.length >= 3) {
-      break;
-    }
+    if (files.length >= 3) break;
   }
 
   return files;
-}
-
-async function getDashboardHash(capableBenchDir: string): Promise<string> {
-  const hash = crypto.createHash('md5');
-  const paths = [
-    path.join(capableBenchDir, 'data', 'tasks', 'problems.csv'),
-    path.join(capableBenchDir, 'runs', 'calibration_summary.json'),
-  ];
-
-  for (const filePath of paths) {
-    await hashFileStat(hash, capableBenchDir, filePath);
-  }
-
-  for (const filePath of await collectHashFiles(path.join(capableBenchDir, 'data', 'tasks'), [
-    'prompt.md',
-    'task.yaml',
-  ])) {
-    await hashFileStat(hash, capableBenchDir, filePath);
-  }
-
-  for (const filePath of await collectFilesByExtension(path.join(capableBenchDir, 'data', 'answers'), '.yaml')) {
-    await hashFileStat(hash, capableBenchDir, filePath);
-  }
-
-  for (const filePath of await findRunSummaries(path.join(capableBenchDir, 'runs'))) {
-    await hashFileStat(hash, capableBenchDir, filePath);
-    await hashFileStat(hash, capableBenchDir, path.join(path.dirname(filePath), 'grade.json'));
-  }
-
-  return hash.digest('hex');
-}
-
-async function collectHashFiles(rootDir: string, names: string[]): Promise<string[]> {
-  const entries = await safeReadDir(rootDir);
-  const files: string[] = [];
-
-  for (const entry of entries) {
-    if (!entry.isDirectory()) {
-      continue;
-    }
-
-    for (const name of names) {
-      const filePath = path.join(rootDir, entry.name, name);
-      if (await exists(filePath)) {
-        files.push(filePath);
-      }
-    }
-  }
-
-  return files.sort();
-}
-
-async function collectFilesByExtension(rootDir: string, extension: string): Promise<string[]> {
-  const entries = await safeReadDir(rootDir);
-  return entries
-    .filter((entry) => entry.isFile() && entry.name.endsWith(extension))
-    .map((entry) => path.join(rootDir, entry.name))
-    .sort();
-}
-
-async function hashFileStat(hash: crypto.Hash, baseDir: string, filePath: string) {
-  try {
-    const stat = await fs.stat(filePath);
-    hash.update(path.relative(baseDir, filePath));
-    hash.update(String(stat.size));
-    hash.update(String(stat.mtimeMs));
-  } catch {
-    hash.update(path.relative(baseDir, filePath));
-    hash.update('missing');
-  }
 }
 
 function parseCsv(input: string): Array<Record<string, string>> {
@@ -385,21 +270,15 @@ function parseCsv(input: string): Array<Record<string, string>> {
 
 function parseYamlLite(input: string): JsonObject {
   const result: JsonObject = {};
-  if (!input.trim()) {
-    return result;
-  }
+  if (!input.trim()) return result;
 
   const lines = input.split(/\r?\n/);
   for (let i = 0; i < lines.length; i += 1) {
     const line = stripYamlComment(lines[i]);
-    if (!line.trim() || line.startsWith(' ') || line.startsWith('-')) {
-      continue;
-    }
+    if (!line.trim() || line.startsWith(' ') || line.startsWith('-')) continue;
 
     const match = line.match(/^([^:]+):\s*(.*)$/);
-    if (!match) {
-      continue;
-    }
+    if (!match) continue;
 
     const key = match[1].trim();
     const rest = match[2].trim();
@@ -490,9 +369,7 @@ function classifyModel(command: string): string {
 }
 
 function scoreFromGrade(grade: JsonObject | null): number | null {
-  if (!grade || typeof grade !== 'object') {
-    return null;
-  }
+  if (!grade || typeof grade !== 'object') return null;
   const rawScore = grade.score ?? grade.precision_at_k;
   const score = Number(rawScore);
   return Number.isFinite(score) ? score : null;
@@ -507,15 +384,11 @@ function numberValue(value: unknown): number | null {
 }
 
 function objectValue(value: unknown): JsonObject | null {
-  return value && typeof value === 'object' && !Array.isArray(value)
-    ? (value as JsonObject)
-    : null;
+  return value && typeof value === 'object' && !Array.isArray(value) ? (value as JsonObject) : null;
 }
 
 function meanBool(values: unknown[]): number | null {
-  if (!values.length) {
-    return null;
-  }
+  if (!values.length) return null;
   return round4(values.filter(Boolean).length / values.length);
 }
 
@@ -525,19 +398,22 @@ function round4(value: number): number {
 
 function autoTagRun(run: DashboardRun): string[] {
   const tags: string[] = [];
-
-  if (run.grade.parsed_answer === false) {
-    tags.push('format_error');
-  }
-  if (run.returncode && run.returncode !== 0) {
-    tags.push('execution_error');
-  }
+  if (run.aup_refusal) tags.push('aup_refusal');
+  if (run.grade.parsed_answer === false) tags.push('format_error');
+  if (run.returncode && run.returncode !== 0) tags.push('execution_error');
   if (run.score !== null && run.score !== undefined) {
     if (run.score < 0.3) tags.push('low_score');
-    if (run.score > 0.9) tags.push('high_score');
   }
-
   return tags;
+}
+
+async function detectAupRefusal(stdoutPath: string): Promise<boolean> {
+  // `"stop_reason":"refusal"` is the authoritative signal in claude stream-json
+  // when the model refuses on Usage Policy grounds. Refusals terminate early so
+  // a 256KB head read is enough to cover every refusal we've seen in this repo.
+  const text = await readTextOptional(stdoutPath, 256 * 1024);
+  if (!text) return false;
+  return text.includes('"stop_reason":"refusal"');
 }
 
 async function readPreviewLines(filePath: string, limit: number): Promise<string[]> {

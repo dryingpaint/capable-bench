@@ -30,6 +30,7 @@ export interface RunDetails {
   grade?: Record<string, unknown>;
   score?: number;
   timestamp: string;
+  aup_refusal?: boolean;
   tags?: string[];
 }
 
@@ -67,6 +68,7 @@ export interface ModelSummary {
   mean_score?: number;
   parsed_rate?: number;
   error_rate?: number;
+  aup_refusal_count?: number;
 }
 
 export interface DashboardData {

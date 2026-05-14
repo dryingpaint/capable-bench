@@ -354,30 +354,37 @@ function RunArtifactDetails({ taskId, run }: RunArtifactDetailsProps) {
         )}
 
         {artifacts && (
-          <>
-            <ArtifactBlock
-              title="Answer Artifact"
-              text={artifacts.answer_text || 'No answer text'}
-              truncated={artifacts.truncated?.answer_text}
-            />
-            <ArtifactBlock
-              title="Agent Trace"
-              text={artifacts.trace_text || 'No trace'}
-              truncated={artifacts.truncated?.trace_text}
-            />
-            <ArtifactBlock
-              title="Stdout"
-              text={artifacts.stdout_text || 'No stdout'}
-              truncated={artifacts.truncated?.stdout_text}
-            />
-            <ArtifactBlock
-              title="Stderr"
-              text={artifacts.stderr_text || 'No stderr'}
-              truncated={artifacts.truncated?.stderr_text}
-            />
-          </>
+          <ArtifactBlock
+            title="Answer Artifact"
+            text={artifacts.answer_text || 'No answer text'}
+            truncated={artifacts.truncated?.answer_text}
+          />
         )}
       </div>
+
+      {artifacts && (
+        <ArtifactBlock
+          title="Agent Trace"
+          text={artifacts.trace_text || 'No trace'}
+          truncated={artifacts.truncated?.trace_text}
+          tall
+        />
+      )}
+
+      {artifacts && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <ArtifactBlock
+            title="Stdout"
+            text={artifacts.stdout_text || 'No stdout'}
+            truncated={artifacts.truncated?.stdout_text}
+          />
+          <ArtifactBlock
+            title="Stderr"
+            text={artifacts.stderr_text || 'No stderr'}
+            truncated={artifacts.truncated?.stderr_text}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -386,10 +393,12 @@ function ArtifactBlock({
   title,
   text,
   truncated,
+  tall,
 }: {
   title: string;
   text: string;
   truncated?: boolean;
+  tall?: boolean;
 }) {
   return (
     <div>
@@ -397,7 +406,7 @@ function ArtifactBlock({
         {title}
         {truncated && <span className="normal-case tracking-normal text-stone-400"> · truncated</span>}
       </h5>
-      <pre className="bg-stone-50 border p-2 text-xs overflow-auto max-h-60">
+      <pre className={`bg-stone-50 border p-2 text-xs overflow-auto ${tall ? 'max-h-[36rem]' : 'max-h-60'}`}>
         {text}
       </pre>
     </div>

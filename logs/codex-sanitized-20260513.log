@@ -1,0 +1,14 @@
+[codex-sanitized] starting 12 tasks
+[codex-sanitized]   1/12  probe-lit-sanitized-pairwise-mch-easy-014                     score=0.0    29.9s
+[codex-sanitized]   2/12  probe-lit-sanitized-pairwise-mch-easy-015                     score=0.0    24.5s
+[codex-sanitized]   3/12  probe-lit-sanitized-pairwise-mch-hard-005                     score=0.0    24.7s
+[codex-sanitized]   4/12  probe-lit-sanitized-pairwise-mch-medium-006                   score=1.0    20.7s
+[codex-sanitized]   5/12  probe-lit-sanitized-pairwise-mch-medium-007                   score=0.0    26.1s
+[codex-sanitized]   6/12  probe-lit-sanitized-pairwise-mch-medium-008                   score=1.0    14.6s
+[codex-sanitized]   7/12  probe-lit-sanitized-pairwise-mch-trivial-018                  score=0.0    26.9s
+[codex-sanitized]   8/12  probe-lit-sanitized-pairwise-nps-easy-014                     score=0.0    25.2s
+[codex-sanitized]   9/12  probe-lit-sanitized-pairwise-oxn-hard-003                     score=1.0    26.1s
+[codex-sanitized]  10/12  probe-lit-sanitized-pairwise-oxn-medium-009                   score=0.0    15.3s
+[codex-sanitized]  11/12  probe-lit-sanitized-pairwise-oxn-trivial-017                  score=0.0    20.2s
+[codex-sanitized]  12/12  probe-lit-sanitized-pairwise-oxn-trivial-020                  score=1.0    20.8s
+[codex-sanitized] done: ok=12 fail=0 total=275s

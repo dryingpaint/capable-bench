@@ -1,13 +1,14 @@
-"""ESM-2 oracle probe over narrow-ratio pairwise-sequence tasks.
+"""ESM-2 baseline probe over pairwise-sequence tasks.
 
 For each `pilot-peptide-pairwise-sequence-{family}-{bucket}-*` task:
   1. Load both peptides' modification strings.
   2. Strip to canonical 20-AA sequence.
   3. Score with ESM-2-650M (mean masked PLL per residue).
-  4. Predict winner = peptide with higher mean PLL.
+  4. Baseline prediction = peptide with higher mean PLL.
   5. Compare prediction to gold; aggregate by family × bucket.
 
-Outputs per-task CSV and prints an accuracy table to stdout. Compare against
+Outputs per-task CSV and prints an accuracy table to stdout. This is a
+sequence-naturalness baseline, not a receptor-potency model. Compare against
 the agent baselines in
 docs/findings/pairwise-sequence-calibration/pairwise_paired_by_family.csv.
 

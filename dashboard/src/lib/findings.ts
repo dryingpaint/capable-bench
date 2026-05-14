@@ -6,7 +6,9 @@ const SUMMARY_BYTES = 2000;
 const SAFE_ID = /^[A-Za-z0-9._-]+$/;
 const ARTIFACT_BYTE_LIMIT = 512 * 1024;
 
-export type ArtifactKind = 'markdown' | 'json' | 'yaml' | 'csv' | 'text';
+export type ArtifactKind = 'markdown' | 'json' | 'yaml' | 'csv' | 'text' | 'image';
+
+const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.avif'];
 
 export interface Artifact {
   name: string;
@@ -150,16 +152,19 @@ async function collectArtifacts(
     if (currentDir === rootDir && entry.name === readmeFilename) continue;
 
     const stat = await fs.stat(fullPath);
-    const readBytes = Math.min(stat.size, ARTIFACT_BYTE_LIMIT);
-    const content = await readBoundedText(fullPath, readBytes);
+    const kind = classifyArtifact(entry.name);
+    const content =
+      kind === 'image'
+        ? ''
+        : await readBoundedText(fullPath, Math.min(stat.size, ARTIFACT_BYTE_LIMIT));
 
     artifacts.push({
       name: entry.name,
       relativePath: path.relative(rootDir, fullPath),
       size: stat.size,
-      kind: classifyArtifact(entry.name),
+      kind,
       content,
-      truncated: stat.size > ARTIFACT_BYTE_LIMIT,
+      truncated: kind !== 'image' && stat.size > ARTIFACT_BYTE_LIMIT,
     });
   }
 
@@ -172,6 +177,7 @@ function classifyArtifact(name: string): ArtifactKind {
   if (lower.endsWith('.json')) return 'json';
   if (lower.endsWith('.yaml') || lower.endsWith('.yml')) return 'yaml';
   if (lower.endsWith('.csv') || lower.endsWith('.tsv')) return 'csv';
+  if (IMAGE_EXTENSIONS.some((ext) => lower.endsWith(ext))) return 'image';
   return 'text';
 }
 

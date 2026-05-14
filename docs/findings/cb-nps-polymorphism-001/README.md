@@ -1,4 +1,4 @@
-# NPSR1 N107I: agents misinterpret findings from literature
+# Agents apply a published stability-optimization template to a question about variant selectivity (cb-nps-polymorphism-001)
 
 Predict-from-sequence task on intra-receptor variant selectivity (NPSR1 Asn107 vs Ile107). Both frontier agents fail at 1/14 random baseline. Both converge on the same wrong compound (`NPSv5.4`), falling for a "looks-comprehensively-optimized" trap (multiple D-amino acids + standard palmitoyl lipidation > a single unusual lipidation linker).
 

@@ -1,0 +1,40 @@
+✓ Initialized. View run at 
+https://modal.com/apps/melissa-duyuan/main/ap-3KeFoz3LEAmomJPQ2YX56h
+✓ Created objects.
+├── 🔨 Created mount PythonPackage:capablebench
+└── 🔨 Created function run_benchmark_task_remote.
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/melissa-duyuan/main/ap-3KeFoz3LEAmomJPQ2YX56h
+{
+  "task_id": "cb-nps-polymorphism-001",
+  "run_id": "20260513-201847-db7dadc0-modal",
+  "remote_task_dir": "/tmp/capable-bench-task/cb-nps-polymorphism-001/20260513-201847-db7dadc0-modal",
+  "command": "codex exec --json --skip-git-repo-check --cd /tmp/capable-bench-task/cb-nps-polymorphism-001/20260513-201847-db7dadc0-modal --dangerously-bypass-approvals-and-sandbox \"$(cat /tmp/capable-bench-task/cb-nps-polymorphism-001/20260513-201847-db7dadc0-modal/prompt.md)\"",
+  "returncode": 0,
+  "duration_seconds": 82.57,
+  "answer_source": "/tmp/capable-bench-task/cb-nps-polymorphism-001/20260513-201847-db7dadc0-modal/answer.json",
+  "stdout_file": "/tmp/capable-bench-task/cb-nps-polymorphism-001/20260513-201847-db7dadc0-modal/stdout.txt",
+  "stderr_file": "/tmp/capable-bench-task/cb-nps-polymorphism-001/20260513-201847-db7dadc0-modal/stderr.txt",
+  "executor": "modal",
+  "run_dir": "/Users/melissadu/Documents/projects/capable-bench/runs/cb-nps-polymorphism-001/20260513-201847-db7dadc0-modal",
+  "grade": {
+    "task_id": "cb-nps-polymorphism-001",
+    "task_type": "program_lead_selection",
+    "label_status": "exact_match",
+    "answer_path": "/Users/melissadu/Documents/projects/capable-bench/runs/cb-nps-polymorphism-001/20260513-201847-db7dadc0-modal/answer.json",
+    "gold_path": "/Users/melissadu/Documents/projects/capable-bench/data/answers/cb-nps-polymorphism-001.yaml",
+    "fields": {
+      "most_Ile107_preferring": {
+        "predicted": "NPSv5.4",
+        "gold": "NPSv18.9",
+        "exact_match": false
+      }
+    },
+    "correct_fields": 0,
+    "total_fields": 1,
+    "exact_match": false,
+    "score": 0.0,
+    "parsed_answer": true
+  }
+}
