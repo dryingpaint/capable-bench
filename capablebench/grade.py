@@ -267,8 +267,12 @@ def _grade_multi_field_exact_match(
     for field, expected in gold_fields.items():
         predicted = answer.get(field)
         pred_norm = _normalize_label(predicted) if predicted is not None else ""
-        gold_norm = _normalize_label(expected)
-        ok = bool(pred_norm) and pred_norm == gold_norm
+        if isinstance(expected, list):
+            accepted = [_normalize_label(x) for x in expected]
+            ok = bool(pred_norm) and pred_norm in accepted
+        else:
+            gold_norm = _normalize_label(expected)
+            ok = bool(pred_norm) and pred_norm == gold_norm
         if ok:
             correct += 1
         per_field[field] = {

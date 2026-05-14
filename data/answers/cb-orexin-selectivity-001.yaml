@@ -5,29 +5,75 @@ gold:
   most_R2_preferring: OXNv25.5
 answer_space:
   most_R2_preferring:
-    - MOXv1
-    - OXNv12.2
-    - OXNv14.15
-    - OXNv14.16
-    - OXNv15.7
-    - OXNv16.13
-    - OXNv16.18
-    - OXNv16.19
-    - OXNv16.20
-    - OXNv2
-    - OXNv25.10
-    - OXNv25.3
-    - OXNv25.5
-    - OXNv25.6
-    - OXNv25.7
-    - OXNv25.9
-    - OXNv7
-random_guess_baseline: 0.0625   # 1/16
+  - OXNv12.2
+  - OXNv14.15
+  - OXNv14.16
+  - OXNv15.7
+  - OXNv16.13
+  - OXNv16.18
+  - OXNv16.19
+  - OXNv16.20
+  - OXNv2
+  - OXNv25.10
+  - OXNv25.3
+  - OXNv25.5
+  - OXNv25.6
+  - OXNv25.7
+  - OXNv25.9
+  - OXNv7
+random_guess_baseline: 0.0625
 notes: |
   Gold computed from data/processed/invitro_assays.csv as the geometric
   mean OX1R EC50 divided by the geometric mean OX2R EC50, aggregated
   across replicates per compound. See data/validators/cb-orexin-selectivity-001.py
-  for the derivation. The trap is OXNv2 ("hardened OXB: D-Leu15") which
-  is the Asahi et al. 2003 published winner at 1473x selectivity — but
-  OXNv25.5 (unpublished [Tyr12, Glu13] substitution) is the actual winner
-  at 8856x selectivity.
+  for the derivation. OXNv2 is described in analogs.csv as a hardened OXB
+  scaffold (D-Leu15); its OX2R selectivity (1473x) sits in the published
+  hardened-OXB regime explored by Asahi et al. 2003, but the substitution
+  shown in analogs.csv (D-Leu15 alone, without the [Ala11] of the Asahi
+  published winner) makes the literature-recognition path softer than a
+  full Asahi-pattern match would be. OXNv25.5 ([Tyr12, Glu13] substitution
+  on native OXB) is the in-house winner at 8856x — this combination has
+  no published OXB-SAR predictor that picks it over OXNv2.
+gold_reasoning: |
+  **Gold: `OXNv25.5`** — computed OX2R selectivity 8856.5×, the largest in the 16-compound panel.
+
+  ## Derivation
+
+  Gold is the geometric mean of `OX1R EC50` divided by the geometric mean of `OX2R EC50`, aggregated across replicates per (compound, receptor) in `data/processed/invitro_assays.csv`. Validator: `data/validators/cb-orexin-selectivity-001.py`.
+
+  ## Top of the panel by OX2R selectivity
+
+  | compound | OX1R EC50 (nM) | OX2R EC50 (nM) | selectivity | n(OX1R) | n(OX2R) | published? |
+  |---|---:|---:|---:|---:|---:|---|
+  | **OXNv25.5** | 265.5 | 0.030 | **8857×** | 2 | 3 | no |
+  | OXNv2 | 447.2 | 0.304 | 1473× | 4 | 12 | partial (D-Leu15 from Asahi 2003) |
+  | OXNv25.7 | 5.3 | 0.004 | 1345× | 2 | 5 | no |
+  | OXNv16.20 | 112.2 | 0.113 | 993× | 2 | 2 | no |
+  | OXNv16.18 | 64.9 | 0.150 | 432× | 2 | 2 | no |
+  | OXNv16.13 | 22.0 | 0.052 | 422× | 2 | 2 | no |
+  | OXNv16.19 | 141.8 | 0.358 | 396× | 2 | 3 | no |
+  | OXNv7 (Orexin A) | 28.2 | 4.16 | 6.8× | 4 | 3 | yes (native ligand) |
+
+  Gap from `OXNv25.5` to the #2 candidate `OXNv2` is 6.0×.
+
+  ## Why OXNv25.5 wins
+
+  `OXNv25.5` is the native OX-B backbone (`RSGPPGLQGRLQRLLQASGNHAAGILTM-NH2`) with two non-natural substitutions at positions 12 and 13: `Q12Y, R13E`. The tyrosine introduces an aromatic ring + H-bond donor where OX-B carries a polar amide; the glutamate flips charge at a position that is arginine in the native sequence. The mechanism consistent with the data is the general SAR finding from Lang et al. 2004 (J. Med. Chem., DOI 10.1021/jm030982t) that OX1R is broadly more sensitive to non-conservative orexin-B substitutions than OX2R, so bulky/charged disruptions away from the conserved C-terminal hydrophobic patch (positions 22–28) preferentially raise OX1R EC50. Observed: OX1R 265 nM vs OX2R 30 pM, the highest selectivity in the panel by 6×.
+
+  ## The literature trap
+
+  The runner-up `OXNv2` is described in `analogs.csv` as "hardened OXB: D-Leu15". The Asahi et al. 2003 published OX2R-selective analog (Bioorg. Med. Chem. Lett. 13, 111; PMID 12467628) is `[Ala11, D-Leu15]`-Orexin B with **400× OX2R selectivity** (EC50 0.13 nM at OX2R, 52 nM at OX1R). The panel entry carries only the `D-Leu15` half of the published pair; in this dataset it reaches 1473× — a real and well-justified hit, and the one any agent retrieving "literature OX2R-selective hardened OXB" should produce. It is also 6× too low to be the gold.
+
+  The deeper trap for `OXNv25.5` is the published alanine scan of orexin-B (Nicole et al. 2015, Br. J. Pharmacol. 172:5211 (PMID 26282891); Lang et al. 2004): **both Q12A and R13A were tested and found functionally silent** at OX1R for binding and apoptosis induction. A literature-anchored agent therefore expects positions 12 and 13 to be inert and discounts `OXNv25.5` as "no meaningful change at OX1R." The data falsifies this — alanine substitutions remove a side chain, but `Q12Y` and `R13E` introduce a bulky aromatic and a flipped charge, contacts that the alanine scan never probed. The OX1R-greater-sensitivity rule from Lang 2004 still applies and dominates.
+
+  An agent anchored on "OX2R-selective peptide → Asahi 2003 hardened OX-B" picks `OXNv2` and scores 0. An agent that anchors on "positions 12 and 13 are silent (alanine scan)" downweights `OXNv25.5` and also scores 0. The correct path is to (a) recognize that the published trap pair has only one of its two substitutions, and (b) recognize that bulky/charged substitutions at literature-silent positions still trigger the OX1R > OX2R substitution-sensitivity asymmetry.
+
+  ## References
+
+  - Asahi et al. 2003, *Bioorg. Med. Chem. Lett.* 13:111. PMID 12467628 — defines `[Ala11, D-Leu15]`-Orexin B as the canonical OX2R-selective hardened OXB (400× selectivity).
+  - Lang et al. 2004, *J. Med. Chem.* 47:1153–1160 (DOI 10.1021/jm030982t) — orexin A/B SAR; finds OX1R broadly more substitution-sensitive than OX2R.
+  - Nicole et al. 2015, *Br. J. Pharmacol.* 172:5211 (PMID 26282891) — orexin-B alanine scan; Q12A and R13A are functionally silent at OX1R.
+
+  Random-guess baseline: 1/16 = 6.25%.
+effect_size: curated
+effect_size_note: cb-* curated task
