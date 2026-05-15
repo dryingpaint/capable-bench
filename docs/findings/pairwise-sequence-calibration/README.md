@@ -40,6 +40,8 @@ The agent invokes real SAR concepts — pharmacophore residues, stereochemistry,
 
 > *Example — `nps-easy-012` (claude), comparing a peptide with one D-Thr substitution to one with four canonical optimizations; gold is the simpler peptide and is 79× more potent:* `"R3 → 4-F-Phe (hydrophobic/aromatic at position 3 — a well-known SAR-driven potency enhancement at NPSR; consistent with the [t-Bu-Ala3]NPS / [Cha3]NPS analog series)."` Real published medicinal chemistry, applied to land on the wrong answer.
 
+The residue-level miss: Claude treated `4-F-Phe` as a generic aromatic/hydrophobic optimization, but in this sequence it replaces native **Arg3** in the NPS `SFRN` activation motif. The simpler gold peptide preserves that N-terminal pharmacophore and only changes Thr13 to D-Thr, while the heavily modified loser removes a conserved cationic contact. The failure is not just "more modifications looked better"; it is modification-count reasoning overriding exact-position accounting.
+
 #### AUP refusal (claude only; 9 of 29)
 The agent's safety filter triggers on the peptide-sequence prompt and the agent never engages. Codex never refuses. All 9 occur on MCH or OXN tasks.
 

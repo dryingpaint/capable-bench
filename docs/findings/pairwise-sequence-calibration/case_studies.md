@@ -69,12 +69,11 @@ The full per-task category labels for all 53 graded failures are in `failure_cla
 
 [Full agent trace](traces/nps-easy-012-claude.jsonl)
 
-**Why this matters.** This is *real medicinal-chemistry knowledge*: [t-Bu-Ala3]NPS and [Cha3]NPS are published NPSR analog series, position-3 aromatic/hydrophobic substitutions are a documented potency-enhancing move in NPS SAR, D-Ser1 / N-Me-Thr / C-terminal amide are all canonical peptide-stability features. Claude correctly identifies four named, published SAR principles. The conclusion is just wrong for this dataset — the held-out assay says the single-D-Thr peptide is 79× more potent.
+**Why this matters.** This is *real medicinal-chemistry knowledge*: [t-Bu-Ala3]NPS and [Cha3]NPS are published NPSR analog series, position-3 aromatic/hydrophobic substitutions are a documented potency-enhancing move in some NPS SAR contexts, and D-Ser1 / N-Me-Thr / C-terminal amide are all canonical peptide-stability features. The conclusion is wrong here because Claude failed to do residue-level accounting in this exact sequence.
 
-This is the most concerning failure mode because it isn't fixable by sanitizing the input. Claude is doing the right kind of reasoning and reaching the wrong answer. Two possibilities:
+The heavily modified peptide does not simply add a 4-F-Phe feature; it replaces native **Arg3** in the NPS `SFRN` activation motif with 4-F-Phe. That removes a conserved cationic contact in the N-terminal recognition region. The gold peptide preserves the N-terminal `SFRN` pharmacophore and changes only Thr13 to D-Thr, a less central position for NPSR activation.
 
-1. **The gold's mechanism beats the textbook expectation.** The mid-sequence D-Thr at position 13 may produce a local conformational change that the published series doesn't predict. If true, this is a *good* benchmark item — it exposes the limit of textbook SAR.
-2. **The visible modification count is misleading the agent.** Claude counts four features for the loser, one for the gold, and reasons "more SAR-validated modifications → more potent." That's the same length/count cue as codex's failure mode (Case 2) just dressed in more sophisticated language.
+So the failure is not "published SAR is useless." It is that Claude treated optimization-like features as additive and portable without checking whether the modification deletes a load-bearing residue at the exact position. The visible modification count is misleading: four plausible-looking medchem changes are worse than one small change when one of the four breaks the core activation motif.
 
 The 79× ratio rules out gold-noise, so the failure is real — not an artifact of close-discrimination.
 
@@ -160,5 +159,4 @@ Both independently identified the same critical residue (Arg3), the same disrupt
 
 Three of the five failure modes are addressable through benchmark or grader changes: **AUP refusal** needs surfacing as a separate signal, **length/complexity cue** can be probed with deliberately length-inverted pairs, and **no-substantive-reasoning** becomes visible the moment you grade rationale text alongside the picked answer.
 
-**Pharmacophore misapplied is the failure mode the benchmark cannot fix.** Claude is invoking real, published, named SAR series and reaching the wrong conclusion. That's not a benchmark-design problem — it's an agent-capability gap that's only legible because the benchmark has held-out experimental data that contradicts the textbook expectation. Cases like `nps-easy-012` (where claude cites `[t-Bu-Ala3]NPS / [Cha3]NPS` by name and still picks wrong) are the items that justify keeping the benchmark.
-
+**Pharmacophore misapplied is the failure mode the benchmark cannot fix.** Claude is invoking real, published, named SAR series and reaching the wrong conclusion. That's not a benchmark-design problem — it's an agent-capability gap that's only legible because the benchmark has held-out experimental data and residue-specific traps. Cases like `nps-easy-012` (where claude cites `[t-Bu-Ala3]NPS / [Cha3]NPS` by name but misses the Arg3 deletion) are the items that justify keeping the benchmark.
