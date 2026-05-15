@@ -86,9 +86,9 @@ Search #2 and #4 are the load-bearing ones: claude searched for the *combination
 
 The trap claude fell for is not the literature-truncation one: it's "the canonical published peptide-optimization template (D-aa + palmitoyl) means more selective." That template is documented for stability/half-life, not for variant selectivity, but claude conflates the two.
 
-## Failure mode taxonomy
+## Failure modes
 
-1. **Modification-count heuristic (both agents).** `NPSv5.4` carries 4 visible modifications (D-Ser, D-Lys, D-Thr, palmitoyl) versus `NPSv18.9`'s single visible feature (one heavy lipidation chain). Both agents reward modification count over modification chemistry. The actual selectivity-driving feature in `NPSv18.9` — the unusually long C20-diacid + dual-AEEA linker that creates a binding-pocket footprint asymmetry between Asn107 and Ile107 — is invisible to a "count the substitutions" reading.
+1. **Modification-count heuristic (both agents).** Both agents reward `NPSv5.4`'s 4 visible modifications over `NPSv18.9`'s single C20-diacid + dual-AEEA linker, missing that the linker is what creates the Asn107/Ile107 pocket asymmetry.
 
-2. **Canonical-template mis-application (claude specifically).** Claude searched for and found the well-published "D-amino acid + palmitoyl" template (Asahi 2003 hardened OXB, similar GLP-1 analog work) and applied it to the NPS variant question. That template optimizes proteolytic stability and half-life, *not* variant selectivity. Claude conflated the two via template-matching rather than reasoning about which feature is mechanistically relevant to a polymorphism that changes a single residue in the binding pocket.
+2. **Canonical-template mis-application (claude specifically).** Claude matched `NPSv5.4` to the well-published "D-amino acid + palmitoyl" template (Asahi 2003, GLP-1 analogs) and imported its stability/half-life claims as variant-selectivity claims.
 
