@@ -154,9 +154,3 @@ Both independently identified the same critical residue (Arg3), the same disrupt
 | Pharmacophore misapplied | `nps-easy-012` (claude) | 12 / 6 | Real SAR + wrong answer; hardest to address | Likely requires changes to agent reasoning, not benchmark design |
 | No substantive reasoning | `oxn-medium-006` (codex) | 1 / 0 | Hidden by current grader | Grade the rationale, not just the pick |
 | **Positive control** | `nps-hard-001` | n/a | What success looks like | Build more tasks of this shape |
-
-## Closing synthesis
-
-Three of the five failure modes are addressable through benchmark or grader changes: **AUP refusal** needs surfacing as a separate signal, **length/complexity cue** can be probed with deliberately length-inverted pairs, and **no-substantive-reasoning** becomes visible the moment you grade rationale text alongside the picked answer.
-
-**Pharmacophore misapplied is the failure mode the benchmark cannot fix.** Claude is invoking real, published, named SAR series and reaching the wrong conclusion. That's not a benchmark-design problem — it's an agent-capability gap that's only legible because the benchmark has held-out experimental data and residue-specific traps. Cases like `nps-easy-012` (where claude cites `[t-Bu-Ala3]NPS / [Cha3]NPS` by name but misses the Arg3 deletion) are the items that justify keeping the benchmark.
