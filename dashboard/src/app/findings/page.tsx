@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowLeft, Calendar, FileText, ChevronRight } from 'lucide-react';
+import { Calendar, FileText, ChevronRight } from 'lucide-react';
 import { listFindings } from '@/lib/findings';
 
 
@@ -14,13 +14,6 @@ export default async function FindingsPage() {
     <div className="min-h-screen bg-stone-50">
       <header className="border-b border-stone-200">
         <div className="max-w-6xl mx-auto px-8 py-6">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1 text-sm text-stone-500 hover:text-stone-900 mb-3"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Dashboard
-          </Link>
           <h1 className="text-2xl font-semibold text-stone-900">Case studies and reports</h1>
           <p className="text-sm text-stone-500 mt-1">
             {findings.length} item{findings.length === 1 ? '' : 's'}

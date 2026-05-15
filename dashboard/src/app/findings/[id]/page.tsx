@@ -1,6 +1,5 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Calendar, FileText, ChevronDown } from 'lucide-react';
+import { Calendar, FileText, ChevronDown } from 'lucide-react';
 import { getFinding, listFindings, formatBytes, type Artifact } from '@/lib/findings';
 import Markdown from '@/components/Markdown';
 import ArtifactView from '@/components/ArtifactView';
@@ -36,13 +35,6 @@ export default async function FindingPage({ params }: PageProps) {
     <div className="min-h-screen bg-stone-50">
       <header className="border-b border-stone-200">
         <div className="max-w-5xl mx-auto px-8 py-6">
-          <Link
-            href="/findings"
-            className="inline-flex items-center gap-1 text-sm text-stone-500 hover:text-stone-900 mb-3"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            All reports
-          </Link>
           <h1 className="text-2xl font-semibold text-stone-900">{finding.title}</h1>
           <div className="text-xs text-stone-400 font-mono mt-1">{finding.id}</div>
           <div className="flex items-center gap-4 text-xs text-stone-500 mt-3">
