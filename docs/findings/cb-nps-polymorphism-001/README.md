@@ -1,40 +1,47 @@
-Predict-from-sequence task on intra-receptor variant selectivity (NPSR1 Asn107 vs Ile107). Both frontier agents fail at 1/5 random baseline. Both converge on the same wrong compound (`NPSv5.4`), falling for a "looks-comprehensively-optimized" trap (multiple D-amino acids + standard palmitoyl lipidation > a single unusual lipidation linker).
+Predict-from-sequence task on intra-receptor variant selectivity (NPSR1 Asn107 vs Ile107). Both frontier agents fail at 1/14 random baseline. Both converge on the same wrong compound (`NPSv5.4`), falling for a "looks-comprehensively-optimized" trap (multiple D-amino acids + standard palmitoyl lipidation > a single unusual lipidation linker).
 
 **Date:** 2026-05-13
 **Task type:** `program_lead_selection` (sequence_to_ranking variant — single exact-match field)
-**Key property:** task uses only repo data (no fabrication). Gold is computed from `data/processed/invitro_assays.csv` aggregating replicate EC50 measurements across the 5 candidate compounds at both hNPSR1-Asn107 and hNPSR1-Ile107 variants.
+**Key property:** task uses only repo data (no fabrication). Gold is computed from `data/processed/invitro_assays.csv` aggregating ~25 replicate EC50 measurements across the 14 candidate compounds at both hNPSR1-Asn107 and hNPSR1-Ile107 variants.
 
 ## The task
 
-The agent receives `analogs.csv` listing 5 peptide compound IDs with their sequence/modification descriptions. No measured potencies for any compound. The prompt asks which compound has the largest preference for hNPSR1-Ile107 over hNPSR1-Asn107, defined as the ratio EC50(Asn107) / EC50(Ile107). Random-guess baseline: 1/5 = 20%.
+The agent receives `analogs.csv` listing 14 peptide compound IDs with their sequence/modification descriptions. No measured potencies for any compound. The prompt asks which compound has the largest preference for hNPSR1-Ile107 over hNPSR1-Asn107, defined as the ratio EC50(Asn107) / EC50(Ile107). Random-guess baseline: 1/14 = 7.14%.
 
-The candidate panel:
+The candidate panel contains:
 
-- `NPS` — native human NPS (variant-neutral baseline, 6.8× preference)
-- `NPSv18.9` — gold; native NPS with an unusually long lipidation linker at K11 (gamma-Glu + two AEEA spacers + C20 diacid)
-- `NPSv5.4` — trap; D-Ser + D-Lys + D-Thr + standard C16 palmitoyl at K11
-- `NPSv18.16` — sibling control; same K11 lipidation *site* as the gold but a short C16 palmitoyl chain — prefers Asn107 (wrong direction)
-- `NPSv8` — inactive decoy; full D-amino acid retro version
+- 7 internal NPS modifications (NPSv5.4, NPSv10.16, NPSv16.13, NPSv21.9, NPSv31.7, NPSv2-proKKv1, NPSv18.9)
+- 2 literature truncations (hNPS(1-10), rNPS(1-10))
+- 1 native human NPS (variant-neutral baseline)
+- 2 wrong-direction decoys (NPSv18.16, NPSv18.26 — these prefer Asn107)
+- 1 inactive decoy (NPSv8 — full D-amino acid retro version)
+- 1 mid-table filler (NPSv34.14)
 
-**Gold answer:** `NPSv18.9` — measured 277× Ile107 preference.
+**Gold answer:** `NPSv18.9` — native human NPS sequence with an unusually heavy lipidation linker at K11 (gamma-Glu + two AEEA spacers + C20 diacid; ~30-atom total chain). Measured 277× Ile107 preference.
 
-The sibling control `NPSv18.16` is the diagnostic peg: same lipidation site at K11, same modification class, but a shorter (C16 palmitoyl) chain. It prefers Asn107. The contrast tells you that chain length and arm geometry — not modification count — drive the variant selectivity.
+The two published N-terminal truncations `hNPS(1-10)` and `rNPS(1-10)` rank #2 and #3 in the panel at 111× and 105× preference — the answers an agent would give if it retrieved "NPS truncation literature → prefers Ile107."
 
 ## Why the gold is correct (raw assay verification)
 
 Gold is the geometric mean of `hNPSR1-Asn107 EC50` divided by the geometric mean of `hNPSR1-Ile107 EC50`, aggregated across replicates per (compound, receptor) in `data/processed/invitro_assays.csv`. Derivation in `data/validators/cb-nps-polymorphism-001.py`.
 
-The 5-compound panel by computed preference:
+Top of the panel by computed preference:
 
-| compound | Asn107 EC50 (nM) | Ile107 EC50 (nM) | Ile107-preference | role |
-|---|---:|---:|---:|---|
-| **NPSv18.9** | 260.8 | 0.94 | **276.7×** | gold (long extended K11 lipidation) |
-| NPSv5.4 | 52.3 | 0.89 | 58.5× | trap (D-aa scatter + standard palmitoyl) |
-| NPS (native) | 25.8 | 3.8 | 6.8× | baseline |
-| NPSv18.16 | — | — | < 1 | sibling control (same K11 site, shorter palmitoyl, prefers Asn107) |
-| NPSv8 | — | — | inactive | all-D retro decoy |
+| compound | Asn107 EC50 (nM) | Ile107 EC50 (nM) | Ile107-preference | n(A) | n(I) | published? |
+|---|---|---|---|---|---|---|
+| **NPSv18.9** | 260.8 | 0.94 | **276.7×** | 5 | 1 | no |
+| rNPS(1-10) | 2090.0 | 18.8 | 111.2× | 1 | 1 | yes (Reinscheid lab) |
+| hNPS(1-10) | 776.0 | 7.4 | 105.2× | 1 | 1 | yes |
+| NPSv16.13 | 1025.7 | 11.1 | 92.7× | 17 | 4 | no |
+| NPSv31.7 | 423.1 | 5.2 | 81.0× | 4 | 2 | no |
+| NPSv10.16 | 1243.2 | 18.0 | 69.1× | 3 | 2 | no |
+| NPSv5.4 | 52.3 | 0.89 | 58.5× | 8 | 2 | no |
+| NPSv21.9 | 550.3 | 9.6 | 57.3× | 3 | 2 | no |
+| NPSv2-proKKv1 | 310.0 | 7.0 | 44.3× | 6 | 2 | no |
+| NPS (native) | 25.8 | 3.8 | 6.8× | 167 | 77 | yes (Reinscheid 2002) |
+| ...wrong-direction decoys below this line... |
 
-Gap from `NPSv18.9` to `NPSv5.4` is 4.7×.
+Gap from `NPSv18.9` to `rNPS(1-10)` is 2.5×. Both `hNPS(1-10)` and `rNPS(1-10)` would be the second-best answers but neither was chosen by the agents.
 
 ## Results
 
