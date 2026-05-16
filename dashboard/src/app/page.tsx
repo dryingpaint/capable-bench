@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useCallback, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { DashboardData } from '@/types/performance';
 import Header from '@/components/Header';
@@ -19,19 +20,53 @@ async function fetchDashboardData(): Promise<DashboardData> {
 }
 
 function DashboardContent() {
-  const [typeFilter, setTypeFilter] = useState('');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const typeFilter = searchParams.get('type') ?? '';
+  const modelFilter = searchParams.get('model') ?? '';
+  const search = searchParams.get('q') ?? '';
+
+  const updateParam = useCallback(
+    (key: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+      const query = params.toString();
+      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    },
+    [pathname, router, searchParams],
+  );
+
+  const setTypeFilter = useCallback((value: string) => updateParam('type', value), [updateParam]);
+  const setModelFilter = useCallback((value: string) => updateParam('model', value), [updateParam]);
+  const setSearch = useCallback((value: string) => updateParam('q', value), [updateParam]);
+
   const { data, isLoading, error } = useQuery({
     queryKey: ['dashboard'],
     queryFn: fetchDashboardData,
   });
 
-  const toggleTypeFilter = (taskType: string) => {
-    setTypeFilter(prev => (prev === taskType ? '' : taskType));
-    if (typeof window !== 'undefined' && taskType) {
-      const el = document.getElementById('tasks-table');
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
+  const toggleTypeFilter = useCallback(
+    (taskType: string) => {
+      const next = typeFilter === taskType ? '' : taskType;
+      setTypeFilter(next);
+      if (typeof window !== 'undefined' && next) {
+        const el = document.getElementById('tasks-table');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    },
+    [typeFilter, setTypeFilter],
+  );
+
+  const filterState = useMemo(
+    () => ({ search, typeFilter, modelFilter, setSearch, setTypeFilter, setModelFilter }),
+    [search, typeFilter, modelFilter, setSearch, setTypeFilter, setModelFilter],
+  );
 
   if (isLoading) {
     return (
@@ -80,7 +115,7 @@ function DashboardContent() {
           selectedTaskType={typeFilter}
         />
         <div id="tasks-table">
-          <TasksTable data={data} typeFilter={typeFilter} setTypeFilter={setTypeFilter} />
+          <TasksTable data={data} {...filterState} />
         </div>
       </main>
     </div>
@@ -90,7 +125,9 @@ function DashboardContent() {
 export default function Dashboard() {
   return (
     <Providers>
-      <DashboardContent />
+      <Suspense fallback={null}>
+        <DashboardContent />
+      </Suspense>
     </Providers>
   );
 }

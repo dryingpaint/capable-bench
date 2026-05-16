@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs/promises';
+import { listTaskIds } from '@/lib/tasks';
 
 const FINDINGS_DIR = path.resolve(process.cwd(), '..', 'docs', 'findings');
 const SUMMARY_BYTES = 2000;
@@ -34,6 +35,7 @@ export interface Finding {
   readmeFilename: string | null;
   lastModified: string;
   artifacts: Artifact[];
+  linkedTaskIds: string[];
 }
 
 export async function listFindings(): Promise<FindingSummary[]> {
@@ -97,6 +99,9 @@ export async function getFinding(id: string): Promise<Finding | null> {
   const artifacts = await collectArtifacts(dirPath, dirPath, readmeFilename);
   artifacts.sort((a, b) => a.relativePath.localeCompare(b.relativePath));
 
+  const knownTaskIds = new Set(await listTaskIds());
+  const linkedTaskIds = resolveLinkedTaskIds(id, readme, knownTaskIds);
+
   return {
     id,
     title,
@@ -104,7 +109,29 @@ export async function getFinding(id: string): Promise<Finding | null> {
     readmeFilename,
     lastModified,
     artifacts,
+    linkedTaskIds,
   };
+}
+
+function resolveLinkedTaskIds(
+  findingId: string,
+  readme: string | null,
+  knownTaskIds: Set<string>,
+): string[] {
+  const ids = new Set<string>();
+  if (knownTaskIds.has(findingId)) ids.add(findingId);
+  if (readme) {
+    // Match lines like "**Task:** `task-id`" or "**Task ID:** `task-id`" — the
+    // pattern findings have been using to point at their canonical benchmark
+    // problem when the finding dir name doesn't match the task ID directly.
+    const pattern = /\*\*Task(?:\s+ID)?:\*\*\s+`([^`]+)`/g;
+    let match: RegExpExecArray | null;
+    while ((match = pattern.exec(readme)) !== null) {
+      const candidate = match[1].trim();
+      if (knownTaskIds.has(candidate)) ids.add(candidate);
+    }
+  }
+  return [...ids];
 }
 
 async function findReadme(dirPath: string): Promise<{ readmePath: string | null; readmeFilename: string | null }> {

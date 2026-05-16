@@ -7,6 +7,7 @@
  *   public/dashboard.json
  *   public/run-artifacts/<taskId>/<runId>.json
  *   public/finding-files/<findingId>/<...path>   (non-README files only)
+ *   public/task-files/<taskId>/<...path>          (data files, excluding prompt.md/task.yaml)
  */
 
 import path from 'path';
@@ -29,9 +30,11 @@ async function main() {
   const dashboardOut = path.join(publicDir, 'dashboard.json');
   const runArtifactsOut = path.join(publicDir, 'run-artifacts');
   const findingFilesOut = path.join(publicDir, 'finding-files');
+  const taskFilesOut = path.join(publicDir, 'task-files');
 
   await rmrf(runArtifactsOut);
   await rmrf(findingFilesOut);
+  await rmrf(taskFilesOut);
   await fs.mkdir(publicDir, { recursive: true });
 
   console.log('[bake] capablebench root:', capableBenchDir);
@@ -67,7 +70,39 @@ async function main() {
   }
   console.log('[bake]   copied', copiedFiles, 'finding artifact files');
 
+  console.log('[bake] copying task data files...');
+  const tasksRoot = path.join(capableBenchDir, 'data', 'tasks');
+  const taskEntries = await safeReadDir(tasksRoot);
+  let copiedTaskFiles = 0;
+  for (const entry of taskEntries) {
+    if (!entry.isDirectory() || !SAFE_ID.test(entry.name)) continue;
+    const taskSrc = path.join(tasksRoot, entry.name);
+    const taskDst = path.join(taskFilesOut, entry.name);
+    copiedTaskFiles += await copyTaskFiles(taskSrc, taskDst);
+  }
+  console.log('[bake]   copied', copiedTaskFiles, 'task data files');
+
   console.log('[bake] done');
+}
+
+async function copyTaskFiles(srcDir: string, dstDir: string): Promise<number> {
+  let count = 0;
+  const entries = await safeReadDir(srcDir);
+  for (const entry of entries) {
+    const srcPath = path.join(srcDir, entry.name);
+    const dstPath = path.join(dstDir, entry.name);
+    if (entry.isDirectory()) {
+      count += await copyTaskFiles(srcPath, dstPath);
+      continue;
+    }
+    if (!entry.isFile()) continue;
+    // prompt.md and task.yaml are already in dashboard.json — skip to avoid duplication.
+    if (entry.name === 'prompt.md' || entry.name === 'task.yaml') continue;
+    await fs.mkdir(path.dirname(dstPath), { recursive: true });
+    await fs.copyFile(srcPath, dstPath);
+    count += 1;
+  }
+  return count;
 }
 
 async function copyFindingFiles(srcDir: string, dstDir: string): Promise<number> {

@@ -10,7 +10,6 @@ export interface TaskMetadata {
   data_files: Array<{
     name: string;
     size_bytes: number;
-    preview: string[];
   }>;
   gold_answer?: Record<string, unknown>;
 }

@@ -1,5 +1,6 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Calendar, FileText, ChevronDown } from 'lucide-react';
+import { Calendar, FileText, ChevronDown, ArrowRight } from 'lucide-react';
 import { getFinding, listFindings, formatBytes, type Artifact } from '@/lib/findings';
 import Markdown from '@/components/Markdown';
 import ArtifactView from '@/components/ArtifactView';
@@ -51,6 +52,26 @@ export default async function FindingPage({ params }: PageProps) {
       </header>
 
       <main className="max-w-5xl mx-auto px-8 py-8 space-y-8">
+        {finding.linkedTaskIds.length > 0 && (
+          <section className="bg-stone-100 border border-stone-200 px-5 py-3">
+            <div className="text-xs uppercase tracking-wider font-semibold text-stone-500 mb-2">
+              Benchmark problem{finding.linkedTaskIds.length === 1 ? '' : 's'}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {finding.linkedTaskIds.map((taskId) => (
+                <Link
+                  key={taskId}
+                  href={`/tasks/${encodeURIComponent(taskId)}`}
+                  className="inline-flex items-center gap-1.5 text-sm font-mono text-stone-800 bg-white border border-stone-300 px-3 py-1.5 hover:border-stone-500 hover:text-stone-900"
+                >
+                  {taskId}
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         {finding.readme ? (
           <section className="bg-white border border-stone-200 px-6 py-6">
             <Markdown findingId={finding.id}>{finding.readme}</Markdown>

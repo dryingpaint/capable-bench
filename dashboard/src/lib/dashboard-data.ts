@@ -24,8 +24,6 @@ export interface RunSummaryLocation {
   runDir: string;
 }
 
-const TEXT_PREVIEW_BYTES = 64 * 1024;
-
 export function defaultCapableBenchDir(): string {
   return path.resolve(process.cwd(), '..');
 }
@@ -211,10 +209,7 @@ async function dataFileSummaries(taskDir: string): Promise<JsonObject[]> {
     files.push({
       name: entry.name,
       size_bytes: stat.size,
-      preview: await readPreviewLines(filePath, 8),
     });
-
-    if (files.length >= 3) break;
   }
 
   return files;
@@ -414,11 +409,6 @@ async function detectAupRefusal(stdoutPath: string): Promise<boolean> {
   const text = await readTextOptional(stdoutPath, 256 * 1024);
   if (!text) return false;
   return text.includes('"stop_reason":"refusal"');
-}
-
-async function readPreviewLines(filePath: string, limit: number): Promise<string[]> {
-  const text = await readTextOptional(filePath, TEXT_PREVIEW_BYTES);
-  return text.split(/\r?\n/).slice(0, limit);
 }
 
 async function readTextOptional(filePath: string, maxBytes?: number): Promise<string> {
