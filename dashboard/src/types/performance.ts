@@ -65,6 +65,7 @@ export interface PerformanceRun {
 export interface ModelSummary {
   tasks: number;
   mean_score?: number;
+  sem_score?: number;
   parsed_rate?: number;
   error_rate?: number;
   aup_refusal_count?: number;

@@ -199,11 +199,22 @@ function modelSummary(
       .map((run) => run.score)
       .filter((score): score is number => typeof score === 'number');
 
+    let mean: number | null = null;
+    let sem: number | null = null;
+    if (scores.length > 0) {
+      mean = scores.reduce((total, score) => total + score, 0) / scores.length;
+      if (scores.length > 1) {
+        // Sample variance / sqrt(n) — SEM across tasks.
+        const variance =
+          scores.reduce((acc, s) => acc + (s - mean!) ** 2, 0) / (scores.length - 1);
+        sem = Math.sqrt(variance / scores.length);
+      }
+    }
+
     summary[model] = {
       tasks: runs.length,
-      mean_score: scores.length
-        ? round4(scores.reduce((total, score) => total + score, 0) / scores.length)
-        : null,
+      mean_score: mean !== null ? round4(mean) : null,
+      sem_score: sem !== null ? round4(sem) : null,
       parsed_rate: meanBool(runs.filter((run) => run.grade).map((run) => run.grade?.parsed_answer)),
       error_rate: meanBool(runs.map((run) => run.returncode !== 0 && run.returncode != null)),
       aup_refusal_count: runs.filter((run) => run.aup_refusal).length,

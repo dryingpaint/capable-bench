@@ -10,6 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
+  ErrorBar,
 } from 'recharts';
 
 interface ChartsGridProps {
@@ -32,9 +33,11 @@ export default function ChartsGrid({ data, onTaskTypeClick, selectedTaskType }: 
     .map((model, index) => {
       const tasks = data.model_summary[model]?.tasks || 0;
       const aupRefusals = data.model_summary[model]?.aup_refusal_count || 0;
+      const sem = data.model_summary[model]?.sem_score ?? null;
       return {
         model,
         score: data.model_summary[model]?.mean_score || 0,
+        sem,
         tasks,
         aupRefusals,
         aupFraction: tasks > 0 ? aupRefusals / tasks : 0,
@@ -87,7 +90,7 @@ export default function ChartsGrid({ data, onTaskTypeClick, selectedTaskType }: 
         <div className="flex justify-between items-start mb-6">
           <div>
             <h3 className="text-lg font-semibold text-stone-900">Model Leaderboard</h3>
-            <p className="text-sm text-stone-600">Mean score across all scored tasks (latest run per model)</p>
+            <p className="text-sm text-stone-600">Mean score across all scored tasks (latest run per model). Error bar = standard error of the mean across tasks.</p>
           </div>
           <div className="flex gap-4 text-xs text-stone-500 items-center">
             {data.models.map((model, index) => (
@@ -125,8 +128,10 @@ export default function ChartsGrid({ data, onTaskTypeClick, selectedTaskType }: 
                     const tasks = props.payload?.tasks ?? 0;
                     return [`${refused} / ${tasks} tasks`, 'AUP-refused'];
                   }
+                  const sem = props.payload?.sem;
+                  const semStr = typeof sem === 'number' ? ` ± ${sem.toFixed(3)}` : '';
                   return [
-                    `${Number(value).toFixed(3)} · ${props.payload?.tasks ?? 0} tasks`,
+                    `${Number(value).toFixed(3)}${semStr} · ${props.payload?.tasks ?? 0} tasks`,
                     'Mean score',
                   ];
                 }}
@@ -135,6 +140,7 @@ export default function ChartsGrid({ data, onTaskTypeClick, selectedTaskType }: 
                 {leaderboardData.map((entry, index) => (
                   <Cell key={`score-cell-${index}`} fill={entry.color} />
                 ))}
+                <ErrorBar dataKey="sem" width={6} strokeWidth={1.5} stroke="#1c1917" direction="x" />
               </Bar>
               <Bar dataKey="aupFraction" stackId="leaderboard" fill="url(#aup-stripes)" radius={[0, 0, 0, 0]} />
             </BarChart>
