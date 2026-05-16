@@ -2,6 +2,7 @@
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 
@@ -338,6 +339,16 @@ export default function Markdown({ children, findingId }: MarkdownProps) {
           ol: ({ children }) => <ol className="my-3 ml-6 list-decimal space-y-1">{children}</ol>,
           li: ({ children }) => <li className="leading-relaxed">{children}</li>,
           a: ({ children, href }) => {
+            // Absolute site paths (/tasks/..., /findings/...) are internal
+            // navigation, NOT in-finding file refs — check this before the
+            // local-finding-ref handler swallows them.
+            if (typeof href === 'string' && href.startsWith('/')) {
+              return (
+                <Link href={href} className="text-blue-600 hover:text-blue-800 underline">
+                  {children}
+                </Link>
+              );
+            }
             if (findingId && typeof href === 'string' && isLocalFindingRef(href)) {
               return <LocalFileToggle href={href} label={children} findingId={findingId} />;
             }

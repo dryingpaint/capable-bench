@@ -113,44 +113,6 @@ export async function getFinding(id: string): Promise<Finding | null> {
   };
 }
 
-export async function findingsLinkedToTask(taskId: string): Promise<FindingSummary[]> {
-  if (!SAFE_ID.test(taskId)) return [];
-  const entries = await safeReadDir(FINDINGS_DIR);
-  const knownTaskIds = new Set(await listTaskIds());
-  const matches: FindingSummary[] = [];
-
-  for (const entry of entries) {
-    if (!entry.isDirectory()) continue;
-    if (!SAFE_ID.test(entry.name)) continue;
-
-    const dirPath = path.join(FINDINGS_DIR, entry.name);
-    const { readmePath, readmeFilename } = await findReadme(dirPath);
-    const dirStat = await fs.stat(dirPath);
-
-    let readmeText: string | null = null;
-    let title = entry.name;
-    let preview = '';
-    let lastModified = dirStat.mtime.toISOString();
-
-    if (readmePath) {
-      readmeText = await readBoundedText(readmePath, SUMMARY_BYTES);
-      title = extractTitle(readmeText) ?? entry.name;
-      preview = extractPreview(readmeText);
-      const stat = await fs.stat(readmePath);
-      lastModified = stat.mtime.toISOString();
-    }
-
-    const linked = resolveLinkedTaskIds(entry.name, readmeText, knownTaskIds);
-    if (!linked.includes(taskId)) continue;
-
-    const artifactCount = await countArtifacts(dirPath, readmeFilename);
-    matches.push({ id: entry.name, title, preview, lastModified, artifactCount });
-  }
-
-  matches.sort((a, b) => b.lastModified.localeCompare(a.lastModified));
-  return matches;
-}
-
 function resolveLinkedTaskIds(
   findingId: string,
   readme: string | null,

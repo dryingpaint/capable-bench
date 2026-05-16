@@ -1,0 +1,13 @@
+id: cb-nps-combo-modifications-001
+task_type: next_experiment
+answer_file: answer.json
+capability_targets:
+- structure_activity_reasoning
+- sequence_to_function_prediction
+evidence_layers:
+- identity
+label_status: experimental_ground_truth
+difficulty_bucket: easy
+potency_ratio: 60.10
+data_files:
+- peptide_sequences.csv

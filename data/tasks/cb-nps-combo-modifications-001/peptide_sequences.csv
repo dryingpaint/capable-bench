@@ -1,0 +1,3 @@
+peptide_id,modification,receptor_family,receptors
+PEP-17D19C9AD5,SFRNGVGTGMKKTSFQR-NH2,NPS,hNPSR1 Asn107;hNPSR1 Ile107
+PEP-C9FE4F8ED3,D-Ser1 + β-hArg3 + Nle10 + N-Me-K11 + C16-palm-K12 + C-term amide (combo),NPS,hNPSR1 Asn107;hNPSR1 Ile107

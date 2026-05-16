@@ -1,0 +1,48 @@
+id: cb-nps-combo-modifications-001
+task_type: next_experiment
+label_status: experimental_ground_truth
+gold_top:
+- PEP-17D19C9AD5
+gold_ranking:
+- PEP-17D19C9AD5
+- PEP-C9FE4F8ED3
+outcome_definition: lower best_ec50_nm in held-out in vitro functional assays at
+  hNPSR1 (potency ratio 60.10x; PEP-17D19C9AD5 best EC50 = 0.9987 nM at hNPSR1 Asn107
+  (Ca2+, Emax 95.69%, clean full agonist), PEP-C9FE4F8ED3 best EC50 = 60.02 nM at
+  hNPSR1 Ile107 (Ca2+, Emax 41.46%, partial agonist and beta-arrestin-inactive at
+  Asn107)
+gold_reasoning: "**Gold: `PEP-17D19C9AD5`** (the 17-mer truncation with C-terminal\
+  \ amide cap) — observed potency ratio 60.10\xD7 at hNPSR1, plus a full-vs-partial\
+  \ agonist efficacy gap in the same direction.\n\n## Held-out measurements\n\n**PEP-17D19C9AD5**\
+  \ (`SFRNGVGTGMKKTSFQR-NH2`, gold winner) — 6 records, clean full agonist:\n\
+  \n| receptor | assay | EC50 (nM) | Emax (%) |\n|---|---|---:|---:|\n| hNPSR1 Asn107\
+  \ | Ca2+ | **0.9987** | 95.69 |\n| hNPSR1 Ile107 | IP-1 | 1.4321 | 101.86 |\n| hNPSR1\
+  \ Ile107 | Ca2+ | 7.7736 | 90.37 |\n| hNPSR1 Asn107 | IP-1 | 15.9149 | 100.17 |\n\
+  | hNPSR1 Asn107 | cAMP | 44.5697 | 106.39 |\n| hNPSR1 Asn107 | b-Arrestin | 57.4878\
+  \ | 97.25 |\n\n**PEP-C9FE4F8ED3** (heavy-combo modifications) — 3 records,\
+  \ partial agonist, beta-arrestin-inactive:\n\n| receptor | assay | EC50 (nM) | Emax\
+  \ (%) |\n|---|---|---:|---:|\n| hNPSR1 Ile107 | Ca2+ | **60.02** | 41.46 |\n| hNPSR1\
+  \ Ile107 | IP-1 | 75.10 | 73.99 |\n| hNPSR1 Asn107 | b-Arrestin | 5000.00 | 4.74\
+  \ |\n\n## Why the simple truncation wins\n\nThe \"optimized\" combo peptide carries\
+  \ five surface marks of medicinal-chemistry optimization (D-Ser1, β-hArg3,\
+  \ Nle10, N-Me-K11, C16-palm-K12), each net-positive in isolation per textbook SAR.\
+  \ Empirically the combination destroys activity:\n\n- **D-Ser1** inverts N-terminal\
+  \ chirality. The N-terminal Ser-Phe of NPS is essential for full Gq-coupled potency\
+  \ at NPSR1 (Reinscheid 2005; Roth 2006). Any position-1 modification typically costs\
+  \ ≥10\xD7 in potency.\n- **C16-palm-K12** sits mid-sequence (position 12 of\
+  \ ~20). Internal lipidation typically sequesters the peptide in membranes or sterically\
+  \ blocks binding, distinct from the terminal lipidation trick used in e.g. GLP-1\
+  \ analogs.\n- **β-homoarginine + N-methylation** convert the full agonist into\
+  \ a partial one (~50% Emax loss on Ca2+, beta-arrestin-inactive).\n\nMeanwhile the\
+  \ truncation `SFRNGVGTGMKK...TSFQR-NH2` is exactly the standard medchem move that\
+  \ *boosts* observed in vitro potency: drop the dispensable C-terminal `AKS` tail,\
+  \ cap with C-amide, keep the active N-terminal core intact.\n\n## Trap design\n\n\
+  This task was constructed to test whether agents treat 5 simultaneous modifications\
+  \ as additive improvements (textbook SAR applied combinatorially) versus reading\
+  \ the specific chemistry (mid-sequence lipidation; D-amino-acid at position 1).\
+  \ Both Claude and Codex fall for the additivity story; the measured data contradict\
+  \ it both in potency (60\xD7) and efficacy (full agonist vs partial/dead).\n"
+effect_size: curated
+effect_size_note: cb-* curated task; reconstructed from the original
+  pilot-peptide-pairwise-sequence-nps-easy-011 case before the pilot
+  task was regenerated 2026-05-13. See docs/findings/cb-nps-combo-modifications-001/.
