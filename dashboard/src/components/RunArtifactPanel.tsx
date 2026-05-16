@@ -27,21 +27,18 @@ function formatScore(score: number | null | undefined): string {
 export function RunArtifactPanel({
   taskId,
   run,
-  defaultOpen = true,
   isLatest = false,
 }: {
   taskId: string;
   run: RunDetails;
-  defaultOpen?: boolean;
   isLatest?: boolean;
 }) {
   const tags = run.tags || [];
   const timestamp = run.timestamp ? new Date(run.timestamp).toISOString().replace('T', ' ').slice(0, 16) : '';
-  const [open, setOpen] = useState(defaultOpen);
+  const [open, setOpen] = useState(false);
   return (
     <details
       className="border border-stone-200 bg-white"
-      {...(defaultOpen ? { open: true } : {})}
       onToggle={(event) => setOpen((event.target as HTMLDetailsElement).open)}
     >
       <summary className="p-4 cursor-pointer text-stone-900 flex items-center gap-3 flex-wrap">

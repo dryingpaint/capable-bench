@@ -123,8 +123,8 @@ function RunsTab({
   return (
     <section>
       <p className="text-sm text-stone-600 mb-3">
-        Every recorded run for this task, grouped by model. The latest run per model is
-        expanded by default; click any prior run to expand its trace, stdout, and stderr.
+        Every recorded run for this task, grouped by model. Click any run to load and view its
+        trace, stdout, and stderr — artifacts are fetched on demand.
       </p>
       <div className="space-y-6">
         {models.map((model) => {
@@ -148,7 +148,6 @@ function RunsTab({
                     key={run.run_id}
                     taskId={task.id}
                     run={run}
-                    defaultOpen={run.run_id === latestId}
                     isLatest={run.run_id === latestId}
                   />
                 ))}
