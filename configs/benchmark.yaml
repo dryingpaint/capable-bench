@@ -1,5 +1,5 @@
 benchmark:
-  name: biodiscoverybench
+  name: capable-bench
   version: 0.1.0
   description: >
     Agentic benchmark for biological and biochemical reasoning, hypothesis

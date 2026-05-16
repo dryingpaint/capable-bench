@@ -15,7 +15,7 @@ from .suite import run_suite, summarize_runs
 from .task_sets import load_task_set
 from .tasks import list_tasks
 from .validate import validate_benchmark
-from .viewer import build_viewer, refresh_dashboard_cache, validate_dashboard_data
+from .dashboard_data import refresh_dashboard_cache, validate_dashboard_data
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -120,13 +120,6 @@ def main() -> None:
     summarize = sub.add_parser("summarize", help="Aggregate grade files under runs/.")
     summarize.add_argument("--runs-dir", type=Path, default=RUNS_DIR)
 
-    viewer = sub.add_parser("build-viewer", help="Build a static HTML task and performance viewer.")
-    viewer.add_argument("--tasks-dir", type=Path, default=TASKS_DIR)
-    viewer.add_argument("--answers-dir", type=Path, default=ANSWERS_DIR)
-    viewer.add_argument("--runs-dir", type=Path, default=RUNS_DIR)
-    viewer.add_argument("--out", type=Path, default=RUNS_DIR / "viewer.html")
-    viewer.add_argument("--include-all-runs", action="store_true")
-
     refresh_cache = sub.add_parser("refresh-dashboard-cache", help="Refresh cached grades in dashboard data.")
     refresh_cache.add_argument("--runs-dir", type=Path, default=RUNS_DIR)
     refresh_cache.add_argument("--force", action="store_true", help="Force refresh all grades, even if already cached")
@@ -228,16 +221,6 @@ def main() -> None:
         _print_json(result)
     elif args.command == "summarize":
         _print_json(summarize_runs(args.runs_dir))
-    elif args.command == "build-viewer":
-        _print_json(
-            build_viewer(
-                args.tasks_dir,
-                args.answers_dir,
-                args.runs_dir,
-                args.out,
-                include_all_runs=args.include_all_runs,
-            )
-        )
     elif args.command == "refresh-dashboard-cache":
         _print_json(refresh_dashboard_cache(args.runs_dir, force=args.force))
     elif args.command == "validate-dashboard-data":

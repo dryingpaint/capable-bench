@@ -6,11 +6,11 @@ files. The agent can choose its own method, install or run tools if its
 environment permits that, and produce a final answer. The evaluator scores the
 answer, not the path.
 
-The expanded benchmark concept is BioDiscoveryBench: a biological and
+The expanded benchmark concept is Capable Bench: a biological and
 biochemical reasoning benchmark for coding agents that covers translational
 candidate decisions, mechanistic hypothesis generation, experiment planning,
 end-to-end drug discovery, and foundation-model-augmented discovery. The full
-track specification lives in [BioDiscoveryBench](BIO_DISCOVERY_BENCHMARK.md).
+track specification lives in [Capable Bench](CAPABLE_BENCH.md).
 
 ## Design Principles
 

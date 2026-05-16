@@ -140,7 +140,7 @@ The curation command currently creates:
 - foundation-model-triage tasks with model-output evidence,
 - end-to-end drug discovery program planning tasks.
 
-BioDiscoveryBench treats every new private dataset as an evidence layer. Current
+Capable Bench treats every new private dataset as an evidence layer. Current
 in vitro and in vivo layers support candidate ranking, hit prediction, failure
 diagnosis, and next-experiment tasks. Future omics, structure,
 developability, model-output, and decision-history layers should be added as

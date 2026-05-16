@@ -1,6 +1,6 @@
-# BioDiscoveryBench
+# Capable Bench
 
-BioDiscoveryBench is the target benchmark shape for this repository: an
+Capable Bench is the target benchmark shape for this repository: an
 agentic, data-grounded evaluation of whether coding agents can do useful
 biological and biochemical reasoning, predict experimental outcomes, and make
 translational candidate decisions from proprietary translational datasets.

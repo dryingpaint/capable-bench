@@ -33,7 +33,7 @@ The dashboard automatically reads from your existing CapableBench data structure
 - `data/answers/` - Gold answers  
 - `runs/` - Execution results
 
-It uses your existing `capablebench.viewer` module to generate the data, then enhances it with:
+It reads task and run data directly, then enhances it with:
 - Automatic tagging of interesting runs
 - Real-time updates every 30 seconds
 - Interactive filtering and search

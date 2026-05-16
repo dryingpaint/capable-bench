@@ -11,7 +11,7 @@ answer or rubric. Agents are free to solve the task however they want; the
 grader scores the final answer.
 
 The benchmark design is documented in
-[BioDiscoveryBench](docs/BIO_DISCOVERY_BENCHMARK.md). It covers translational
+[Capable Bench](docs/CAPABLE_BENCH.md). It covers translational
 candidate ranking, hit prediction, failure diagnosis, mechanistic hypothesis
 generation, next-experiment selection, end-to-end discovery program planning,
 and tasks that require agents to use or critique biology foundation-model
@@ -178,18 +178,3 @@ The dashboard will be available at http://localhost:3000 and provides:
 - **Professional UX** - modern design with responsive layout
 
 The dashboard reads directly from your existing data structure (`data/`, `runs/`) and enhances it with automatic tagging and interactive exploration.
-
-### Static HTML Viewer (Legacy)
-
-Build a local static HTML viewer:
-
-```bash
-uv run capablebench build-viewer
-```
-
-The generated static HTML viewer is written to `runs/viewer.html`. It shows all
-tasks, prompt/data previews, latest per-model scores, and calibration summary
-data, regraded against the current hidden answers. For each run it also shows
-`agent_trace.txt`, `stdout.txt`, `stderr.txt`, the submitted answer artifact,
-and the grade. Use `codex exec --json` or Claude's stream JSON output if you
-want agent turns and tool calls in the trace.
