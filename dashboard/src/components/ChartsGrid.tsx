@@ -63,9 +63,16 @@ export default function ChartsGrid({ data, onTaskTypeClick, selectedTaskType }: 
         if (run?.aup_refusal) aupCount += 1;
       });
 
-      result[model] = scores.length > 0
+      const mean = scores.length > 0
         ? scores.reduce((a, b) => a + b, 0) / scores.length
         : null;
+      let sem: number | null = null;
+      if (mean !== null && scores.length > 1) {
+        const variance = scores.reduce((acc, s) => acc + (s - mean) ** 2, 0) / (scores.length - 1);
+        sem = Math.sqrt(variance / scores.length);
+      }
+      result[model] = mean;
+      result[`${model}__sem`] = sem;
       result[`${model}__aup`] = aupCount;
       result[`${model}__aupFraction`] = tasksForType.length > 0 ? aupCount / tasksForType.length : 0;
     });
@@ -154,7 +161,7 @@ export default function ChartsGrid({ data, onTaskTypeClick, selectedTaskType }: 
           <div>
             <h3 className="text-lg font-semibold text-stone-900">Mean score by task type</h3>
             <p className="text-sm text-stone-600">
-              {onTaskTypeClick ? 'Click a bar to filter the table below' : 'Per-model mean on each task family'}
+              {onTaskTypeClick ? 'Click a bar to filter the table below. Error bar = SEM across tasks in the family.' : 'Per-model mean on each task family. Error bar = SEM across tasks in the family.'}
             </p>
           </div>
           {selectedTaskType && onTaskTypeClick && (
@@ -216,10 +223,10 @@ export default function ChartsGrid({ data, onTaskTypeClick, selectedTaskType }: 
                     const aup = Number(props.payload?.[`${model}__aup`] ?? 0);
                     return [`${aup} task${aup === 1 ? '' : 's'}`, `${model} AUP-refused`];
                   }
-                  return [
-                    value === null || value === undefined ? '—' : Number(value).toFixed(3),
-                    key,
-                  ];
+                  if (value === null || value === undefined) return ['—', key];
+                  const sem = props.payload?.[`${key}__sem`];
+                  const semStr = typeof sem === 'number' ? ` ± ${sem.toFixed(3)}` : '';
+                  return [`${Number(value).toFixed(3)}${semStr}`, key];
                 }}
               />
               {data.models.flatMap((model, index) => [
@@ -230,7 +237,9 @@ export default function ChartsGrid({ data, onTaskTypeClick, selectedTaskType }: 
                   fill={colorFor(index)}
                   radius={[0, 0, 0, 0]}
                   style={onTaskTypeClick ? { cursor: 'pointer' } : undefined}
-                />,
+                >
+                  <ErrorBar dataKey={`${model}__sem`} width={4} strokeWidth={1.25} stroke="#1c1917" direction="y" />
+                </Bar>,
                 <Bar
                   key={`${model}-aup`}
                   dataKey={`${model}__aupFraction`}
