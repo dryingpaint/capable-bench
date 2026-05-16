@@ -1,10 +1,9 @@
-# Capable Bench
+# capablebench
 
-Agentic benchmark harness for BioDiscoveryBench: a biological and biochemical
-reasoning benchmark for coding agents. The goal is to test whether agents such
-as Codex or Claude Code can inspect messy scientific data, run their own
-analyses, generate hypotheses, plan experiments, and make experimentally useful
-drug discovery decisions.
+capablebench is a biological and biochemical reasoning benchmark for coding
+agents. The goal is to test whether agents such as Codex or Claude Code can
+inspect messy scientific data, run their own analyses, generate hypotheses,
+plan experiments, and make experimentally useful drug discovery decisions.
 
 The setup follows the useful parts of BioMysteryBench: each problem has a
 prompt, task-specific data files, optional network-domain metadata, and a hidden
@@ -17,9 +16,6 @@ candidate ranking, hit prediction, failure diagnosis, mechanistic hypothesis
 generation, next-experiment selection, end-to-end discovery program planning,
 and tasks that require agents to use or critique biology foundation-model
 outputs.
-
-Calibration guidance for Codex, Claude, Modal, and the target unsaturated
-`<0.60` mean-score gate lives in [Calibration](docs/CALIBRATION.md).
 
 ## Quick Start
 
