@@ -25,7 +25,7 @@ export default async function TaskPage({ params }: PageProps) {
   const result = await getTask(id);
   if (!result) notFound();
 
-  const { task, latestRuns, models } = result;
+  const { task, latestRuns, allRuns, models } = result;
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -70,7 +70,7 @@ export default async function TaskPage({ params }: PageProps) {
       </header>
 
       <main className="max-w-5xl mx-auto px-8 py-8">
-        <TaskTabs task={task} models={models} latestRuns={latestRuns} />
+        <TaskTabs task={task} models={models} latestRuns={latestRuns} allRuns={allRuns} />
       </main>
     </div>
   );

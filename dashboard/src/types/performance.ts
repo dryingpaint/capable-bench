@@ -75,6 +75,7 @@ export interface DashboardData {
   models: string[];
   model_summary: Record<string, ModelSummary>;
   latest_runs: Record<string, Record<string, RunDetails>>;
+  all_runs?: Record<string, Record<string, RunDetails[]>>;
   task_tags?: Record<string, string[]>;
   runs?: RunDetails[];
 }

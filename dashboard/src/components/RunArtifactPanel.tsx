@@ -24,13 +24,30 @@ function formatScore(score: number | null | undefined): string {
   return score.toFixed(3);
 }
 
-export function RunArtifactPanel({ taskId, run }: { taskId: string; run: RunDetails }) {
+export function RunArtifactPanel({
+  taskId,
+  run,
+  defaultOpen = true,
+  isLatest = false,
+}: {
+  taskId: string;
+  run: RunDetails;
+  defaultOpen?: boolean;
+  isLatest?: boolean;
+}) {
   const tags = run.tags || [];
+  const timestamp = run.timestamp ? new Date(run.timestamp).toISOString().replace('T', ' ').slice(0, 16) : '';
   return (
-    <details className="border border-stone-200 bg-white" open>
-      <summary className="p-4 cursor-pointer font-semibold text-stone-900 flex items-center gap-3">
-        <span>{run.model}</span>
+    <details className="border border-stone-200 bg-white" {...(defaultOpen ? { open: true } : {})}>
+      <summary className="p-4 cursor-pointer text-stone-900 flex items-center gap-3 flex-wrap">
         <span className={`font-bold ${scoreClass(run.score)}`}>{formatScore(run.score)}</span>
+        <span className="font-mono text-xs text-stone-700">{run.run_id}</span>
+        {timestamp && <span className="text-xs text-stone-500">{timestamp}</span>}
+        {isLatest && (
+          <span className="inline-block text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200">
+            latest
+          </span>
+        )}
         {tags.length > 0 && (
           <div className="flex gap-1">
             {tags.map((tag) => (
@@ -46,12 +63,7 @@ export function RunArtifactPanel({ taskId, run }: { taskId: string; run: RunDeta
         )}
       </summary>
       <div className="px-4 pb-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
-          <div>
-            <strong>Run:</strong>
-            <br />
-            <span className="font-mono text-xs">{run.run_id}</span>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 text-sm">
           <div>
             <strong>Return code:</strong>
             <br />

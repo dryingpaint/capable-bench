@@ -47,6 +47,7 @@ export async function buildDashboardData(capableBenchDir: string): Promise<JsonO
     models,
     model_summary: modelSummary(Object.values(latestRuns), models),
     latest_runs: latestRuns,
+    all_runs: allByTaskModel(runs),
     task_tags: taskTags(tasks),
   };
 }
@@ -156,6 +157,21 @@ function latestByTaskModel(runs: DashboardRun[]): Record<string, Record<string, 
     }
   }
   return latest;
+}
+
+function allByTaskModel(runs: DashboardRun[]): Record<string, Record<string, DashboardRun[]>> {
+  const grouped: Record<string, Record<string, DashboardRun[]>> = {};
+  for (const run of runs) {
+    grouped[run.task_id] ||= {};
+    grouped[run.task_id][run.model] ||= [];
+    grouped[run.task_id][run.model].push(run);
+  }
+  for (const taskId of Object.keys(grouped)) {
+    for (const model of Object.keys(grouped[taskId])) {
+      grouped[taskId][model].sort((a, b) => String(b.timestamp).localeCompare(String(a.timestamp)));
+    }
+  }
+  return grouped;
 }
 
 function taskTags(tasks: Array<JsonObject & { id: string }>): Record<string, string[]> {

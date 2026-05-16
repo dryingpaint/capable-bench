@@ -22,6 +22,7 @@ export async function listTaskIds(): Promise<string[]> {
 export async function getTask(id: string): Promise<{
   task: TaskMetadata;
   latestRuns: Record<string, RunDetails>;
+  allRuns: Record<string, RunDetails[]>;
   models: string[];
 } | null> {
   if (!SAFE_ID.test(id)) return null;
@@ -31,6 +32,7 @@ export async function getTask(id: string): Promise<{
   return {
     task,
     latestRuns: data.latest_runs?.[id] || {},
+    allRuns: data.all_runs?.[id] || {},
     models: data.models,
   };
 }

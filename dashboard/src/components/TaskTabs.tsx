@@ -10,13 +10,14 @@ interface TaskTabsProps {
   task: TaskMetadata;
   models: string[];
   latestRuns: Record<string, RunDetails>;
+  allRuns: Record<string, RunDetails[]>;
 }
 
 type TabId = 'problem' | 'runs';
 
-export default function TaskTabs({ task, models, latestRuns }: TaskTabsProps) {
+export default function TaskTabs({ task, models, latestRuns, allRuns }: TaskTabsProps) {
   const [tab, setTab] = useState<TabId>('problem');
-  const runCount = models.filter((model) => latestRuns[model]).length;
+  const runCount = models.reduce((total, model) => total + (allRuns[model]?.length ?? 0), 0);
 
   return (
     <div>
@@ -33,7 +34,7 @@ export default function TaskTabs({ task, models, latestRuns }: TaskTabsProps) {
         {tab === 'problem' ? (
           <ProblemTab task={task} />
         ) : (
-          <RunsTab task={task} models={models} latestRuns={latestRuns} />
+          <RunsTab task={task} models={models} latestRuns={latestRuns} allRuns={allRuns} />
         )}
       </div>
     </div>
@@ -112,30 +113,48 @@ function RunsTab({
   task,
   models,
   latestRuns,
+  allRuns,
 }: {
   task: TaskMetadata;
   models: string[];
   latestRuns: Record<string, RunDetails>;
+  allRuns: Record<string, RunDetails[]>;
 }) {
   return (
     <section>
       <p className="text-sm text-stone-600 mb-3">
-        Latest run per model. Trace, stdout, and stderr load on demand.
+        Every recorded run for this task, grouped by model. The latest run per model is
+        expanded by default; click any prior run to expand its trace, stdout, and stderr.
       </p>
-      <div className="space-y-3">
+      <div className="space-y-6">
         {models.map((model) => {
-          const run = latestRuns[model];
-          if (!run) {
+          const runs = allRuns[model] ?? [];
+          if (runs.length === 0) {
             return (
-              <div
-                key={model}
-                className="border border-stone-200 bg-white p-4 text-sm text-stone-500"
-              >
+              <div key={model} className="border border-stone-200 bg-white p-4 text-sm text-stone-500">
                 <span className="font-semibold text-stone-900">{model}</span> · no run found
               </div>
             );
           }
-          return <RunArtifactPanel key={model} taskId={task.id} run={run} />;
+          const latestId = latestRuns[model]?.run_id;
+          return (
+            <div key={model}>
+              <div className="text-xs uppercase tracking-wider font-semibold text-stone-500 mb-2">
+                {model} · {runs.length} run{runs.length === 1 ? '' : 's'}
+              </div>
+              <div className="space-y-2">
+                {runs.map((run) => (
+                  <RunArtifactPanel
+                    key={run.run_id}
+                    taskId={task.id}
+                    run={run}
+                    defaultOpen={run.run_id === latestId}
+                    isLatest={run.run_id === latestId}
+                  />
+                ))}
+              </div>
+            </div>
+          );
         })}
       </div>
     </section>
