@@ -38,26 +38,26 @@ Brief description and one representative trace excerpt for each.
 #### Pharmacophore misapplied (claude 17/29 = 59%; codex 12/21 = 57%)
 The agent invokes real SAR concepts — pharmacophore residues, stereochemistry, charge, motif positions — but reaches the wrong conclusion. This is the failure mode that *isn't* fixable by cleaning the input.
 
-> *Example — [`nps-easy-012`](traces/nps-easy-012-claude.jsonl) (claude), comparing a peptide with one D-Thr substitution to one with four canonical optimizations; gold is the simpler peptide and is 79× more potent:* `"R3 → 4-F-Phe (hydrophobic/aromatic at position 3 — a well-known SAR-driven potency enhancement at NPSR; consistent with the [t-Bu-Ala3]NPS / [Cha3]NPS analog series)."` Real published medicinal chemistry, applied to land on the wrong answer.
+> *Example — [`nps-easy-012`](traces/nps-easy-012-claude.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-nps-easy-012/) (claude), comparing a peptide with one D-Thr substitution to one with four canonical optimizations; gold is the simpler peptide and is 79× more potent:* `"R3 → 4-F-Phe (hydrophobic/aromatic at position 3 — a well-known SAR-driven potency enhancement at NPSR; consistent with the [t-Bu-Ala3]NPS / [Cha3]NPS analog series)."` Real published medicinal chemistry, applied to land on the wrong answer.
 
 The residue-level miss: Claude treated `4-F-Phe` as a generic aromatic/hydrophobic optimization, but in this sequence it replaces native **Arg3** in the NPS `SFRN` activation motif. The simpler gold peptide preserves that N-terminal pharmacophore and only changes Thr13 to D-Thr, while the heavily modified loser removes a conserved cationic contact. The failure is not just "more modifications looked better"; it is modification-count reasoning overriding exact-position accounting.
 
 #### AUP refusal (claude only; 9 of 29)
 The agent's safety filter triggers on the peptide-sequence prompt and the agent never engages. Codex never refuses. All 9 occur on MCH or OXN tasks.
 
-> *Example — [`mch-trivial-016`](traces/mch-trivial-016-claude.jsonl):* `"API Error: Claude Code is unable to respond to this request, which appears to violate our Usage Policy..."`
+> *Example — [`mch-trivial-016`](traces/mch-trivial-016-claude.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-mch-trivial-016/):* `"API Error: Claude Code is unable to respond to this request, which appears to violate our Usage Policy..."`
 
 #### Length / complexity cue (codex 7/21 = 33%; claude 2/29 = 7%)
 The agent's reasoning leans on sequence length, scaffold size, or sheer number of modifications without engaging with specific residues or mechanism.
 
-> *Example — [`oxn-hard-001`](traces/oxn-hard-001-codex.jsonl) (codex), comparing a 14-residue analog with non-natural substitutions to a 28-residue native-like peptide; the shorter analog is 4.5× more potent:* `"The stronger sequence signal is the full-length, native-like OX2R peptide versus the shorter analog with multiple nonstandard substitutions."` No engagement with the specific substitutions; the decision is length-based.
+> *Example — [`oxn-hard-001`](traces/oxn-hard-001-codex.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-oxn-hard-001/) (codex), comparing a 14-residue analog with non-natural substitutions to a 28-residue native-like peptide; the shorter analog is 4.5× more potent:* `"The stronger sequence signal is the full-length, native-like OX2R peptide versus the shorter analog with multiple nonstandard substitutions."` No engagement with the specific substitutions; the decision is length-based.
 
 #### No substantive reasoning (claude 1/29; codex 2/21)
 The agent picks an answer without articulating biochemical reasoning; the trace contains only boilerplate or filesystem chatter.
 
-> *Example — [`oxn-medium-006`](traces/oxn-medium-006-codex.jsonl) (codex), where the loser carries `D-Citrulline` replacing a conserved Arg (a known 14× potency penalty):* `"I'm comparing them against the recognizable orexin-B-like motif and the likely impact of truncation/substitution versus a single noncanonical residue."` No claim about which substitution is worse, no mention of D-Citrulline.
+> *Example — [`oxn-medium-006`](traces/oxn-medium-006-codex.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-oxn-medium-006/) (codex), where the loser carries `D-Citrulline` replacing a conserved Arg (a known 14× potency penalty):* `"I'm comparing them against the recognizable orexin-B-like motif and the likely impact of truncation/substitution versus a single noncanonical residue."` No claim about which substitution is worse, no mention of D-Citrulline.
 
 #### Positive control (both agents correct)
 For contrast — when the benchmark works as advertised.
 
-> *Example — [`nps-hard-001`](traces/nps-hard-001-claude.jsonl):* both agents independently identified D-Arg at position 3 as disrupting the conserved SFRNG activation motif and picked against it. Claude: `"D-Arg3 substitution disrupts an essential cationic residue in the SFRNG activation motif"`. Codex: `"the D-Arg substitution at position 3 [is] the larger likely potency penalty for NPSR activation"`. Two-concept SAR, two agents, two correct answers — modest ratio at a known SAR position.
+> *Example — [`nps-hard-001`](traces/nps-hard-001-claude.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-nps-hard-001/):* both agents independently identified D-Arg at position 3 as disrupting the conserved SFRNG activation motif and picked against it. Claude: `"D-Arg3 substitution disrupts an essential cationic residue in the SFRNG activation motif"`. Codex: `"the D-Arg substitution at position 3 [is] the larger likely potency penalty for NPSR activation"`. Two-concept SAR, two agents, two correct answers — modest ratio at a known SAR position.

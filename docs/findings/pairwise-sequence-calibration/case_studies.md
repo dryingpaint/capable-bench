@@ -6,7 +6,7 @@ The full per-task category labels for all 53 graded failures are in `failure_cla
 
 ---
 
-## 1. AUP refusal — [`mch-trivial-016`](traces/mch-trivial-016-claude.jsonl) (claude)
+## 1. AUP refusal — [`mch-trivial-016`](traces/mch-trivial-016-claude.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-mch-trivial-016/) (claude)
 
 **Setup.** A 9-residue cyclic mimetic vs. a 17-residue native MCH-like peptide.
 
@@ -25,11 +25,11 @@ The full per-task category labels for all 53 graded failures are in `failure_cla
 
 **Implication.** Until refusals are surfaced as a separate column, claude's failure rate is inflated by ~23%. The benchmark cannot currently distinguish "claude can't do peptide SAR" from "claude refuses peptide tasks."
 
-**More examples (claude AUP refusals).** `mch-easy-013`, `mch-medium-010`, [`mch-trivial-016`](traces/mch-trivial-016-claude.jsonl), `mch-trivial-017`, `nps-trivial-020`. All MCH or NPS family.
+**More examples (claude AUP refusals).** `mch-easy-013`, `mch-medium-010`, [`mch-trivial-016`](traces/mch-trivial-016-claude.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-mch-trivial-016/), `mch-trivial-017`, `nps-trivial-020`. All MCH or NPS family.
 
 ---
 
-## 2. Length / complexity cue — [`oxn-hard-001`](traces/oxn-hard-001-codex.jsonl) (codex)
+## 2. Length / complexity cue — [`oxn-hard-001`](traces/oxn-hard-001-codex.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-oxn-hard-001/) (codex)
 
 **Setup.** Two OX2R-family peptides; gold is the shorter analog with non-natural residue substitutions. Potency ratio **4.46×** (gold more potent).
 
@@ -52,7 +52,7 @@ The full per-task category labels for all 53 graded failures are in `failure_cla
 
 ---
 
-## 3. Pharmacophore misapplied — [`nps-easy-012`](traces/nps-easy-012-claude.jsonl) (claude)
+## 3. Pharmacophore misapplied — [`nps-easy-012`](traces/nps-easy-012-claude.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-nps-easy-012/) (claude)
 
 **Setup.** Two NPS analogs; gold is the simpler peptide with a single D-Thr substitution. Potency ratio **79×** (gold more potent — robust gold).
 
@@ -81,7 +81,7 @@ The 79× ratio rules out gold-noise, so the failure is real — not an artifact 
 
 ---
 
-## 4. No substantive reasoning — [`oxn-medium-006`](traces/oxn-medium-006-codex.jsonl) (codex)
+## 4. No substantive reasoning — [`oxn-medium-006`](traces/oxn-medium-006-codex.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-oxn-medium-006/) (codex)
 
 **Setup.** Potency ratio **14×** (gold more potent). Loser carries a D-Citrulline substitution at a conserved Arg.
 
@@ -114,7 +114,7 @@ Claude names the modification (D-Citrulline), identifies what it replaces (argin
 
 ---
 
-## 5. Positive control — [`nps-hard-001`](traces/nps-hard-001-claude.jsonl) (both agents correct)
+## 5. Positive control — [`nps-hard-001`](traces/nps-hard-001-claude.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-nps-hard-001/) (both agents correct)
 
 **Setup.** Potency ratio **4.24×**. Gold is the peptide with peripheral modifications; loser has a D-Arg at position 3 inside the conserved SFRNG activation motif.
 
@@ -149,8 +149,8 @@ Both independently identified the same critical residue (Arg3), the same disrupt
 
 | Category | Example | n (claude / codex) | Concern level | Fix path |
 |---|---|---|---|---|
-| AUP refusal | [`mch-trivial-016`](traces/mch-trivial-016-claude.jsonl) | 5 / 0 | Inflates claude failure rate by ~23% | Surface as a separate column; not addressable in-task |
-| Length / complexity cue | [`oxn-hard-001`](traces/oxn-hard-001-codex.jsonl) (codex) | 4 / 10 | Dominant codex failure at narrow ratios | Controlled probes that invert length-vs-potency |
-| Pharmacophore misapplied | [`nps-easy-012`](traces/nps-easy-012-claude.jsonl) (claude) | 12 / 6 | Real SAR + wrong answer; hardest to address | Likely requires changes to agent reasoning, not benchmark design |
-| No substantive reasoning | [`oxn-medium-006`](traces/oxn-medium-006-codex.jsonl) (codex) | 1 / 0 | Hidden by current grader | Grade the rationale, not just the pick |
+| AUP refusal | [`mch-trivial-016`](traces/mch-trivial-016-claude.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-mch-trivial-016/) | 5 / 0 | Inflates claude failure rate by ~23% | Surface as a separate column; not addressable in-task |
+| Length / complexity cue | [`oxn-hard-001`](traces/oxn-hard-001-codex.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-oxn-hard-001/) (codex) | 4 / 10 | Dominant codex failure at narrow ratios | Controlled probes that invert length-vs-potency |
+| Pharmacophore misapplied | [`nps-easy-012`](traces/nps-easy-012-claude.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-nps-easy-012/) (claude) | 12 / 6 | Real SAR + wrong answer; hardest to address | Likely requires changes to agent reasoning, not benchmark design |
+| No substantive reasoning | [`oxn-medium-006`](traces/oxn-medium-006-codex.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-oxn-medium-006/) (codex) | 1 / 0 | Hidden by current grader | Grade the rationale, not just the pick |
 | **Positive control** | `nps-hard-001` | n/a | What success looks like | Build more tasks of this shape |
