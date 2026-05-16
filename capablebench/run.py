@@ -190,7 +190,7 @@ def _format_trace_chunk(stream_name: str, chunk: str) -> str:
     return "".join(f"[{timestamp}] {stream_name}> {line}" for line in chunk.splitlines(True))
 
 
-_TRACE_FIELD_LIMIT = 800
+_TRACE_FIELD_LIMIT = 100_000
 
 
 def _trunc(value: Any, limit: int = _TRACE_FIELD_LIMIT) -> str:
@@ -299,8 +299,8 @@ def _format_agent_event(event: dict[str, Any]) -> str:
             out = item.get("aggregated_output") or item.get("output") or ""
             exit_code = item.get("exit_code")
             return (
-                f"[exec] {_trunc(cmd or '', limit=300)}\n"
-                f"        ↳ exit={exit_code} {_trunc(out, limit=600)}"
+                f"[exec] {_trunc(cmd or '')}\n"
+                f"        ↳ exit={exit_code} {_trunc(out)}"
             )
         if itype == "file_change":
             changes = item.get("changes") or []
