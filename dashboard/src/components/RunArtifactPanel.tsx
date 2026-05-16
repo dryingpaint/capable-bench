@@ -37,8 +37,13 @@ export function RunArtifactPanel({
 }) {
   const tags = run.tags || [];
   const timestamp = run.timestamp ? new Date(run.timestamp).toISOString().replace('T', ' ').slice(0, 16) : '';
+  const [open, setOpen] = useState(defaultOpen);
   return (
-    <details className="border border-stone-200 bg-white" {...(defaultOpen ? { open: true } : {})}>
+    <details
+      className="border border-stone-200 bg-white"
+      {...(defaultOpen ? { open: true } : {})}
+      onToggle={(event) => setOpen((event.target as HTMLDetailsElement).open)}
+    >
       <summary className="p-4 cursor-pointer text-stone-900 flex items-center gap-3 flex-wrap">
         <span className={`font-bold ${scoreClass(run.score)}`}>{formatScore(run.score)}</span>
         <span className="font-mono text-xs text-stone-700">{run.run_id}</span>
@@ -81,7 +86,7 @@ export function RunArtifactPanel({
           </div>
         </div>
 
-        <RunArtifactDetails taskId={taskId} run={run} />
+        {open && <RunArtifactDetails taskId={taskId} run={run} />}
       </div>
     </details>
   );
