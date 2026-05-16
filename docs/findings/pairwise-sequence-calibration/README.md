@@ -56,8 +56,3 @@ The agent's reasoning leans on sequence length, scaffold size, or sheer number o
 The agent picks an answer without articulating biochemical reasoning; the trace contains only boilerplate or filesystem chatter.
 
 > *Example — [`oxn-medium-006`](traces/oxn-medium-006-codex.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-oxn-medium-006/) (codex), where the loser carries `D-Citrulline` replacing a conserved Arg (a known 14× potency penalty):* `"I'm comparing them against the recognizable orexin-B-like motif and the likely impact of truncation/substitution versus a single noncanonical residue."` No claim about which substitution is worse, no mention of D-Citrulline.
-
-#### Positive control (both agents correct)
-For contrast — when the benchmark works as advertised.
-
-> *Example — [`nps-hard-001`](traces/nps-hard-001-claude.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-nps-hard-001/):* both agents independently identified D-Arg at position 3 as disrupting the conserved SFRNG activation motif and picked against it. Claude: `"D-Arg3 substitution disrupts an essential cationic residue in the SFRNG activation motif"`. Codex: `"the D-Arg substitution at position 3 [is] the larger likely potency penalty for NPSR activation"`. Two-concept SAR, two agents, two correct answers — modest ratio at a known SAR position.

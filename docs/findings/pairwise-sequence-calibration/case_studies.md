@@ -1,6 +1,6 @@
 # Case studies — pairwise potency failure modes
 
-One illustrative case per failure mode identified in `README.md`, plus a positive-control case showing real SAR reasoning when it works. Every quote is verbatim from `runs/<task_id>/<timestamp>/agent_trace.txt`; click the *Full agent trace* toggle to expand each one inline.
+One illustrative case per failure mode identified in `README.md`. Every quote is verbatim from `runs/<task_id>/<timestamp>/agent_trace.txt`; click the *Full agent trace* toggle to expand each one inline.
 
 The full per-task category labels for all 53 graded failures are in `failure_classifications.csv`.
 
@@ -114,37 +114,6 @@ Claude names the modification (D-Citrulline), identifies what it replaces (argin
 
 ---
 
-## 5. Positive control — [`nps-hard-001`](traces/nps-hard-001-claude.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-nps-hard-001/) (both agents correct)
-
-**Setup.** Potency ratio **4.24×**. Gold is the peptide with peripheral modifications; loser has a D-Arg at position 3 inside the conserved SFRNG activation motif.
-
-| | Modification |
-|---|---|
-| PEP-57AA9A237F (gold) | `(D-Ser)FRNGVGTGMK(N-Me-Lys)(N-Me-Thr)SFQRAKS-NH2` |
-| PEP-DCA805671F | `SF(D-Arg)NGVGTGMKKTSFQRAKS` |
-
-Native NPS sequence is `SFRNGVGTGMKKTSFQRAKS`. The loser's D-Arg3 substitution is *inside* the SFRNG activation motif; the gold's modifications (D-Ser1, mid-region N-methylations, C-terminal amide) are at peripheral positions.
-
-**What both agents did.** Claude:
-
-> *"its modifications (D-Ser1, mid-region N-methylations, C-terminal amide) preserve the critical N-terminal pharmacophore, whereas PEP-DCA805671F's **D-Arg3 substitution disrupts an essential cationic residue in the SFRNG activation motif**."*
-
-[Full claude trace](traces/nps-hard-001-claude.jsonl)
-
-Codex:
-
-> *"I'm treating the **D-Arg substitution at position 3 as the larger likely potency penalty for NPSR activation**, compared with the other peptide's D-Ser/N-methyl/C-amide pattern."*
-
-[Full codex trace](traces/nps-hard-001-codex.jsonl)
-
-Both independently identified the same critical residue (Arg3), the same disruption (D-substitution at a conserved cationic position), and the same mechanism (loss of NPSR activation).
-
-**Why this matters.** This is what the benchmark *claims* to test, and when conditions align — clear conserved-motif SAR, modifications at chemically distinct positions, modest potency ratio — both agents succeed via real reasoning. The benchmark *can* discriminate engaged-SAR reasoning from surface heuristics; the problem is most tasks aren't structured cleanly enough to force this mode.
-
-**Implication.** Build more tasks like `nps-hard-001`: narrow potency ratios, modifications at well-known SAR positions. The current 1.1–1.5× success rate of ~4/15 between the two agents is suggestive but unverified — some of those 4 wins may be length-cue picks that happened to land correctly, not real SAR reasoning. An audit would settle it.
-
----
-
 ## Summary
 
 | Category | Example | n (claude / codex) | Concern level | Fix path |
@@ -153,4 +122,3 @@ Both independently identified the same critical residue (Arg3), the same disrupt
 | Length / complexity cue | [`oxn-hard-001`](traces/oxn-hard-001-codex.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-oxn-hard-001/) (codex) | 4 / 10 | Dominant codex failure at narrow ratios | Controlled probes that invert length-vs-potency |
 | Pharmacophore misapplied | [`nps-easy-012`](traces/nps-easy-012-claude.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-nps-easy-012/) (claude) | 12 / 6 | Real SAR + wrong answer; hardest to address | Likely requires changes to agent reasoning, not benchmark design |
 | No substantive reasoning | [`oxn-medium-006`](traces/oxn-medium-006-codex.jsonl) · [task page](/tasks/pilot-peptide-pairwise-sequence-oxn-medium-006/) (codex) | 1 / 0 | Hidden by current grader | Grade the rationale, not just the pick |
-| **Positive control** | `nps-hard-001` | n/a | What success looks like | Build more tasks of this shape |
