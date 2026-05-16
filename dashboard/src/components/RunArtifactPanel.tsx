@@ -24,6 +24,18 @@ function formatScore(score: number | null | undefined): string {
   return score.toFixed(3);
 }
 
+// run.timestamp is the run dir name (e.g. "20260512-224437" or
+// "20260513-083756-ba6d62b3-modal"), not an ISO string. Parse the
+// YYYYMMDD-HHMMSS prefix into a readable "YYYY-MM-DD HH:MM" form; fall back
+// to the raw value if it doesn't match.
+function formatRunTimestamp(value: string | undefined): string {
+  if (!value) return '';
+  const match = /^(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})/.exec(value);
+  if (!match) return value;
+  const [, yyyy, mm, dd, hh, mn] = match;
+  return `${yyyy}-${mm}-${dd} ${hh}:${mn}`;
+}
+
 export function RunArtifactPanel({
   taskId,
   run,
@@ -34,7 +46,7 @@ export function RunArtifactPanel({
   isLatest?: boolean;
 }) {
   const tags = run.tags || [];
-  const timestamp = run.timestamp ? new Date(run.timestamp).toISOString().replace('T', ' ').slice(0, 16) : '';
+  const timestamp = formatRunTimestamp(run.timestamp);
   const [open, setOpen] = useState(false);
   return (
     <details
